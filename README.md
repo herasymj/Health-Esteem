@@ -19,7 +19,7 @@ Health-Esteem provides an electronic idea organization system for interorganizat
 * Chengyu Lou
 
 ## Documentation
-[Google Drive (Planning, Presentations in progress, Meeting notes)](https://drive.google.com/drive/folders/1xXZoQ2bTMq2rhHzLl4sXl5ZG7T7oY1FZ?usp=sharing)
+* [Google Drive (Planning, Presentations in progress, Meeting notes)](https://drive.google.com/drive/folders/1xXZoQ2bTMq2rhHzLl4sXl5ZG7T7oY1FZ?usp=sharing)
 
 ## Archived Readme from Braintrust's repository
 
