@@ -8,8 +8,6 @@
 # Health-Esteem
 Based on https://github.com/rstancu/braintrust
 
-https://drive.google.com/drive/folders/1xXZoQ2bTMq2rhHzLl4sXl5ZG7T7oY1FZ?usp=sharing
-
 Health-Esteem provides an electronic idea organization system for interorganizational improvement.
 
 **Contributors:** 
@@ -19,6 +17,9 @@ Health-Esteem provides an electronic idea organization system for interorganizat
 * Quinn Bast
 * Wilson Nie
 * Chengyu Lou
+
+## Documentation
+Google Drive (Planning, Presentations in progress, Meeting notes) - https://drive.google.com/drive/folders/1xXZoQ2bTMq2rhHzLl4sXl5ZG7T7oY1FZ?usp=sharing
 
 ## Archived Readme from Braintrust's repository
 
