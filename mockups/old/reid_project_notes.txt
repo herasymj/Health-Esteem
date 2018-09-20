@@ -1,0 +1,45 @@
+"To empower and foster a culture of participation for innovation."
+Push staff towards Kaizen naturally
+
+1. Must collaborate with LEAD/MANAGER to advance their idea.
+2. Trial the idea.
+3. LEAD/MANAGER determines lessons learned & efficiencies from the trial,
+    makes a decision with IDEA SUBMITTER,
+    relay decision to TEAM.
+4. Benefits, participation rate, and number of ideas are tracked and reported via dashboard on the eIDEAS landing page.
+
+
+FLOW:
+1. Enter in idea form, wait for MANAGER
+2. Possibly wait for 5-10 business days for MANAGER feedback
+3. Must have face-to-face meeting with MANAGER
+4. YES-NO-ICEBOX process:
+     YES -> Click PLAN checkbox and fill in the PLAN + HOW it will be an improvement (1st time the staff thinks about PLAN?)
+            MANAGER creates task list and assigns target completion date
+
+     NO -> Click ABANDON idea, MANAGER & SUBMITTER fill in WHY it was ABANDONED
+
+     PARKING LOT/ICEBOX -> Click PARKING LOT, SUBMITTER fill in WHY it was PARKING LOT'd and sets DATE for REVIEW.
+
+5. After a YES -> DO/CHECK/ACTION/ADOPT/ABANDON/ADJUST
+
+   MANAGER does the following: DO           (explains idea & tasks to STAFF)
+                               CHECK        (everything)
+                               ACTION       (chooses ADOPT/ADJUST/ABANDON)
+                                -> ADOPT    (does everything with IDEA SUBMITTER & writes a story)
+                                -> ABANDON  (same as NO process above)
+                                -> ADJUST   (loop back to DO)
+
+PROBLEMS:
+1. Staff are not ENCOURAGED to trial ideas for improvement.
+    -> FAKE DATA, staff are told they MUST have 2 ideas per month. Cannot but a quota on innovation.
+    -> Bad UI contributes
+2. Leaders do not feel they have TIME to improve.
+    -> Waiting (too much work? must process every idea no matter what?)
+3. Mgmt is seen as a TOOL.
+    -> Restrictive?
+    -> Not using the system for themselves, but because they are told to.
+4. Using "Magic Numbers" as a goal. Progress is measured monthly via idea quota.
+    -> Progress needs to be continuous.
+5. Adopt/Monitor phase only 26% -> lots of "bad" ideas?
+   Action phase only 58% -> ideas stuck in limbo? not enough time to process them all?
