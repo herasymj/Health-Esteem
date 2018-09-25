@@ -57,8 +57,8 @@ Also refer to the [Discussion Document](./discussions.md).
 ### 1.4 Assumptions
  * The project will be under MIT license.
  * Balsamiq is used to creating mockup screens.
- * Vue.js will be used.
- * Source code and related documents will be hosted on a public [GitHub](https://github.com/rstancu/braintrust).
+ * ASP.Net core will be used.
+ * Source code and related documents will be hosted on a public [GitHub](https://github.com/herasymj/Health-Esteem).
 
 ## 2 Methodology
 Using Balsamiq, mockups for the envisioned project were created. Each mockup screen helps to identify a piece of the functionality for the whole project.
@@ -156,7 +156,7 @@ Take mockups and break them down into individual requirements (1 sentence each),
 The application should be "user-friendly" and easy to maintain.
 
 ### 4.1 Interface Requirements
-The interface should be web based (Vue.js) and mobile device friendly.
+The interface should be web based (ASP.Net Core) and mobile device friendly.
 
 #### 4.1.1 Software Interfaces
-Some kind of web stack (e.g. LAMP), using Vue.js.
+Some kind of web stack (e.g. LAMP), using ASP.Net Core.
