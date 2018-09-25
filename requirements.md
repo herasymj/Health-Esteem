@@ -6,6 +6,7 @@
 <br/><br/><br/><br/>
 
 **Current Contributors:** Tristan Heisler, Shawn Clake, Jennifer Herasymuik, Quinn Bast, Wilson Nie, Oscar Lou
+<br/>
 **Original Authors:** Reid Stancu, Simranjeet Kaur, Susmita Patel
 
 # Functional Requirements
