@@ -18,8 +18,10 @@ Health-Esteem provides an electronic idea organization system for interorganizat
 * Wilson Nie
 * Chengyu Lou
 
-## Documentation
+### Documentation
 * [Google Drive (Planning, Presentations in progress, Meeting notes)](https://drive.google.com/drive/folders/1xXZoQ2bTMq2rhHzLl4sXl5ZG7T7oY1FZ?usp=sharing)
+* [Requirements](https://github.com/herasymj/Health-Esteem/blob/Milestone1/documentation/requirements.md)
+* [Discussion](https://github.com/herasymj/Health-Esteem/blob/Milestone1/documentation/discussions.md)
 
 ## Archived Readme from Braintrust's repository
 
