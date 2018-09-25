@@ -10,7 +10,7 @@ Based on https://github.com/rstancu/braintrust
 
 Health-Esteem provides an electronic idea organization system for interorganizational improvement.
 
-**Contributors:** 
+### Contributors: 
 * Shawn Clake
 * Jennifer Herasymuik
 * Tristan Heisler
