@@ -5,7 +5,8 @@
 
 <br/><br/><br/><br/>
 
-**Authors:** Reid Stancu, Simranjeet Kaur, Susmita Patel
+**Current Contributors:** Tristan Heisler, Shawn Clake, Jennifer Herasymuik, Quinn Bast, Wilson Nie, Oscar Lou
+**Original Authors:** Reid Stancu, Simranjeet Kaur, Susmita Patel
 
 # Functional Requirements
 
