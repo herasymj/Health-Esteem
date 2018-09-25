@@ -74,7 +74,7 @@ Take mockups and break them down into individual requirements (1 sentence each),
 | FR1-1.2 | When creating a new idea the system shall require  the user (where applicable) to select a division and/or unit via an autocomplete drop down list.   |
 | FR1-1.3 | The system shall allow the user to 'Save as Draft' or 'Submit' the idea.   |
 | FR1-1.4 | The system shall allow the user to add amendments to a submitted idea.   |
-| FR1-2 | The system shall allow the user to edit their non-submitted ideas by saving as a draft.   |
+| FR1-2 | The system shall allow the user to edit their drafts.   |
 
 #### Table 2: Viewing Ideas
 | ID     | Requirement Definition     |
