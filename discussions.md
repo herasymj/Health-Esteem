@@ -5,7 +5,8 @@
 
 <br/><br/><br/><br/>
 
-**Authors: Tristan Heisler, Shawn Clake, Jennifer Herasymuik, Quinn Bast, Wilson Nie, Oscar Lou**
+**Current Contributors:** Tristan Heisler, Shawn Clake, Jennifer Herasymuik, Quinn Bast, Wilson Nie, Oscar Lou
+<br/>
 **Original Authors:** Reid Stancu, Simranjeet Kaur, Susmita Patel
 
 # Discussion
@@ -57,7 +58,7 @@ The purpose of this document is to outline design decisions as well as some pote
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 1 Points System
-The primary function of the point system is to provide some rewards for collaborating. In addition the point system provides various types of motivations which incentivize users to return.
+The primary function of the point system is to provide some rewards for collaborating. In addition, the point system provides various types of motivations which incentivize users to return.
 
 ### 1.1 Motivation
 The motivations for choosing a points system are described below.
