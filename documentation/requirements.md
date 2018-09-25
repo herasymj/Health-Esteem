@@ -1,11 +1,13 @@
 <p>
-  <img align="left" src="./uofr_logo.jpg" alt="U of R logo" width="39.055%"/>
-  <img align="right" src="./ehealth_logo.png" alt="eHealth logo" width="27.5%"/>
+  <img align="left" src="https://github.com/herasymj/Health-Esteem/raw/Milestone1/assets/uofr_logo.jpg" alt="U of R logo" width="39.055%"/>
+  <img align="right" src="https://github.com/herasymj/Health-Esteem/raw/Milestone1/assets/ehealth_logo.png" alt="eHealth logo" width="27.5%"/>
 </p>
 
 <br/><br/><br/><br/>
 
-**Authors:** Reid Stancu, Simranjeet Kaur, Susmita Patel
+**Current Contributors:** Tristan Heisler, Shawn Clake, Jennifer Herasymuik, Quinn Bast, Wilson Nie, Oscar Lou
+<br/>
+**Original Authors:** Reid Stancu, Simranjeet Kaur, Susmita Patel
 
 # Functional Requirements
 
@@ -55,8 +57,8 @@ Also refer to the [Discussion Document](./discussions.md).
 ### 1.4 Assumptions
  * The project will be under MIT license.
  * Balsamiq is used to creating mockup screens.
- * Vue.js will be used.
- * Source code and related documents will be hosted on a public [GitHub](https://github.com/rstancu/braintrust).
+ * ASP.Net core will be used.
+ * Source code and related documents will be hosted on a public [GitHub](https://github.com/herasymj/Health-Esteem).
 
 ## 2 Methodology
 Using Balsamiq, mockups for the envisioned project were created. Each mockup screen helps to identify a piece of the functionality for the whole project.
@@ -94,13 +96,11 @@ Take mockups and break them down into individual requirements (1 sentence each),
 #### Table 4: Viewing Statistics of Ideas
 | ID     | Requirement Definition     |
 | :--- | :--- |
-| FR4-1 | The system shall allow the user to view some graphical statistics about ideas.   |
-| FR4-1.1 | The system shall store some statistics about the fields in FR2-1.1 as needed.   |
-| FR4-2 | The system shall allow the user to view the total number of (global) submitted ideas.   |
-| FR4-3 | The system shall allow the user to view an 'Idea Points vs Time' plot for teams and individuals.   |
-| FR4-4 | The system shall allow the user to view a number of different statistical charts to visualize points data.   |
-| FR4-5 | The system shall provide a 'Goto Me' button that when pressed automatically displays the users individual statistics.   |
-| FR4-6 | The system shall provide a 'Goto My Team' button that when pressed automatically displays the users teams' statistics. (This may have to be disabled because a user may or may not belong to more than one team)  |
+| FR4-1 | The system shall allow the user to view the total number of (global) submitted ideas.   |
+| FR4-2 | The system shall allow the user to view an 'Idea Points vs Time' plot for teams and individuals.   |
+| FR4-3 | The system shall allow the user to view a number of different statistical charts to visualize points data.   |
+| FR4-4 | The system shall provide a 'Goto Me' button that when pressed automatically displays the users individual statistics.   |
+| FR4-5 | The system shall provide a 'Goto My Team' button that when pressed automatically displays the users teams' statistics. (This may have to be disabled because a user may or may not belong to more than one team)  |
 
 #### Table 5: Home Page/Login/Contact Us
 | ID     | Requirement Definition     |
@@ -156,7 +156,7 @@ Take mockups and break them down into individual requirements (1 sentence each),
 The application should be "user-friendly" and easy to maintain.
 
 ### 4.1 Interface Requirements
-The interface should be web based (Vue.js) and mobile device friendly.
+The interface should be web based (ASP.Net Core) and mobile device friendly.
 
 #### 4.1.1 Software Interfaces
-Some kind of web stack (e.g. LAMP), using Vue.js.
+Some kind of web stack (e.g. LAMP), using ASP.Net Core.

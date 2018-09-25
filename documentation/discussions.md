@@ -1,11 +1,13 @@
 <p>
-  <img align="left" src="./uofr_logo.jpg" alt="U of R logo" width="39.055%"/>
-  <img align="right" src="./ehealth_logo.png" alt="eHealth logo" width="27.5%"/>
+  <img align="left" src="https://github.com/herasymj/Health-Esteem/raw/Milestone1/assets/uofr_logo.jpg" alt="U of R logo" width="39.055%"/>
+  <img align="right" src="https://github.com/herasymj/Health-Esteem/raw/Milestone1/assets/ehealth_logo.png" alt="eHealth logo" width="27.5%"/>
 </p>
 
 <br/><br/><br/><br/>
 
-**Authors:** Reid Stancu, Simranjeet Kaur, Susmita Patel
+**Current Contributors:** Tristan Heisler, Shawn Clake, Jennifer Herasymuik, Quinn Bast, Wilson Nie, Oscar Lou
+<br/>
+**Original Authors:** Reid Stancu, Simranjeet Kaur, Susmita Patel
 
 # Discussion
 The purpose of this document is to outline design decisions as well as some potential problems with respect to Braintrust's eIDEAS project. This document attempts to answer the _why_ questions new readers may have.
@@ -56,7 +58,7 @@ The purpose of this document is to outline design decisions as well as some pote
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 1 Points System
-The primary function of the point system is to provide some rewards for collaborating. In addition the point system provides various types of motivations which incentivize users to return.
+The primary function of the point system is to provide some rewards for collaborating. In addition, the point system provides various types of motivations which incentivize users to return.
 
 ### 1.1 Motivation
 The motivations for choosing a points system are described below.
