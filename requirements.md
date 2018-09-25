@@ -94,13 +94,11 @@ Take mockups and break them down into individual requirements (1 sentence each),
 #### Table 4: Viewing Statistics of Ideas
 | ID     | Requirement Definition     |
 | :--- | :--- |
-| FR4-1 | The system shall allow the user to view some graphical statistics about ideas.   |
-| FR4-1.1 | The system shall store some statistics about the fields in FR2-1.1 as needed.   |
-| FR4-2 | The system shall allow the user to view the total number of (global) submitted ideas.   |
-| FR4-3 | The system shall allow the user to view an 'Idea Points vs Time' plot for teams and individuals.   |
-| FR4-4 | The system shall allow the user to view a number of different statistical charts to visualize points data.   |
-| FR4-5 | The system shall provide a 'Goto Me' button that when pressed automatically displays the users individual statistics.   |
-| FR4-6 | The system shall provide a 'Goto My Team' button that when pressed automatically displays the users teams' statistics. (This may have to be disabled because a user may or may not belong to more than one team)  |
+| FR4-1 | The system shall allow the user to view the total number of (global) submitted ideas.   |
+| FR4-2 | The system shall allow the user to view an 'Idea Points vs Time' plot for teams and individuals.   |
+| FR4-3 | The system shall allow the user to view a number of different statistical charts to visualize points data.   |
+| FR4-4 | The system shall provide a 'Goto Me' button that when pressed automatically displays the users individual statistics.   |
+| FR4-5 | The system shall provide a 'Goto My Team' button that when pressed automatically displays the users teams' statistics. (This may have to be disabled because a user may or may not belong to more than one team)  |
 
 #### Table 5: Home Page/Login/Contact Us
 | ID     | Requirement Definition     |
