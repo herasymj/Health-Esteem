@@ -31,10 +31,10 @@ Repository for Team Braintrust's eIDEAS project (ENSE 885AS Spring/Summer 2018).
 
 Documents:
 
-* [Requirements](./requirements.md)
-* [Discussion](./discussions.md)
-* [Usability Report](./Lo-Fi%20Usability%20Evaluation/milestone3_usability_report.pdf)
-* Latest Mockups: \[[Balsamiq File (.bmpr)](./mockups/eideas.bmpr)\], \[[PDF - clean](./mockups/eideas.pdf)\] , \[[PDF - with linking hints](./mockups/eideas_with_link_hints.pdf)\]
+* [Requirements](https://github.com/rstancu/braintrust/blob/master/requirements.md)
+* [Discussion](https://github.com/rstancu/braintrust/blob/master/discussions.md)
+* [Usability Report](https://github.com/rstancu/braintrust/raw/master/Lo-Fi%20Usability%20Evaluation/milestone3_usability_report.pdf)
+* Latest Mockups: \[[Balsamiq File (.bmpr)](https://github.com/rstancu/braintrust/raw/master/mockups/eideas.bmpr)\], \[[PDF - clean](https://github.com/rstancu/braintrust/raw/master/mockups/eideas.pdf)\] , \[[PDF - with linking hints](https://github.com/rstancu/braintrust/raw/master/mockups/eideas_with_link_hints.pdf)\]
 
 **About this Project**
 
