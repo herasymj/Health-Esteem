@@ -1,10 +1,11 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace eIDEAS.Models
 {
     public class Division
     {
-        public Guid ID;
-        public string Name;
+        [Key]
+        public int ID { get; set; }
+        public string Name { get; set; }
     }
 }

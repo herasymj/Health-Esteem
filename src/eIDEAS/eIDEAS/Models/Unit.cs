@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace eIDEAS.Models
 {
     public class Unit
     {
-        public Guid ID;
-        public Guid DivisionID;
-        public string Name;
+        [Key]
+        public int ID { get; set; }
+        public int DivisionID { get; set; }
+        public string Name { get; set; }
     }
 }
