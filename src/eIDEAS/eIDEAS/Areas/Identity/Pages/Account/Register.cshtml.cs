@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using eIDEAS.Data;
 using eIDEAS.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace eIDEAS.Areas.Identity.Pages.Account
@@ -20,17 +24,23 @@ namespace eIDEAS.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
+
+        public List<SelectListItem> Divisions;
+        public List<SelectListItem> Units;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -73,10 +83,28 @@ namespace eIDEAS.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public void OnGet(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync()
         {
-            ReturnUrl = returnUrl;
+            await LoadDivisions();
+            await LoadUnits();
+            return Page();
         }
+
+        private async Task LoadDivisions()
+            => Divisions = await _context.Division
+                .Select(division => new SelectListItem
+                {
+                    Value = division.ID.ToString(),
+                    Text = division.Name
+                }).ToListAsync();
+
+        private async Task LoadUnits()
+            => Units = await _context.Unit
+                .Select(unit => new SelectListItem
+                {
+                    Value = unit.ID.ToString(),
+                    Text = unit.Name
+                }).ToListAsync();
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
