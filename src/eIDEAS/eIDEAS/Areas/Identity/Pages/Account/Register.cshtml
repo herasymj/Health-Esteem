@@ -24,14 +24,16 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.DivisionID"></label>
-                <select class="form-control">
+                <label>Division</label>
+                <select asp-for="Input.DivisionID" class="form-control">
+                    <option value="" disabled selected hidden>Select Division</option>
                     <option value="1">eHealth</option>
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="Input.UnitID"></label>
-                <select class="form-control">
+                <label>Unit</label>
+                <select asp-for="Input.UnitID" class="form-control">
+                    <option value="" disabled selected hidden>Select Unit</option>
                     <option value="1">Knowledge Management</option>
                     <option value="2">Finance</option>
                     <option value="3">Continuous Improvement</option>
