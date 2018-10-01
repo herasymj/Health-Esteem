@@ -26,8 +26,9 @@ namespace eIDEAS.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
 
-        public List<SelectListItem> Divisions;
-        public List<SelectListItem> Units;
+        public Dictionary<SelectListItem, List<SelectListItem>> DivisionUnits;
+        //public List<SelectListItem> Divisions;
+        //public List<SelectListItem> Units;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -85,26 +86,25 @@ namespace eIDEAS.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadDivisions();
-            await LoadUnits();
+            DivisionUnits = new Dictionary<SelectListItem, List<SelectListItem>>();
+
+            var divisions = await _context.Division.ToListAsync();
+
+            foreach (var division in divisions)
+            {
+                var units = _context.Unit
+                    .Where(unit => unit.DivisionID == division.ID)
+                    .Select(unit => new SelectListItem
+                    {
+                        Value = unit.ID.ToString(),
+                        Text = unit.Name
+                    }).ToList();
+
+                DivisionUnits.Add(new SelectListItem() { Value = division.ID.ToString(), Text = division.Name }, units);
+            }
+
             return Page();
         }
-
-        private async Task LoadDivisions()
-            => Divisions = await _context.Division
-                .Select(division => new SelectListItem
-                {
-                    Value = division.ID.ToString(),
-                    Text = division.Name
-                }).ToListAsync();
-
-        private async Task LoadUnits()
-            => Units = await _context.Unit
-                .Select(unit => new SelectListItem
-                {
-                    Value = unit.ID.ToString(),
-                    Text = unit.Name
-                }).ToListAsync();
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {

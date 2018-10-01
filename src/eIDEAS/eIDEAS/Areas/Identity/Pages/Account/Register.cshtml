@@ -6,6 +6,8 @@
 
 <h2>@ViewData["Title"]</h2>
 
+
+
 <div class="row">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
@@ -25,11 +27,12 @@
             </div>
             <div class="form-group">
                 <label>Division</label>
-                @Html.DropDownList("Value", Model.Divisions, new { @class = "form-control" })
+                <select asp-for="Input.DivisionID" asp-items="Model.DivisionUnits.Keys" class="form-control"></select>
             </div>
             <div class="form-group">
-                <label>Unit</label>                
-                @Html.DropDownList("Value", Model.Units, new { @class = "form-control" })
+                <label>Unit</label>
+                <!-- Update to instead display the corresponding units-->
+                <select asp-for="Input.UnitID" asp-items="Model.DivisionUnits.Keys" class="form-control"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
