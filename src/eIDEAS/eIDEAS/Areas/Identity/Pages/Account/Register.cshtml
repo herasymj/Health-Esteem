@@ -6,8 +6,6 @@
 
 <h2>@ViewData["Title"]</h2>
 
-
-
 <div class="row">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
@@ -27,12 +25,24 @@
             </div>
             <div class="form-group">
                 <label>Division</label>
-                <select asp-for="Input.DivisionID" asp-items="Model.DivisionUnits.Keys" class="form-control"></select>
+                <select asp-for="Input.DivisionID" class="form-control" id="division">
+                    @foreach (var division in Model.DivisionUnits.Keys)
+                    {
+                        <option value="@division.ID.ToString()">@division.Name</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label>Unit</label>
-                <!-- Update to instead display the corresponding units-->
-                <select asp-for="Input.UnitID" asp-items="Model.DivisionUnits.Keys" class="form-control"></select>
+                <select asp-for="Input.UnitID" class="form-control" id="unit">
+                    @foreach (var division in Model.DivisionUnits)
+                    {
+                        @foreach (var unit in division.Value)
+                        {
+                            <option class="unit-option" data-division="@division.Key.ID" value="@unit.ID.ToString()">@unit.Name</option>
+                        }
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
@@ -51,4 +61,31 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        function updateApplicableUnits(selectedDivisionID) {
+            //For each unit, show it only if it is part of the selected division
+            $('.unit-option').each(function (i) {
+                if ($(this).data('division') == selectedDivisionID) {
+                    $(this).show();
+                }
+                else {
+                    $(this).hide();
+                }
+            });
+
+            //Clear the value displayed for unit selected
+            $('#unit').val('');
+        }
+
+        $(function () {
+            //Upon loading the page, populate the appropriate units for eHealth
+            updateApplicableUnits(1);
+
+            //Whenever the selected division changes, display the corresponding units.
+            $('#division').change(function () {
+                updateApplicableUnits($(this).val());
+            });
+        });
+    </script>
 }

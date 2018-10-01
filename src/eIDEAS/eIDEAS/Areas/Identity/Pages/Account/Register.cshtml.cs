@@ -26,7 +26,7 @@ namespace eIDEAS.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
 
-        public Dictionary<SelectListItem, List<SelectListItem>> DivisionUnits;
+        public Dictionary<Division, List<Unit>> DivisionUnits;
         //public List<SelectListItem> Divisions;
         //public List<SelectListItem> Units;
 
@@ -86,7 +86,7 @@ namespace eIDEAS.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync()
         {
-            DivisionUnits = new Dictionary<SelectListItem, List<SelectListItem>>();
+            DivisionUnits = new Dictionary<Division, List<Unit>>();
 
             var divisions = await _context.Division.ToListAsync();
 
@@ -94,13 +94,9 @@ namespace eIDEAS.Areas.Identity.Pages.Account
             {
                 var units = _context.Unit
                     .Where(unit => unit.DivisionID == division.ID)
-                    .Select(unit => new SelectListItem
-                    {
-                        Value = unit.ID.ToString(),
-                        Text = unit.Name
-                    }).ToList();
+                    .ToList();
 
-                DivisionUnits.Add(new SelectListItem() { Value = division.ID.ToString(), Text = division.Name }, units);
+                DivisionUnits.Add(division, units);
             }
 
             return Page();
