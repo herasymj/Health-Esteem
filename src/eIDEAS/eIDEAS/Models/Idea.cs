@@ -19,4 +19,5 @@ namespace eIDEAS.Models
         public DateTime DateCreated { get; set; }
         public DateTime DateEdited { get; set; }
     }
+
 }

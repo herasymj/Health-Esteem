@@ -26,9 +26,7 @@ namespace eIDEAS.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
 
-        public Dictionary<Division, List<Unit>> DivisionUnits;
-        //public List<SelectListItem> Divisions;
-        //public List<SelectListItem> Units;
+        public Dictionary<Division, List<Unit>> DivisionUnits = new Dictionary<Division, List<Unit>>();
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -86,8 +84,6 @@ namespace eIDEAS.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync()
         {
-            DivisionUnits = new Dictionary<Division, List<Unit>>();
-
             var divisions = await _context.Division.ToListAsync();
 
             foreach (var division in divisions)
