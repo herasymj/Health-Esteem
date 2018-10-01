@@ -10,7 +10,8 @@ namespace eIDEAS.Data
             : base(options)
         {
         }
-        public DbSet<eIDEAS.Models.Division> Division { get; set; }
-        public DbSet<eIDEAS.Models.Unit> Unit { get; set; }
+        public DbSet<Division> Division { get; set; }
+        public DbSet<Unit> Unit { get; set; }
+        public DbSet<Idea> Idea { get; set; }
     }
 }
