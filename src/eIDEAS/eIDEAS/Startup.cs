@@ -55,6 +55,8 @@ namespace eIDEAS
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                //app.UseStatusCodePages("text/html", "<h1>Error! Status Code {0}</h1>");
+                app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
                 app.UseHsts();
             }
 
