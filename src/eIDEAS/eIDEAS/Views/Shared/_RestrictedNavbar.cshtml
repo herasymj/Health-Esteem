@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <button asp-area="" asp-controller="Ideas" asp-action="Index" class="btn btn-link navbar-btn navbar-link">Ideas</button>
+        </li>
+    </ul>
+}
