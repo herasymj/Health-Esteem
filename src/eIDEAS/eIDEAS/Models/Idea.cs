@@ -12,7 +12,7 @@ namespace eIDEAS.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string SolutionPlan { get; set; }
-        public string Status { get; set; }
+        public StatusEnum Status { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateEdited { get; set; }
     }

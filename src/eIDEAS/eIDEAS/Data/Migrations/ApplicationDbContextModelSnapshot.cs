@@ -107,7 +107,7 @@ namespace eIDEAS.Data.Migrations
 
                     b.Property<string>("SolutionPlan");
 
-                    b.Property<string>("Status");
+                    b.Property<int>("Status");
 
                     b.Property<string>("Title");
 

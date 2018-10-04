@@ -73,7 +73,7 @@ namespace eIDEAS.Controllers
 
                 //Update the idea with information not directly entered by the user
                 idea.UserID = new Guid(_loggedInUserID);
-                idea.Status = "Plan";
+                idea.Status = StatusEnum.Plan;
                 idea.DateCreated = DateTime.UtcNow;
                 idea.DateEdited = DateTime.UtcNow;
 

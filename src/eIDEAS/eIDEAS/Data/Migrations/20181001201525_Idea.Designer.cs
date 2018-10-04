@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eIDEAS.Data;
+using eIDEAS.Models;
 
 namespace eIDEAS.Data.Migrations
 {
@@ -109,7 +110,7 @@ namespace eIDEAS.Data.Migrations
 
                     b.Property<string>("SolutionPlan");
 
-                    b.Property<string>("Status");
+                    b.Property<StatusEnum>("Status");
 
                     b.Property<string>("Title");
 

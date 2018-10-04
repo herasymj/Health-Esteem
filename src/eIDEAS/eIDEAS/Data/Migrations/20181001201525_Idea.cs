@@ -1,4 +1,5 @@
 ﻿using System;
+using eIDEAS.Models;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -19,7 +20,7 @@ namespace eIDEAS.Data.Migrations
                     Title = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     SolutionPlan = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
+                    Status = table.Column<StatusEnum>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateEdited = table.Column<DateTime>(nullable: false)
                 },
