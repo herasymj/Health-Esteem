@@ -14,16 +14,6 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UserID" class="control-label"></label>
-                <input asp-for="UserID" class="form-control" />
-                <span asp-validation-for="UserID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UnitID" class="control-label"></label>
-                <input asp-for="UnitID" class="form-control" />
-                <span asp-validation-for="UnitID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
@@ -39,22 +29,14 @@
                 <span asp-validation-for="SolutionPlan" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
+                <label asp-for="UnitID" class="control-label"></label>
+                <select asp-for="UnitID" class="form-control">
+                    <option value="@ViewBag.UnitID">@ViewBag.UnitName</option>
+                </select>
+                <span asp-validation-for="UnitID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateEdited" class="control-label"></label>
-                <input asp-for="DateEdited" class="form-control" />
-                <span asp-validation-for="DateEdited" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Submit Idea" class="btn btn-default" />
             </div>
         </form>
     </div>

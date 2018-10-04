@@ -113,7 +113,7 @@ namespace eIDEAS.Data.Migrations
 
                     b.Property<int>("UnitID");
 
-                    b.Property<int>("UserID");
+                    b.Property<Guid>("UserID");
 
                     b.HasKey("ID");
 

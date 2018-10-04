@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using eIDEAS.Data;
+using eIDEAS.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using eIDEAS.Data;
-using eIDEAS.Models;
 
 namespace eIDEAS.Controllers
 {
     public class IdeasController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public IdeasController(ApplicationDbContext context)
+        public IdeasController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;           
         }
 
         // GET: Ideas
@@ -46,18 +47,37 @@ namespace eIDEAS.Controllers
         // GET: Ideas/Create
         public IActionResult Create()
         {
+            //Obtain the logged in user and their id
+            var _loggedInUserID = _userManager.GetUserId(HttpContext.User);
+            var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
+
+            //Obtain the logged in user's unit
+            var userUnit = _context.Unit.Where(unit => unit.ID == loggedInUser.UnitID).FirstOrDefault();
+
+            //Store the associated unit's id and name for use in the view
+            ViewBag.UnitID = userUnit.ID;
+            ViewBag.UnitName = userUnit.Name;
+
             return View();
         }
 
         // POST: Ideas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated,DateEdited")] Idea idea)
+        public async Task<IActionResult> Create([Bind("ID,UnitID,Title,Description,SolutionPlan")] Idea idea)
         {
             if (ModelState.IsValid)
             {
+                //Get the logged in user's id
+                var _loggedInUserID = _userManager.GetUserId(HttpContext.User);
+
+                //Update the idea with information not directly entered by the user
+                idea.UserID = new Guid(_loggedInUserID);
+                idea.Status = "Plan";
+                idea.DateCreated = DateTime.UtcNow;
+                idea.DateEdited = DateTime.UtcNow;
+
+                //Attempt to add the idea to the database
                 _context.Add(idea);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -82,8 +102,6 @@ namespace eIDEAS.Controllers
         }
 
         // POST: Ideas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated,DateEdited")] Idea idea)

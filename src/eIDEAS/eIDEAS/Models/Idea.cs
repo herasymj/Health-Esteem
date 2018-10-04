@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eIDEAS.Models
 {
@@ -10,7 +7,7 @@ namespace eIDEAS.Models
     {
         [Key]
         public int ID { get; set; }
-        public int UserID { get; set; }
+        public Guid UserID { get; set; }
         public int UnitID { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
