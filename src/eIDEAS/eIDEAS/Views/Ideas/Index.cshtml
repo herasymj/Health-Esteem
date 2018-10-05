@@ -5,74 +5,58 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Ideas</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create Idea</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UnitID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SolutionPlan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateEdited)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SolutionPlan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateEdited)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div>
+    @foreach (var idea in Model)
+    {
+        <div class="panel panel-default">
+            <div>
+                <p>
+                    @Html.DisplayFor(modelItem => idea.Title)
+                </p>
+                <p>
+                    Submitted on @Html.DisplayFor(modelItem => idea.DateCreated) by --AUTHOR_NAME--
+                </p>
+                <p>
+                    to --TEAM_NAME--
+                </p>
+                <p>
+                    @Html.DisplayFor(modelItem => idea.Status)
+                </p>
+                <button data-toggle="collapse" data-target="#@idea.ID">More Details</button>
+            </div>
+            <div id="@idea.ID" class="collapse">
+                <div class="row" style="margin-top:25px;">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="col-md-6">
+                            Description
+                        </div>
+                        <div class="col-md-6">
+                            Solution Plan
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:25px;">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="col-md-6">
+                            @Html.DisplayFor(modelItem => idea.Description)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.DisplayFor(modelItem => idea.SolutionPlan)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a asp-action="Edit" asp-route-id="@idea.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@idea.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@idea.ID">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+
