@@ -22,10 +22,29 @@ namespace eIDEAS.Controllers
             _userManager = userManager;           
         }
 
-        // GET: Ideas
-        public async Task<IActionResult> Index()
+        // GET: Ideas?filterType={filterType}
+        [HttpGet]
+        public async Task<IActionResult> Index(String filterType)
         {
-            return View(await _context.Idea.ToListAsync());
+            //Create basic model for the ideas to show. Initially set to have no rows
+            List<Idea> ideaModel = new List<Idea>();
+            //Get the user ID
+            var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+            
+            //Determine what ideas the user wants to see
+            if (filterType == "MyIdeas")
+            {         
+                //Get a model that filters on only the user's ideas
+                ideaModel = await _context.Idea.Where(idea => idea.UserID == new Guid(loggedInUserID)).ToListAsync();
+            } else if (filterType == "TeamIdeas")
+            {
+                //Create a model that filters on only the user's team's ideas.
+                var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+                int unitID = _context.Unit.Where(unit => unit.ID == loggedInUser.UnitID).FirstOrDefault().ID;
+                ideaModel = await _context.Idea.Where(idea => idea.UnitID == unitID).ToListAsync();
+            }
+            //Send the model to the view and return the view
+            return View(ideaModel);
         }
 
         // GET: Ideas/Details/5

@@ -5,7 +5,6 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <li>
-        <a asp-controller="/Ideas/Index">Ideas</a>
-    </li>
+    <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="MyIdeas">My Ideas</a></li>
+    <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="TeamIdeas">Team Ideas</a></li>
 }
