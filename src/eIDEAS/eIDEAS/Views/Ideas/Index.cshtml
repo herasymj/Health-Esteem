@@ -21,7 +21,7 @@
                     <h4><strong>@Html.DisplayFor(modelItem => idea.Title)</strong></h4>
                     <p class="no-margin">Submitted on @localIdeaSubmissionTime by --AUTHOR_NAME--</p>
                     <p>to <strong>--TEAM NAME--</strong></p>
-                    <p class="no-margin">Status: @Html.DisplayFor(modelItem => idea.Status)</p>
+                    <p class="no-margin">Status: @Html.DisplayFor(modelItem => idea.Status) <a asp-action="Edit" asp-route-id="@idea.ID">Update Status</a></p>                    
                 </div>
                 <div class="col-md-1">
                     <img class="expand" data-toggle="collapse" data-target="#@idea.ID" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" style="margin-top: 28px" />

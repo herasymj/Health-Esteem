@@ -131,7 +131,7 @@ namespace eIDEAS.Controllers
         // POST: Ideas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated,DateEdited")] Idea idea)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated")] Idea idea)
         {
             if (id != idea.ID)
             {
@@ -142,6 +142,7 @@ namespace eIDEAS.Controllers
             {
                 try
                 {
+                    idea.DateEdited = DateTime.UtcNow;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
                 }
