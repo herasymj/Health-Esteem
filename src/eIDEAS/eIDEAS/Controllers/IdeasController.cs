@@ -8,9 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eIDEAS.Controllers
 {
+    [Authorize]
     public class IdeasController : Controller
     {
         private readonly ApplicationDbContext _context;

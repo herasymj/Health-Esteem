@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using eIDEAS.Data;
 using eIDEAS.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eIDEAS.Controllers
 {
+    [Authorize]
     public class DivisionsController : Controller
     {
         private readonly ApplicationDbContext _context;
