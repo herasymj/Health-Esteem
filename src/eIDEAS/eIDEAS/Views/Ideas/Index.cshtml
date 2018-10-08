@@ -24,7 +24,7 @@
                     <p class="no-margin">Status: @Html.DisplayFor(modelItem => idea.Status)</p>
                 </div>
                 <div class="col-md-1">
-                    <img data-toggle="collapse" data-target="#@idea.ID" data-expanded="false" src="~/images/arrow-right.png" style="margin-top: 28px" />
+                    <img class="expand" data-toggle="collapse" data-target="#@idea.ID" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" style="margin-top: 28px" />
                 </div>
             </div>
             <div id="@idea.ID" class="collapse">
@@ -53,3 +53,13 @@
         </div>
     }
 </div>
+
+<script type="text/javascript">
+    //This function toggles the display of the arrow indicating if a idea view is expanded. It is called whenever such an arrow is clicked.
+    function toggleArrow(arrowImage) {
+        if (arrowImage.src.endsWith('arrow-right.png'))
+            arrowImage.src = "images/arrow-down.png"
+        else
+            arrowImage.src = "images/arrow-right.png";
+    }
+</script>
