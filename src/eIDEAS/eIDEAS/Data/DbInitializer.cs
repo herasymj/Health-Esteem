@@ -1,4 +1,5 @@
 ﻿using eIDEAS.Models;
+using eIDEAS.Models.Enums;
 using System;
 using System.Linq;
 

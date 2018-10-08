@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eIDEAS.Data;
 using eIDEAS.Models;
+using eIDEAS.Models.Enums;
 
 namespace eIDEAS.Data.Migrations
 {

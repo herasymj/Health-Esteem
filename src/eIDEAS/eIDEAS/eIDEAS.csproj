@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20181004230500_StatusEnum.cs" />
     <Compile Remove="Data\Migrations\20181004230500_StatusEnum.Designer.cs" />
+    <Compile Remove="Data\Migrations\20181008061834_Action.cs" />
+    <Compile Remove="Data\Migrations\20181008061834_Action.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

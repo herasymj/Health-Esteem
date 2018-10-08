@@ -1,5 +1,6 @@
 ﻿using System;
 using eIDEAS.Models;
+using eIDEAS.Models.Enums;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
