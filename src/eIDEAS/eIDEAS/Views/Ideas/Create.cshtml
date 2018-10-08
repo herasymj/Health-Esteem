@@ -5,9 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
-
-<h4>Idea</h4>
+<h3>Create Idea</h3>
 <hr />
 <div class="row">
     <div class="col-md-12">
@@ -15,37 +13,35 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                <input asp-for="Title" class="form-control" placeholder="Enter title" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 no-padding">
                     <label asp-for="Description" class="control-label"></label>
-                    <textarea asp-for="Description" class="form-control" style="resize:none"></textarea>
+                    <textarea asp-for="Description" class="form-control" placeholder="Enter problem description" style="height: 150px;"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 no-padding" style="padding-left: 5px">
                     <label asp-for="SolutionPlan" class="control-label"></label>
-                    <textarea asp-for="SolutionPlan" class="form-control" style="resize:none"></textarea>
+                    <textarea asp-for="SolutionPlan" class="form-control" placeholder="Enter solution plan" style="height: 150px;"></textarea>
                     <span asp-validation-for="SolutionPlan" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="UnitID" class="control-label"></label>
-                <select asp-for="UnitID" class="form-control">
-                    <option value="@ViewBag.UnitID">@ViewBag.UnitName</option>
-                </select>
-                <span asp-validation-for="UnitID" class="text-danger"></span>
+            <div class="form-group col-md-12 no-padding">
+                <div class="col-md-3 no-padding">
+                    <label asp-for="UnitID" class="control-label"></label>
+                    <select asp-for="UnitID" class="form-control">
+                        <option value="@ViewBag.UnitID">@ViewBag.UnitName</option>
+                    </select>
+                    <span asp-validation-for="UnitID" class="text-danger"></span>
+                </div>                
             </div>
             <div class="form-group">
-                <input type="submit" value="Submit Idea" class="btn btn-default" />
+                <input type="submit" value="Submit Idea" class="btn btn-default"/>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

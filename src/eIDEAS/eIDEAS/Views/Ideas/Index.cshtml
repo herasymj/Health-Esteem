@@ -5,74 +5,51 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Ideas</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create Idea</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UnitID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SolutionPlan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateEdited)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SolutionPlan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateEdited)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div>
+    @foreach (var idea in Model)
+    {
+        var localIdeaSubmissionTime = idea.DateCreated.ToLocalTime();
+
+        <div class="panel panel-default idea-overview">
+            <div class="row">
+                <div class="col-md-11">
+                    <h4><strong>@Html.DisplayFor(modelItem => idea.Title)</strong></h4>
+                    <p class="no-margin">Submitted on @localIdeaSubmissionTime by --AUTHOR_NAME--</p>
+                    <p>to <strong>--TEAM NAME--</strong></p>
+                    <p class="no-margin">Status: @Html.DisplayFor(modelItem => idea.Status)</p>
+                </div>
+                <div class="col-md-1">
+                    <img data-toggle="collapse" data-target="#@idea.ID" data-expanded="false" src="~/images/arrow-right.png" style="margin-top: 28px" />
+                </div>
+            </div>
+            <div id="@idea.ID" class="collapse">
+                <hr />
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="col-md-6 no-padding">
+                            <h5><strong>Description</strong></h5>
+                        </div>
+                        <div class="col-md-6 no-padding">
+                            <h5><strong>Solution Plan</strong></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="col-md-5 problem-description no-padding" style="padding: 5px">
+                            @Html.DisplayFor(modelItem => idea.Description)
+                        </div>
+                        <div class="col-md-offset-1 col-md-5 solution-plan no-padding" style="padding: 5px">
+                            @Html.DisplayFor(modelItem => idea.SolutionPlan)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
