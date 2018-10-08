@@ -1,5 +1,4 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
-for details on configuring this project to bundle and minify static web assets. */
+﻿/* Body */
 body {
     padding-top: 50px;
     padding-bottom: 20px;
@@ -20,13 +19,53 @@ body {
 
 /* Make .svg files in the carousel display properly in older browsers */
 .carousel-inner .item img[src$=".svg"] {
-    width: 100%;
-    height: 100%
+    height: 100%;    
+    width: 100%
+}
+
+/* Hovering */
+.expand:hover {
+    cursor: pointer
+}
+
+/* hr */
+hr {
+    background-color: #888888;
+    height: 1px;
+    margin: 5px 0px
+}
+
+/* Idea overview */
+.idea-overview {
+    background-color: #EEEEEE;
+    border-color: #888888;
+    border-width: thin;
+    padding: 0px 10px 10px 10px
+}
+
+/* Override margin from bootstrap */
+.no-margin {
+    margin: 0px
+}
+
+/* Override padding from bootstrap */
+.no-padding {
+    padding: 0px
+}
+
+/* Problem Description and Solution Plan for an idea */
+.problem-description, .solution-plan {
+    background-color: #FFFFFF;
 }
 
 /* QR code generator */
 #qrCode {
     margin: 15px;
+}
+
+/* Textarea */
+textarea {
+    resize: none;
 }
 
 /* Hide/rearrange for smaller screens */
