@@ -26,8 +26,11 @@ namespace eIDEAS.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(String filterType)
         {
+            //If a filter type was not specified, default to the "MyIdeas" page.
+            filterType = filterType == null ? "MyIdeas" : filterType;
+
             //Create basic model for the ideas to show. Initially set to have no rows
-            List<Idea> ideaModel = new List<Idea>();
+            IEnumerable<Idea> ideaModel = new List<Idea>();
             //Get the user ID
             var loggedInUserID = _userManager.GetUserId(HttpContext.User);
             
