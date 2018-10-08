@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using eIDEAS.Models.Enums;
 
 namespace eIDEAS.Controllers
 {
@@ -78,6 +79,8 @@ namespace eIDEAS.Controllers
                 idea.Status = StatusEnum.Plan;
                 idea.DateCreated = DateTime.UtcNow;
                 idea.DateEdited = DateTime.UtcNow;
+
+                //Adding idea points for user
 
                 //Attempt to add the idea to the database
                 _context.Add(idea);

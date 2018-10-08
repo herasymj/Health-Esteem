@@ -1,4 +1,5 @@
 ﻿using System;
+using eIDEAS.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace eIDEAS.Models
