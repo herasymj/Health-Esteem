@@ -14,6 +14,5 @@ namespace eIDEAS.Data
         public DbSet<Unit> Unit { get; set; }
         public DbSet<Idea> Idea { get; set; }
         public DbSet<Action> Action { get; set; }
-        public DbSet<Point> Point { get; set; }
     }
 }
