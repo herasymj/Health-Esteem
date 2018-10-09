@@ -42,9 +42,11 @@ namespace eIDEAS.Controllers
             {         
                 //Get a model that filters on only the user's ideas
                 ideaModel = await _context.Idea.Where(idea => idea.UserID == new Guid(loggedInUserID)).ToListAsync();
+                ViewBag.PageName = "My Ideas";
             } else if (filterType == "TeamIdeas")
             {
                 //Create a model that filters on only the user's team's ideas.
+                ViewBag.PageName = "Team Ideas";
                 var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
                 int unitID = _context.Unit.Where(unit => unit.ID == loggedInUser.UnitID).FirstOrDefault().ID;
                 ideaModel = await _context.Idea.Where(idea => idea.UnitID == unitID).ToListAsync();
@@ -146,7 +148,7 @@ namespace eIDEAS.Controllers
         // POST: Ideas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated,DateEdited")] Idea idea)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated")] Idea idea)
         {
             if (id != idea.ID)
             {
@@ -157,6 +159,7 @@ namespace eIDEAS.Controllers
             {
                 try
                 {
+                    idea.DateEdited = DateTime.UtcNow;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
                 }
