@@ -1,0 +1,10 @@
+﻿@model eIDEAS.Models.ErrorViewModel
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div>
+    <p>Sorry, something went wrong!</p>
+    <p>Error Code: @Html.DisplayFor(Model => Model.RequestId)</p> 
+</div>
