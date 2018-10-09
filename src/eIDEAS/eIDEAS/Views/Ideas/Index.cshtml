@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<eIDEAS.Models.Idea>
+@using eIDEAS.Models.Enums
 
 @{
     ViewData["Title"] = "Index";
@@ -16,13 +17,67 @@
         var localIdeaSubmissionTime = idea.DateCreated.ToLocalTime();
 
         <div class="panel panel-default idea-overview">
+            @{
+                //Create variables used for the display of the status progress bar
+                string doClass = "progress-bar-waiting";
+                string checkClass = "progress-bar-waiting";
+                string actClass = "progress-bar-waiting";
+                string actText = "Act";
+
+                //The display of the progress bar depends on how far the idea has made it in the PDCA process.
+                //An idea will have always reached at least the "Plan" stage.
+                switch (idea.Status)
+                {
+                    case StatusEnum.Do:
+                        doClass = "progress-bar-info";
+                        break;
+                    case StatusEnum.Check:
+                        doClass = "progress-bar-info";
+                        checkClass = "progress-bar-info";
+                        break;
+                    case StatusEnum.Adopt:
+                        doClass = "progress-bar-info";
+                        checkClass = "progress-bar-info";
+                        actClass = "progress-bar-success";
+                        actText = StatusEnum.Adopt.ToString();
+                        break;
+                    case StatusEnum.Adapt:
+                        doClass = "progress-bar-info";
+                        checkClass = "progress-bar-info";
+                        actClass = "progress-bar-warning";
+                        actText = StatusEnum.Adapt.ToString();
+                        break;
+                    case StatusEnum.Abandon:
+                        doClass = "progress-bar-info";
+                        checkClass = "progress-bar-info";
+                        actClass = "progress-bar-danger";
+                        actText = StatusEnum.Abandon.ToString();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             <div class="row">
                 <div class="col-md-11">
                     <h4><strong>@Html.DisplayFor(modelItem => idea.Title)</strong></h4>
-                    <p class="no-margin">Submitted on @localIdeaSubmissionTime by --AUTHOR_NAME--</p>
-                    <p>to <strong>--TEAM NAME--</strong></p>
-                    <label style="width: 115px; font-weight: normal">Status: @Html.DisplayFor(modelItem => idea.Status)</label>
-                    <a asp-action="Edit" asp-route-id="@idea.ID" class="btn btn-sm btn-default no-padding" role="button" style="padding: 2px 5px">Update Status</a>
+                    <div class="col-md-5 no-padding">
+                        <p class="no-margin">Submitted on @localIdeaSubmissionTime by --AUTHOR_NAME--</p>
+                        <p>to <strong>--TEAM NAME--</strong></p>
+                    </div>
+                    <div class="col-md-7 no-padding" style="padding-top: 20px">
+                        <div class="col-md-10 no-padding">
+                            <div class="progress no-margin">
+                                <div class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
+                                <div class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
+                                <div class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
+                                <div class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <a asp-action="Edit" asp-route-id="@idea.ID" class="btn btn-sm btn-default no-padding" role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-1">
                     <img class="expand" data-toggle="collapse" data-target="#@idea.ID" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" style="margin-top: 28px" />

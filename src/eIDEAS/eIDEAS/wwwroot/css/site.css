@@ -53,6 +53,11 @@ hr {
     padding: 0px
 }
 
+/* Additional progress bar type */
+.progress-bar-waiting {
+    background-color: #888888;
+}
+
 /* Problem Description and Solution Plan for an idea */
 .problem-description, .solution-plan {
     background-color: #FFFFFF;
