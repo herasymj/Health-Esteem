@@ -10,8 +10,8 @@ namespace eIDEAS.Models
         public int ID { get; set; }
         public Guid UserID { get; set; }
         public int IdeaID { get; set; }
-        public int ActionID { get; set; }
         public ActionTypeEnum Type { get; set; }
+        public string Value { get; set; }
         public DateTime Date { get; set; }
     }
 }

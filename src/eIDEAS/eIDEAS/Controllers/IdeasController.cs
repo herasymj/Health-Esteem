@@ -106,7 +106,22 @@ namespace eIDEAS.Controllers
 
                 //Attempt to add the idea to the database
                 _context.Add(idea);
+
+                //save changes and return to home
                 await _context.SaveChangesAsync();
+
+                //add points
+                int id = idea.ID;
+                var action = new Models.Action();
+                action.UserID = new Guid(_loggedInUserID);
+                action.IdeaID = id;
+                action.Type = ActionTypeEnum.point;
+                action.Value = 50.ToString();//random value that we can deal with later
+                action.Date = DateTime.UtcNow;
+
+                _context.Add(action);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(idea);

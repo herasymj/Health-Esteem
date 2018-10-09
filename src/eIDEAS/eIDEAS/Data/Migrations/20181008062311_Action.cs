@@ -17,8 +17,8 @@ namespace eIDEAS.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserID = table.Column<Guid>(nullable: false),
                     IdeaID = table.Column<int>(nullable: false),
-                    ActionID = table.Column<int>(nullable: false),
                     Type = table.Column<ActionTypeEnum>(nullable: false),
+                    Value = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
