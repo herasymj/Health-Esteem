@@ -30,29 +30,65 @@ namespace eIDEAS.Controllers
         public async Task<IActionResult> Index(String filterType)
         {
             //If a filter type was not specified, default to the "MyIdeas" page.
-            filterType = filterType == null ? "MyIdeas" : filterType;
+            if (filterType == null)
+                filterType = "MyIdeas";
 
             //Create basic model for the ideas to show. Initially set to have no rows
-            IEnumerable<Idea> ideaModel = new List<Idea>();
-            //Get the user ID
+            List<IdeaPresentationViewModel> ideaViewModel = new List<IdeaPresentationViewModel>();
+
+            //Retrieve the logged in user's information
             var loggedInUserID = _userManager.GetUserId(HttpContext.User);
-            
+            ApplicationUser loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+
+            //Retrieve the logged in user's unit information
+            Unit loggedInUserUnit = _context.Unit.Where(unit => unit.ID == loggedInUser.UnitID).FirstOrDefault();
+
             //Determine what ideas the user wants to see
             if (filterType == "MyIdeas")
             {         
-                //Get a model that filters on only the user's ideas
-                ideaModel = await _context.Idea.Where(idea => idea.UserID == new Guid(loggedInUserID)).ToListAsync();
+                //Get a model that filters on the user's ideas
+                var ideas = await _context.Idea.Where(idea => idea.UserID.ToString() == loggedInUserID).ToListAsync();
+
+                //Create the idea presentation viewmodel
+                foreach(Idea idea in ideas)
+                {
+                    var ideaPresentation = new IdeaPresentationViewModel
+                        {
+                            Overview = idea,
+                            AuthorFirstName = loggedInUser.FirstName,
+                            AuthorLastName = loggedInUser.LastName,
+                            UnitName = loggedInUserUnit.Name
+                        };
+
+                    ideaViewModel.Add(ideaPresentation);
+                }
                 ViewBag.PageName = "My Ideas";
-            } else if (filterType == "TeamIdeas")
-            {
-                //Create a model that filters on only the user's team's ideas.
-                ViewBag.PageName = "Team Ideas";
-                var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
-                int unitID = _context.Unit.Where(unit => unit.ID == loggedInUser.UnitID).FirstOrDefault().ID;
-                ideaModel = await _context.Idea.Where(idea => idea.UnitID == unitID).ToListAsync();
             }
+            else if (filterType == "TeamIdeas")
+            {
+                //Get a model that filters on the user's unit's ideas
+                var ideas = await _context.Idea.Where(idea => idea.UnitID == loggedInUserUnit.ID).ToListAsync();
+
+                //Create the idea presentation viewmodel
+                foreach (Idea idea in ideas)
+                {
+                    ApplicationUser ideaAuthor = await _context.Users.Where(user => user.Id == idea.UserID.ToString()).FirstOrDefaultAsync();
+
+                    var ideaPresentation = new IdeaPresentationViewModel
+                    {
+                        Overview = idea,
+                        AuthorFirstName = ideaAuthor.FirstName,
+                        AuthorLastName = ideaAuthor.LastName,
+                        UnitName = loggedInUserUnit.Name
+                    };
+
+                    ideaViewModel.Add(ideaPresentation);
+                }
+                ViewBag.PageName = "Team Ideas";
+            }
+
             //Send the model to the view and return the view
-            return View(ideaModel);
+            return View(ideaViewModel);
         }
 
         // GET: Ideas/Details/5
@@ -117,8 +153,8 @@ namespace eIDEAS.Controllers
                 var action = new Models.Action();
                 action.UserID = new Guid(_loggedInUserID);
                 action.IdeaID = id;
-                action.Type = ActionTypeEnum.point;
-                action.Value = 50.ToString();//random value that we can deal with later
+                action.Type = ActionTypeEnum.IdeaPoint;
+                action.Value = 150.ToString();
                 action.Date = DateTime.UtcNow;
 
                 _context.Add(action);

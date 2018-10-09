@@ -1,5 +1,6 @@
-﻿@model IEnumerable<eIDEAS.Models.Idea>
+﻿@using eIDEAS.Models
 @using eIDEAS.Models.Enums
+@model IEnumerable<IdeaPresentationViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,7 +15,7 @@
 <div>
     @foreach (var idea in Model)
     {
-        var localIdeaSubmissionTime = idea.DateCreated.ToLocalTime();
+        var localIdeaSubmissionTime = idea.Overview.DateCreated.ToLocalTime();
 
         <div class="panel panel-default idea-overview">
             @{
@@ -26,7 +27,7 @@
 
                 //The display of the progress bar depends on how far the idea has made it in the PDCA process.
                 //An idea will have always reached at least the "Plan" stage.
-                switch (idea.Status)
+                switch (idea.Overview.Status)
                 {
                     case StatusEnum.Do:
                         doClass = "progress-bar-info";
@@ -60,10 +61,10 @@
 
             <div class="row">
                 <div class="col-md-11">
-                    <h4><strong>@Html.DisplayFor(modelItem => idea.Title)</strong></h4>
+                    <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
                     <div class="col-md-5 no-padding">
-                        <p class="no-margin">Submitted on @localIdeaSubmissionTime by --AUTHOR_NAME--</p>
-                        <p>to <strong>--TEAM NAME--</strong></p>
+                        <p class="no-margin">Submitted on @localIdeaSubmissionTime by @idea.AuthorFirstName @idea.AuthorLastName</p>
+                        <p>to <strong>@idea.UnitName</strong></p>
                     </div>
                     <div class="col-md-7 no-padding" style="padding-top: 20px">
                         <div class="col-md-10 no-padding">
@@ -75,15 +76,15 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <a asp-action="Edit" asp-route-id="@idea.ID" class="btn btn-sm btn-default no-padding" role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
+                            <a asp-action="Edit" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default no-padding" role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-1">
-                    <img class="expand" data-toggle="collapse" data-target="#@idea.ID" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" style="margin-top: 28px" />
+                    <img class="expand" data-toggle="collapse" data-target="#@idea.Overview.ID" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" style="margin-top: 28px" />
                 </div>
             </div>
-            <div id="@idea.ID" class="collapse">
+            <div id="@idea.Overview.ID" class="collapse">
                 <hr />
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
@@ -98,10 +99,10 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         <div class="col-md-5 problem-description no-padding" style="padding: 5px">
-                            @Html.DisplayFor(modelItem => idea.Description)
+                            @Html.DisplayFor(modelItem => idea.Overview.Description)
                         </div>
                         <div class="col-md-offset-1 col-md-5 solution-plan no-padding" style="padding: 5px">
-                            @Html.DisplayFor(modelItem => idea.SolutionPlan)
+                            @Html.DisplayFor(modelItem => idea.Overview.SolutionPlan)
                         </div>
                     </div>
                 </div>
