@@ -149,15 +149,15 @@ namespace eIDEAS.Controllers
                 await _context.SaveChangesAsync();
 
                 //add points
-                int id = idea.ID;
-                var action = new Models.Action();
-                action.UserID = new Guid(_loggedInUserID);
-                action.IdeaID = id;
-                action.Type = ActionTypeEnum.IdeaPoint;
-                action.Value = 150.ToString();
-                action.Date = DateTime.UtcNow;
+                //int id = idea.ID;
+                //var action = new Models.Action();
+                //action.UserID = new Guid(_loggedInUserID);
+                //action.IdeaID = id;
+                //action.Type = ActionTypeEnum.IdeaPoint;
+                ////action.Value = 150.ToString();
+                //action.Date = DateTime.UtcNow;
 
-                _context.Add(action);
+                //_context.Add(action);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));

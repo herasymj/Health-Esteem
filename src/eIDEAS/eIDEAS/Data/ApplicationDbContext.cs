@@ -13,6 +13,7 @@ namespace eIDEAS.Data
         public DbSet<Division> Division { get; set; }
         public DbSet<Unit> Unit { get; set; }
         public DbSet<Idea> Idea { get; set; }
-        public DbSet<Action> Action { get; set; }
+        public DbSet<Amendment> Amendment { get; set; }
+        public DbSet<IdeaInteraction> IdeaInteraction { get; set; }
     }
 }
