@@ -1,4 +1,4 @@
-﻿@model IEnumerable<eIDEAS.Models.Unit>
+﻿@model IEnumerable<eIDEAS.Models.UnitDivision>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,10 +14,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DivisionID)
+                Division
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.division.Name)
             </th>
             <th></th>
         </tr>
@@ -26,15 +26,15 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.DivisionID)
+                @Html.DisplayFor(modelItem => item.division.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.unit.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.unit.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.unit.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.unit.ID">Delete</a>
             </td>
         </tr>
 }
