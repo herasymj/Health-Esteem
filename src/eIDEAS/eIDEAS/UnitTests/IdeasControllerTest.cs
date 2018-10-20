@@ -55,17 +55,16 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DetailPageErrorsOnInvalidId()
         {
-            //Check to make sure there is nothing in the database for ID = 1
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count > 0)
+            int i = 999999;
+            //Find a row that doesn't exist in the database
+            while(_context.Division.Where(div => div.ID == i).ToList().Count > 0)
             {
-                //If something exists, remove it.
-                _context.Division.Remove(_context.Division.Where(div => div.ID == 1).First());
-                await _context.SaveChangesAsync();
+                i++;
             }
+            
 
             //Access the detail page where id=1 and wait for the page
-            var actionResult = controller.Details(1);
-            actionResult.Wait();
+            var actionResult = controller.Details(i);
             var detailPage = actionResult.Result;
 
             //Ensure that a NotFoundResult is returned.
@@ -75,46 +74,43 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DetailPageReturnsViewIfValid()
         {
-            //Check to make sure that a division id exists
-            if (_context.Idea.Where(id => id.ID == 1).ToList().Count == 0)
-            {
-                //If a division with the ID doesn't exist, create one and save the database.
-                Idea newIdeas = new Idea();
-                newIdeas.ID = 1;
-                newIdeas.UserID = new Guid("39b17b12-1e02-422c-849b-fde0ccb205bc");
-                newIdeas.UnitID = 1;
-                newIdeas.Title = "rrrr";
-                newIdeas.Description = "dasd";
-                newIdeas.SolutionPlan = "dsd";
-                newIdeas.Status = 0;
-                newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
-                newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
+            //If a division with the ID doesn't exist, create one and save the database.
+            Idea newIdeas = new Idea();
+            newIdeas.UserID = new Guid();
+            newIdeas.UnitID = 1;
+            newIdeas.Title = "rrrr";
+            newIdeas.Description = "dasd";
+            newIdeas.SolutionPlan = "dsd";
+            newIdeas.Status = 0;
+            newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
+            newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
 
-                _context.Idea.Add(newIdeas);
-                await _context.SaveChangesAsync();
-            }
+            _context.Idea.Add(newIdeas);
+            await _context.SaveChangesAsync();
 
             //Get the details page for the division
-            var actionResult = controller.Details(1);
+            var actionResult = controller.Details(newIdeas.ID);
             actionResult.Wait();
             var detailPage = actionResult.Result as ViewResult;
 
             //Ensure that a view is returned.
             Assert.NotNull(detailPage);
+
+            //Delete the row after it is inserted
+            _context.Idea.Remove(newIdeas);
         }
 
         [Fact]
         public async void EditPageErrorsOnInvalidId()
         {
-            //Ensure that if an id that does't exist is passed, a NotFound is thrown
-            if (_context.Idea.Where(id => id.ID == 1).ToList().Count > 0)
+            int i = 999999;
+            while(_context.Idea.Where(id => id.ID == i).ToList().Count > 0)
             {
-                _context.Idea.Remove(_context.Idea.Where(id => id.ID == 1).First());
-                await _context.SaveChangesAsync();
+                i++;
             }
 
             //Access the edit page
-            var actionResult = controller.Edit(1);
+            var actionResult = controller.Edit(i);
             actionResult.Wait();
             var editPage = actionResult.Result;
 
@@ -125,31 +121,29 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void EditPageReturnsViewIfValid()
         {
-            //Ensure that if an id that exists is passed, a page is returned
-            if (_context.Idea.Where(id => id.ID == 1).ToList().Count == 0)
-            {
-                Idea newIdeas = new Idea();
-                newIdeas.ID = 1;
-                newIdeas.UserID = new Guid("39b17b12-1e02-422c-849b-fde0ccb205bc");
-                newIdeas.UnitID = 1;
-                newIdeas.Title = "rrrr";
-                newIdeas.Description = "dasd";
-                newIdeas.SolutionPlan = "dsd";
-                newIdeas.Status = 0;
-                newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
-                newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
+            Idea newIdeas = new Idea();
+            newIdeas.UserID = new Guid();
+            newIdeas.UnitID = 1;
+            newIdeas.Title = "rrrr";
+            newIdeas.Description = "dasd";
+            newIdeas.SolutionPlan = "dsd";
+            newIdeas.Status = 0;
+            newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
+            newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
 
-                _context.Idea.Add(newIdeas);
-                await _context.SaveChangesAsync();
-            }
+            _context.Idea.Add(newIdeas);
+            await _context.SaveChangesAsync();
 
             //Access the edit page.
-            var actionResult = controller.Edit(1);
+            var actionResult = controller.Edit(newIdeas.ID);
             actionResult.Wait();
             var editPage = actionResult.Result as ViewResult;
 
             //Ensure that the detail page is returned.
             Assert.NotNull(editPage);
+
+            //Delete the fake data
+            _context.Idea.Remove(newIdeas);
         }
 
         [Fact]
@@ -168,15 +162,14 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DeletePageErrorsOnInvalidId()
         {
-            //Ensure that if an id that does't exist is passed, a NotFound is thrown
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count > 0)
+            int i = 999999;
+            while(_context.Division.Where(div => div.ID == 1).ToList().Count > 0)
             {
-                _context.Division.Remove(_context.Division.Where(div => div.ID == 1).First());
-                await _context.SaveChangesAsync();
+                i++;
             }
 
             //Access the delete page.
-            var actionResult = controller.Delete(1);
+            var actionResult = controller.Delete(i);
             actionResult.Wait();
             var page = actionResult.Result;
 
@@ -187,31 +180,29 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DeletePageReturnsViewIfValid()
         {
-            //Ensure that if an id that exists is passed, a page is returned
-            if (_context.Idea.Where( id=> id.ID == 1).ToList().Count == 0)
-            {
-                Idea newIdeas = new Idea();
-                newIdeas.ID = 1;
-                newIdeas.UserID = new Guid("39b17b12-1e02-422c-849b-fde0ccb205bc");
-                newIdeas.UnitID = 1;
-                newIdeas.Title = "rrrr";
-                newIdeas.Description = "dasd";
-                newIdeas.SolutionPlan = "dsd";
-                newIdeas.Status = 0;
-                newIdeas.DateCreated = new DateTime(2008, 5, 1, 8 ,30,52);
-                 newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
+            Idea newIdeas = new Idea();
+            newIdeas.UserID = new Guid();
+            newIdeas.UnitID = 1;
+            newIdeas.Title = "rrrr";
+            newIdeas.Description = "dasd";
+            newIdeas.SolutionPlan = "dsd";
+            newIdeas.Status = 0;
+            newIdeas.DateCreated = new DateTime(2008, 5, 1, 8 ,30,52);
+            newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
                 
-                _context.Idea.Add(newIdeas);
-                await _context.SaveChangesAsync();
-            }
+            _context.Idea.Add(newIdeas);
+            await _context.SaveChangesAsync();
 
             //Access the delete page.
-            var actionResult = controller.Delete(1);
+            var actionResult = controller.Delete(newIdeas.ID);
             actionResult.Wait();
             var page = actionResult.Result as ViewResult;
 
             //Ensure that a deletepage is returned
             Assert.NotNull(page);
+
+            //Delete the fake data
+            _context.Idea.Remove(newIdeas);
         }
 
         [Fact]
@@ -228,30 +219,26 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DeleteConfirmedDeletesData()
         {
-            //Ensure that there is a row to delete.
-            if (_context.Idea.Where(div => div.ID == 1).ToList().Count == 0)
-            {
-                Idea newIdeas = new Idea();
-                newIdeas.ID = 1;
-                newIdeas.UserID = new Guid("39b17b12-1e02-422c-849b-fde0ccb205bc");
-                newIdeas.UnitID = 1;
-                newIdeas.Title = "rrrr";
-                newIdeas.Description = "dasd";
-                newIdeas.SolutionPlan = "dsd";
-                newIdeas.Status = 0;
-                newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
-                newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
+            //Create a new idea
+            Idea newIdeas = new Idea();
+            newIdeas.UserID = new Guid();
+            newIdeas.UnitID = 1;
+            newIdeas.Title = "rrrr";
+            newIdeas.Description = "dasd";
+            newIdeas.SolutionPlan = "dsd";
+            newIdeas.Status = 0;
+            newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
+            newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
 
-                _context.Idea.Add(newIdeas);
-                await _context.SaveChangesAsync();
-            }
+            _context.Idea.Add(newIdeas);
+            await _context.SaveChangesAsync();
 
             //Access the delete confirmation page.
-            var actionResult = controller.DeleteConfirmed(1);
+            var actionResult = controller.DeleteConfirmed(newIdeas.ID);
             actionResult.Wait();
 
             //Ensure that the row got deleted.
-            Assert.True(_context.Idea.Where(div => div.ID == 1).ToList().Count == 0);
+            Assert.True(_context.Idea.Where(div => div.ID == newIdeas.ID).ToList().Count == 0);
             //Ensure that the user is returned back to the index page.
             //The result from the controller is a redirect.
             var redirect = actionResult.Result;

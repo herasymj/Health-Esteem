@@ -41,17 +41,15 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DetailPageErrorsOnInvalidId()
         {
-            //Check to make sure there is nothing in the database for ID = 1
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count > 0)
+            int i = 999999;
+            //Find a row that doesn't exist.
+            while(_context.Division.Where(div => div.ID == i).ToList().Count > 0)
             {
-                //If something exists, remove it.
-                _context.Division.Remove(_context.Division.Where(div => div.ID == 1).First());
-                await _context.SaveChangesAsync();
+                i++;
             }
 
             //Access the detail page where id=1 and wait for the page
-            var actionResult = controller.Details(1);
-            actionResult.Wait();
+            var actionResult = controller.Details(i);
             var detailPage = actionResult.Result;
 
             //Ensure that a NotFoundResult is returned.
@@ -61,24 +59,21 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DetailPageReturnsViewIfValid()
         {
-            //Check to make sure that a division id exists
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count == 0)
-            {
-                //If a division with the ID doesn't exist, create one and save the database.
-                Division newDivision = new Division();
-                newDivision.ID = 1;
-                newDivision.Name = "Test Name";
-                _context.Division.Add(newDivision);
-                await _context.SaveChangesAsync();
-            }
+            //If a division with the ID doesn't exist, create one and save the database.
+            Division newDivision = new Division();
+            newDivision.Name = "Test Name";
+            _context.Division.Add(newDivision);
+            await _context.SaveChangesAsync();
 
             //Get the details page for the division
-            var actionResult = controller.Details(1);
-            actionResult.Wait();
+            var actionResult = controller.Details(newDivision.ID);
             var detailPage = actionResult.Result as ViewResult;
 
             //Ensure that a view is returned.
             Assert.NotNull(detailPage);
+
+            //Delete the row
+            _context.Division.Remove(newDivision);
         }
 
         [Fact]
@@ -87,24 +82,21 @@ namespace eIDEAS.UnitTests
             //Ensure that if a null id is passed a nofound result is returned.
             //Ensure that if an id that does't exist is passed, a Not Found is thrown
             var actionResult = controller.Details(null);
-            actionResult.Wait();
             var detailPage = actionResult.Result;
             Assert.True(detailPage is NotFoundResult);
         }
 
         [Fact]
-        public async void EditPageErrorsOnInvalidId()
+        public void EditPageErrorsOnInvalidId()
         {
-            //Ensure that if an id that does't exist is passed, a NotFound is thrown
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count > 0)
+            int i = 999999;
+            while(_context.Division.Where(div => div.ID == i).ToList().Count > 0)
             {
-                _context.Division.Remove(_context.Division.Where(div => div.ID == 1).First());
-                await _context.SaveChangesAsync();
+                i++;
             }
 
             //Access the edit page
-            var actionResult = controller.Edit(1);
-            actionResult.Wait();
+            var actionResult = controller.Edit(i);
             var editPage = actionResult.Result;
 
             //Ensure a NotFoundResult is returned.
@@ -114,23 +106,21 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void EditPageReturnsViewIfValid()
         {
-            //Ensure that if an id that exists is passed, a page is returned
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count == 0)
-            {
-                Division newDivision = new Division();
-                newDivision.ID = 1;
-                newDivision.Name = "Test Name";
-                _context.Division.Add(newDivision);
-                await _context.SaveChangesAsync();
-            }
+            //Create a division to test on
+            Division newDivision = new Division();
+            newDivision.Name = "Test Name";
+            _context.Division.Add(newDivision);
+            await _context.SaveChangesAsync();
 
             //Access the edit page.
-            var actionResult = controller.Edit(1);
-            actionResult.Wait();
+            var actionResult = controller.Edit(newDivision.ID);
             var editPage = actionResult.Result as ViewResult;
 
             //Ensure that the detail page is returned.
             Assert.NotNull(editPage);
+
+            //Delete the division
+            _context.Division.Remove(newDivision);
         }
 
         [Fact]
@@ -139,7 +129,6 @@ namespace eIDEAS.UnitTests
             //Ensure that if a null id is passed a nofound result is returned.
             //Ensure that if an id that does't exist is passed, a Not Found is thrown
             var actionResult = controller.Edit(null);
-            actionResult.Wait();
             var editPage = actionResult.Result;
 
             //Ensure a NotFoundResult is returned.
@@ -149,16 +138,14 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DeletePageErrorsOnInvalidId()
         {
-            //Ensure that if an id that does't exist is passed, a NotFound is thrown
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count > 0)
+            int i = 999999;
+            while (_context.Division.Where(div => div.ID == i).ToList().Count > 0)
             {
-                _context.Division.Remove(_context.Division.Where(div => div.ID == 1).First());
-                await _context.SaveChangesAsync();
+                i++;
             }
 
             //Access the delete page.
-            var actionResult = controller.Delete(1);
-            actionResult.Wait();
+            var actionResult = controller.Delete(i);
             var page = actionResult.Result;
 
             //Ensure that a NotFoundResult is returned.
@@ -168,23 +155,21 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DeletePageReturnsViewIfValid()
         {
-            //Ensure that if an id that exists is passed, a page is returned
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count == 0)
-            {
-                Division newDivision = new Division();
-                newDivision.ID = 1;
-                newDivision.Name = "Test Name";
-                _context.Division.Add(newDivision);
-                await _context.SaveChangesAsync();
-            }
+            Division newDivision = new Division();
+            newDivision.Name = "Test Name";
+            _context.Division.Add(newDivision);
+            await _context.SaveChangesAsync();
 
             //Access the delete page.
-            var actionResult = controller.Delete(1);
+            var actionResult = controller.Delete(newDivision.ID);
             actionResult.Wait();
             var page = actionResult.Result as ViewResult;
 
             //Ensure that a deletepage is returned
             Assert.NotNull(page);
+
+            //Delete the test data
+            _context.Division.Remove(newDivision);
         }
 
         [Fact]
@@ -201,22 +186,17 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DeleteConfirmedDeletesData()
         {
-            //Ensure that there is a row to delete.
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count == 0)
-            {
-                Division newDivision = new Division();
-                newDivision.ID = 1;
-                newDivision.Name = "Test Name";
-                _context.Division.Add(newDivision);
-                await _context.SaveChangesAsync();
-            }
+            Division newDivision = new Division();
+            newDivision.Name = "Test Name";
+            _context.Division.Add(newDivision);
+            await _context.SaveChangesAsync();
 
             //Access the delete confirmation page.
-            var actionResult = controller.DeleteConfirmed(1);
+            var actionResult = controller.DeleteConfirmed(newDivision.ID);
             actionResult.Wait();
 
             //Ensure that the row got deleted.
-            Assert.True(_context.Division.Where(div => div.ID == 1).ToList().Count == 0);
+            Assert.True(_context.Division.Where(div => div.ID == newDivision.ID).ToList().Count == 0);
             //Ensure that the user is returned back to the index page.
             //The result from the controller is a redirect.
             var redirect = actionResult.Result;
