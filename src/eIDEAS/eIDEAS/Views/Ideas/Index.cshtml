@@ -91,7 +91,7 @@
                     <img class="expand" data-toggle="collapse" data-target="#idea-@idea.Overview.ID-details" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" style="margin-top: 28px" />
                 </div>
             </div>
-            <div id="idea-@idea.Overview.ID-details" class="row">
+            <div id="idea-@idea.Overview.ID-details" class="row collapse">
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-12">
@@ -116,9 +116,26 @@
                         <div class="col-md-12">
                             <div class="solution-plan" style="padding: 5px">
                                 @Html.DisplayFor(modelItem => idea.Overview.SolutionPlan)
-                            </div>                           
-                        </div>                        
+                            </div>
+                        </div>
                     </div>
+                    @foreach (var amendment in idea.Amendments)
+                    {
+                        <div class="row" style="margin-top: 10px">
+                            <div class="col-md-10 col-md-offset-2">
+                                <div class="amendment" style="padding: 5px">
+                                    @amendment.Comment
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-2" align="right">
+                                <span>
+                                    Posted by <strong>@amendment.AuthorFirstName @amendment.AuthorLastName</strong> on @amendment.PostingDate
+                                </span>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
