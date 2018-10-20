@@ -50,28 +50,7 @@ namespace eIDEAS.UnitTests
             this.controller = hc;
         }
         
-        [Fact]
-        public async void DetailPageReturnsIfValid()
-        {
-            //Check to make sure that a division id exists
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count == 0)
-            {
-                //If a division with the ID doesn't exist, create one and save the database.
-                Division newDivision = new Division();
-                newDivision.ID = 1;
-                newDivision.Name = "Test Name";
-                _context.Division.Add(newDivision);
-                await _context.SaveChangesAsync();
-            }
-
-            //Get the details page for the division
-            var actionResult = controller.Details(1);
-            actionResult.Wait();
-            var detailPage = actionResult.Result as ViewResult;
-
-            //Ensure that a view is returned.
-            Assert.NotNull(detailPage);
-        }
+       
 
         [Fact]
         public async void DetailPageErrorsOnInvalidId()
@@ -97,13 +76,21 @@ namespace eIDEAS.UnitTests
         public async void DetailPageReturnsViewIfValid()
         {
             //Check to make sure that a division id exists
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count == 0)
+            if (_context.Idea.Where(id => id.ID == 1).ToList().Count == 0)
             {
                 //If a division with the ID doesn't exist, create one and save the database.
-                Division newDivision = new Division();
-                newDivision.ID = 1;
-                newDivision.Name = "Test Name";
-                _context.Division.Add(newDivision);
+                Idea newIdeas = new Idea();
+                newIdeas.ID = 1;
+                newIdeas.UserID = new Guid("39b17b12-1e02-422c-849b-fde0ccb205bc");
+                newIdeas.UnitID = 1;
+                newIdeas.Title = "rrrr";
+                newIdeas.Description = "dasd";
+                newIdeas.SolutionPlan = "dsd";
+                newIdeas.Status = 0;
+                newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
+                newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
+
+                _context.Idea.Add(newIdeas);
                 await _context.SaveChangesAsync();
             }
 
@@ -120,9 +107,9 @@ namespace eIDEAS.UnitTests
         public async void EditPageErrorsOnInvalidId()
         {
             //Ensure that if an id that does't exist is passed, a NotFound is thrown
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count > 0)
+            if (_context.Idea.Where(id => id.ID == 1).ToList().Count > 0)
             {
-                _context.Division.Remove(_context.Division.Where(div => div.ID == 1).First());
+                _context.Idea.Remove(_context.Idea.Where(id => id.ID == 1).First());
                 await _context.SaveChangesAsync();
             }
 
@@ -139,12 +126,20 @@ namespace eIDEAS.UnitTests
         public async void EditPageReturnsViewIfValid()
         {
             //Ensure that if an id that exists is passed, a page is returned
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count == 0)
+            if (_context.Idea.Where(id => id.ID == 1).ToList().Count == 0)
             {
-                Division newDivision = new Division();
-                newDivision.ID = 1;
-                newDivision.Name = "Test Name";
-                _context.Division.Add(newDivision);
+                Idea newIdeas = new Idea();
+                newIdeas.ID = 1;
+                newIdeas.UserID = new Guid("39b17b12-1e02-422c-849b-fde0ccb205bc");
+                newIdeas.UnitID = 1;
+                newIdeas.Title = "rrrr";
+                newIdeas.Description = "dasd";
+                newIdeas.SolutionPlan = "dsd";
+                newIdeas.Status = 0;
+                newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
+                newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
+
+                _context.Idea.Add(newIdeas);
                 await _context.SaveChangesAsync();
             }
 
@@ -193,12 +188,20 @@ namespace eIDEAS.UnitTests
         public async void DeletePageReturnsViewIfValid()
         {
             //Ensure that if an id that exists is passed, a page is returned
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count == 0)
+            if (_context.Idea.Where( id=> id.ID == 1).ToList().Count == 0)
             {
-                Division newDivision = new Division();
-                newDivision.ID = 1;
-                newDivision.Name = "Test Name";
-                _context.Division.Add(newDivision);
+                Idea newIdeas = new Idea();
+                newIdeas.ID = 1;
+                newIdeas.UserID = new Guid("39b17b12-1e02-422c-849b-fde0ccb205bc");
+                newIdeas.UnitID = 1;
+                newIdeas.Title = "rrrr";
+                newIdeas.Description = "dasd";
+                newIdeas.SolutionPlan = "dsd";
+                newIdeas.Status = 0;
+                newIdeas.DateCreated = new DateTime(2008, 5, 1, 8 ,30,52);
+                 newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
+                
+                _context.Idea.Add(newIdeas);
                 await _context.SaveChangesAsync();
             }
 
@@ -226,12 +229,20 @@ namespace eIDEAS.UnitTests
         public async void DeleteConfirmedDeletesData()
         {
             //Ensure that there is a row to delete.
-            if (_context.Division.Where(div => div.ID == 1).ToList().Count == 0)
+            if (_context.Idea.Where(div => div.ID == 1).ToList().Count == 0)
             {
-                Division newDivision = new Division();
-                newDivision.ID = 1;
-                newDivision.Name = "Test Name";
-                _context.Division.Add(newDivision);
+                Idea newIdeas = new Idea();
+                newIdeas.ID = 1;
+                newIdeas.UserID = new Guid("39b17b12-1e02-422c-849b-fde0ccb205bc");
+                newIdeas.UnitID = 1;
+                newIdeas.Title = "rrrr";
+                newIdeas.Description = "dasd";
+                newIdeas.SolutionPlan = "dsd";
+                newIdeas.Status = 0;
+                newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
+                newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
+
+                _context.Idea.Add(newIdeas);
                 await _context.SaveChangesAsync();
             }
 
@@ -240,7 +251,7 @@ namespace eIDEAS.UnitTests
             actionResult.Wait();
 
             //Ensure that the row got deleted.
-            Assert.True(_context.Division.Where(div => div.ID == 1).ToList().Count == 0);
+            Assert.True(_context.Idea.Where(div => div.ID == 1).ToList().Count == 0);
             //Ensure that the user is returned back to the index page.
             //The result from the controller is a redirect.
             var redirect = actionResult.Result;

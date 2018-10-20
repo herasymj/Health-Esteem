@@ -12,104 +12,135 @@
 <p>
     <a asp-action="Create">Create Idea</a>
 </p>
-<div>
+
     @foreach (var idea in Model)
     {
         var localIdeaSubmissionTime = idea.Overview.DateCreated.ToLocalTime();
 
+        //Create variables used for the display of the status progress bar
+        string doClass = "progress-bar-waiting";
+        string checkClass = "progress-bar-waiting";
+        string actClass = "progress-bar-waiting";
+        string actText = "Act";
+
+        //The display of the progress bar depends on how far the idea has made it in the PDCA process.
+        //An idea will have always reached at least the "Plan" stage.
+        switch (idea.Overview.Status)
+        {
+            case StatusEnum.Do:
+                doClass = "progress-bar-info";
+                break;
+            case StatusEnum.Check:
+                doClass = "progress-bar-info";
+                checkClass = "progress-bar-info";
+                break;
+            case StatusEnum.Adopt:
+                doClass = "progress-bar-info";
+                checkClass = "progress-bar-info";
+                actClass = "progress-bar-success";
+                actText = StatusEnum.Adopt.ToString();
+                break;
+            case StatusEnum.Adapt:
+                doClass = "progress-bar-info";
+                checkClass = "progress-bar-info";
+                actClass = "progress-bar-warning";
+                actText = StatusEnum.Adapt.ToString();
+                break;
+            case StatusEnum.Abandon:
+                doClass = "progress-bar-info";
+                checkClass = "progress-bar-info";
+                actClass = "progress-bar-danger";
+                actText = StatusEnum.Abandon.ToString();
+                break;
+            default:
+                break;
+        }
+
+
         <div class="panel panel-default idea-overview">
-            @{
-                //Create variables used for the display of the status progress bar
-                string doClass = "progress-bar-waiting";
-                string checkClass = "progress-bar-waiting";
-                string actClass = "progress-bar-waiting";
-                string actText = "Act";
-
-                //The display of the progress bar depends on how far the idea has made it in the PDCA process.
-                //An idea will have always reached at least the "Plan" stage.
-                switch (idea.Overview.Status)
-                {
-                    case StatusEnum.Do:
-                        doClass = "progress-bar-info";
-                        break;
-                    case StatusEnum.Check:
-                        doClass = "progress-bar-info";
-                        checkClass = "progress-bar-info";
-                        break;
-                    case StatusEnum.Adopt:
-                        doClass = "progress-bar-info";
-                        checkClass = "progress-bar-info";
-                        actClass = "progress-bar-success";
-                        actText = StatusEnum.Adopt.ToString();
-                        break;
-                    case StatusEnum.Adapt:
-                        doClass = "progress-bar-info";
-                        checkClass = "progress-bar-info";
-                        actClass = "progress-bar-warning";
-                        actText = StatusEnum.Adapt.ToString();
-                        break;
-                    case StatusEnum.Abandon:
-                        doClass = "progress-bar-info";
-                        checkClass = "progress-bar-info";
-                        actClass = "progress-bar-danger";
-                        actText = StatusEnum.Abandon.ToString();
-                        break;
-                    default:
-                        break;
-                }
-            }
-
             <div class="row">
                 <div class="col-md-11">
-                    <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
-                    <div class="col-md-5 no-padding">
-                        <p class="no-margin">Submitted on @localIdeaSubmissionTime by @idea.AuthorFirstName @idea.AuthorLastName</p>
-                        <p>to <strong>@idea.UnitName</strong></p>
-                    </div>
-                    <div class="col-md-7 no-padding" style="padding-top: 20px">
-                        <div class="col-md-10 no-padding">
-                            <div class="progress no-margin">
-                                <div class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
-                                <div class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
-                                <div class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
-                                <div class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
                         </div>
-                        <div class="col-md-2">
-                            <a asp-action="Edit" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default no-padding" role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p class="no-margin">Submitted on @localIdeaSubmissionTime by @idea.AuthorFirstName @idea.AuthorLastName</p>
+                            <p>to <strong>@idea.UnitName</strong></p>
+                        </div>
+                        <div class="col-md-6 " style="padding-top: 20px">
+                            <div class="row">
+                                <div class="col-md-10 ">
+                                    <div class="progress no-margin">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
+                                        <div class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
+                                        <div class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
+                                        <div class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <a asp-action="Edit" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-1">
-                    <img class="expand" data-toggle="collapse" data-target="#@idea.Overview.ID" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" style="margin-top: 28px" />
+                    <img class="expand" data-toggle="collapse" data-target="#idea-@idea.Overview.ID-details" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" style="margin-top: 28px" />
                 </div>
             </div>
-            <div id="@idea.Overview.ID" class="collapse">
-                <hr />
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="col-md-6 no-padding">
+            <div id="idea-@idea.Overview.ID-details" class="row collapse">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
                             <h5><strong>Description</strong></h5>
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="problem-description" style="padding: 5px">
+                                @Html.DisplayFor(modelItem => idea.Overview.Description)
+                            </div>                            
                         </div>
-                        <div class="col-md-6 no-padding">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
                             <h5><strong>Solution Plan</strong></h5>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="col-md-5 problem-description no-padding" style="padding: 5px">
-                            @Html.DisplayFor(modelItem => idea.Overview.Description)
-                        </div>
-                        <div class="col-md-offset-1 col-md-5 solution-plan no-padding" style="padding: 5px">
-                            @Html.DisplayFor(modelItem => idea.Overview.SolutionPlan)
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="solution-plan" style="padding: 5px">
+                                @Html.DisplayFor(modelItem => idea.Overview.SolutionPlan)
+                            </div>
                         </div>
                     </div>
+                    @foreach (var amendment in idea.Amendments)
+                    {
+                        <div class="row" style="margin-top: 10px">
+                            <div class="col-md-10 col-md-offset-2">
+                                <div class="amendment" style="padding: 5px">
+                                    @amendment.Comment
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-2" align="right">
+                                <span>
+                                    Posted by <strong>@amendment.AuthorFirstName @amendment.AuthorLastName</strong> on @amendment.PostingDate
+                                </span>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     }
-</div>
+
 
 <script type="text/javascript">
     //This function toggles the display of the arrow indicating if a idea view is expanded. It is called whenever such an arrow is clicked.
