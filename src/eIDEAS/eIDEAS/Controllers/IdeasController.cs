@@ -148,16 +148,12 @@ namespace eIDEAS.Controllers
                 //save changes and return to home
                 await _context.SaveChangesAsync();
 
-                //add points
-                //int id = idea.ID;
-                //var action = new Models.Action();
-                //action.UserID = new Guid(_loggedInUserID);
-                //action.IdeaID = id;
-                //action.Type = ActionTypeEnum.IdeaPoint;
-                ////action.Value = 150.ToString();
-                //action.Date = DateTime.UtcNow;
+                //add points to user table
+                //150 creation
+                var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
+                loggedInUser.IdeaPoints += 150;
+                _context.Update(loggedInUser);
 
-                //_context.Add(action);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
