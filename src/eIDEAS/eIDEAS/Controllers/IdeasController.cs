@@ -154,7 +154,7 @@ namespace eIDEAS.Controllers
         // POST: Ideas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UnitID,Title,Description,SolutionPlan")] Idea idea)
+        public async Task<IActionResult> Create([Bind("ID,UnitID,Title,Description,SolutionPlan")] Idea idea, bool isDraft)
         {
             if (ModelState.IsValid)
             {
@@ -166,6 +166,7 @@ namespace eIDEAS.Controllers
                 idea.Status = StatusEnum.Plan;
                 idea.DateCreated = DateTime.UtcNow;
                 idea.DateEdited = DateTime.UtcNow;
+                idea.IsDraft = isDraft;
 
                 //Attempt to add the idea to the database
                 _context.Add(idea);
