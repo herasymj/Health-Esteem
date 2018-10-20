@@ -29,6 +29,8 @@ namespace eIDEAS.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(String filterType)
         {
+            List <Idea> ideas = new List<Idea>();
+
             //If a filter type was not specified, default to the "MyIdeas" page.
             if (filterType == null)
                 filterType = "MyIdeas";
@@ -43,48 +45,71 @@ namespace eIDEAS.Controllers
             //Retrieve the logged in user's unit information
             Unit loggedInUserUnit = _context.Unit.Where(unit => unit.ID == loggedInUser.UnitID).FirstOrDefault();
 
+            //Create a dictionary to store user information
+            Dictionary<Guid, ApplicationUser> userDictionary = new Dictionary<Guid, ApplicationUser>();
+
             //Determine what ideas the user wants to see
             if (filterType == "MyIdeas")
             {         
                 //Get a model that filters on the user's ideas
-                var ideas = await _context.Idea.Where(idea => idea.UserID.ToString() == loggedInUserID).ToListAsync();
+                ideas = await _context.Idea.Where(idea => idea.UserID.ToString() == loggedInUserID).ToListAsync();
 
-                //Create the idea presentation viewmodel
-                foreach(Idea idea in ideas)
-                {
-                    var ideaPresentation = new IdeaPresentationViewModel
-                        {
-                            Overview = idea,
-                            AuthorFirstName = loggedInUser.FirstName,
-                            AuthorLastName = loggedInUser.LastName,
-                            UnitName = loggedInUserUnit.Name
-                        };
-
-                    ideaViewModel.Add(ideaPresentation);
-                }
+                //Name the page appropriately
                 ViewBag.PageName = "My Ideas";
             }
             else if (filterType == "TeamIdeas")
             {
                 //Get a model that filters on the user's unit's ideas
-                var ideas = await _context.Idea.Where(idea => idea.UnitID == loggedInUserUnit.ID).ToListAsync();
+                ideas = await _context.Idea.Where(idea => idea.UnitID == loggedInUserUnit.ID).ToListAsync();
 
-                //Create the idea presentation viewmodel
-                foreach (Idea idea in ideas)
+                //Name the page appropriately
+                ViewBag.PageName = "Team Ideas";     
+            }
+
+            //Create the idea presentation viewmodel
+            foreach (Idea idea in ideas)
+            {
+                //If the user dictionary does not have the idea author, add it
+                if (!userDictionary.ContainsKey(idea.UserID))
                 {
                     ApplicationUser ideaAuthor = await _context.Users.Where(user => user.Id == idea.UserID.ToString()).FirstOrDefaultAsync();
+                    userDictionary.Add(idea.UserID, ideaAuthor);
+                }
 
-                    var ideaPresentation = new IdeaPresentationViewModel
+                //Retrieve amendments
+                List<AmendmentPresentationViewModel> amendmentViewModel = new List<AmendmentPresentationViewModel>();
+                var amendments = _context.Amendment.Where(amendment => amendment.IdeaID == idea.ID);
+
+                foreach (Amendment amendment in amendments)
+                {
+                    //If the user dictionary does not have the amendment author, add it
+                    if (!userDictionary.ContainsKey(amendment.UserID))
                     {
-                        Overview = idea,
-                        AuthorFirstName = ideaAuthor.FirstName,
-                        AuthorLastName = ideaAuthor.LastName,
-                        UnitName = loggedInUserUnit.Name
+                        ApplicationUser amendmentAuthor = await _context.Users.Where(user => user.Id == amendment.UserID.ToString()).FirstOrDefaultAsync();
+                        userDictionary.Add(amendment.UserID, amendmentAuthor);
+                    }
+
+                    var amendmentPresentation = new AmendmentPresentationViewModel
+                    {
+                        AuthorFirstName = userDictionary[amendment.UserID].FirstName,
+                        AuthorLastName = userDictionary[amendment.UserID].LastName,
+                        Comment = amendment.Comment,
+                        PostingDate = amendment.DateCreated
                     };
 
-                    ideaViewModel.Add(ideaPresentation);
+                    amendmentViewModel.Add(amendmentPresentation);
                 }
-                ViewBag.PageName = "Team Ideas";
+
+                var ideaPresentation = new IdeaPresentationViewModel
+                {
+                    Overview = idea,
+                    AuthorFirstName = userDictionary[idea.UserID].FirstName,
+                    AuthorLastName = userDictionary[idea.UserID].LastName,
+                    UnitName = loggedInUserUnit.Name,
+                    Amendments = amendmentViewModel
+                };
+
+                ideaViewModel.Add(ideaPresentation);
             }
 
             //Send the model to the view and return the view
@@ -148,16 +173,12 @@ namespace eIDEAS.Controllers
                 //save changes and return to home
                 await _context.SaveChangesAsync();
 
-                //add points
-                int id = idea.ID;
-                var action = new Models.Action();
-                action.UserID = new Guid(_loggedInUserID);
-                action.IdeaID = id;
-                action.Type = ActionTypeEnum.IdeaPoint;
-                action.Value = 150.ToString();
-                action.Date = DateTime.UtcNow;
+                //add points to user table
+                //150 creation
+                var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
+                loggedInUser.IdeaPoints += 150;
+                _context.Update(loggedInUser);
 
-                _context.Add(action);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));

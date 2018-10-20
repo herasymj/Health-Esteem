@@ -10,8 +10,8 @@ using eIDEAS.Data;
 namespace eIDEAS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181008062311_Action")]
-    partial class Action
+    [Migration("20181019235126_User_AddPoints_AddPermissions_ProfilePic")]
+    partial class User_AddPoints_AddPermissions_ProfilePic
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -16,5 +16,13 @@ namespace eIDEAS.Models
 
         [Required]
         public int UnitID { get; set; }
+
+        public int IdeaPoints { get; set; }
+
+        public int ParticipationPoints { get; set; }
+
+        public int Permissions { get; set; }
+
+        public string ProfilePic { get; set; }
     }
 }

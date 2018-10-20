@@ -4,7 +4,46 @@
     ViewData["Title"] = "Error";
 }
 
-<div>
-    <p>Sorry, something went wrong!</p>
-    <p>Error Code: @Html.DisplayFor(Model => Model.RequestId)</p> 
+<br />
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="error_image" style='background-image:url("https://i.ytimg.com/vi/gaLIEUNv2YM/maxresdefault.jpg");width: 50%;margin: 0 auto;background-position:50% 50%;background-size: cover;background-repeat:no-repeat;border-radius:50%;min-width:500px;min-height:500px;'></div>
+    </div>
 </div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center">Sorry, something went wrong!</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h5 class="text-center" style="font-style:italic;">Error Code: @Html.DisplayFor(Model => Model.RequestId)</h5>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            var path = 'url("images/errors/';
+            var choice = Math.floor((Math.random() * 4) + 1);
+
+            if (choice == 1)
+                path += 'dog1';
+            else if (choice == 2)
+                path += 'dog2';
+            else if (choice == 3)
+                path += 'cat1';
+            else if (choice == 4)
+                path += 'cat2';
+
+            path += '.jpg")';
+            console.log(path);
+            $('#error_image').css("background-image", path);
+        });
+        
+    </script>
+}

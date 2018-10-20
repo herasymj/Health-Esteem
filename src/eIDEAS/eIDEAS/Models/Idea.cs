@@ -27,9 +27,14 @@ namespace eIDEAS.Models
 
         public StatusEnum Status { get; set; }
 
+        public bool IsDraft { get; set; }
+
+        public string ClosingRemarks { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         public DateTime DateEdited { get; set; }
+
     }
 
 }

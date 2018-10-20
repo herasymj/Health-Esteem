@@ -24,7 +24,19 @@ namespace eIDEAS.Controllers
         // GET: Units
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Unit.ToListAsync());
+            List<UnitDivision> uds = new List<UnitDivision>();
+
+            foreach(Unit unit in await _context.Unit.ToListAsync())
+            {
+                UnitDivision ud = new UnitDivision(_context)
+                {
+                    unit = unit
+                };
+                ud.division = ud.GetDivisions(unit.DivisionID).First();
+                uds.Add(ud);
+            }
+
+            return View(uds);
         }
 
         // GET: Units/Details/5
@@ -42,13 +54,15 @@ namespace eIDEAS.Controllers
                 return NotFound();
             }
 
-            return View(unit);
+            UnitDivision ud = new UnitDivision(_context) { unit = unit };
+            ud.division = ud.GetDivisions(unit.DivisionID).First();
+            return View(ud);
         }
 
         // GET: Units/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new UnitDivision(_context));
         }
 
         // POST: Units/Create
@@ -56,15 +70,15 @@ namespace eIDEAS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,DivisionID,Name")] Unit unit)
+        public async Task<IActionResult> Create(UnitDivision ud)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(unit);
+                _context.Add(ud.unit);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(unit);
+            return View(ud.unit);
         }
 
         // GET: Units/Edit/5
@@ -80,7 +94,10 @@ namespace eIDEAS.Controllers
             {
                 return NotFound();
             }
-            return View(unit);
+
+            UnitDivision ud = new UnitDivision(_context) { unit = unit };
+            ud.division = ud.GetDivisions(unit.DivisionID).First();
+            return View(ud);
         }
 
         // POST: Units/Edit/5
@@ -88,9 +105,9 @@ namespace eIDEAS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,DivisionID,Name")] Unit unit)
+        public async Task<IActionResult> Edit(int id, UnitDivision ud)
         {
-            if (id != unit.ID)
+            if (id != ud.unit.ID)
             {
                 return NotFound();
             }
@@ -99,12 +116,12 @@ namespace eIDEAS.Controllers
             {
                 try
                 {
-                    _context.Update(unit);
+                    _context.Update(ud.unit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UnitExists(unit.ID))
+                    if (!UnitExists(ud.unit.ID))
                     {
                         return NotFound();
                     }
@@ -115,7 +132,7 @@ namespace eIDEAS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(unit);
+            return View(ud.unit);
         }
 
         // GET: Units/Delete/5
