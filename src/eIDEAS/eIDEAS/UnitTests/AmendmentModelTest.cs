@@ -8,15 +8,16 @@ using Xunit;
 using Microsoft.EntityFrameworkCore;
 using eIDEAS.Models;
 using eIDEAS.Areas.Identity.Pages.Account;
+using Newtonsoft.Json;
 
 namespace eIDEAS.UnitTests
 {
-    [TestCaseOrderer("TestOrderExamples.TestCaseOrdering.PriorityOrderer", "TestOrderExamples")]
-    public class IdeaModelTest
+    
+    public class AmendmentModelTest
     {
         ApplicationDbContext _context;
         
-        public IdeaModelTest()
+        public AmendmentModelTest()
         {
             //Setup the database context in the testing envorinment
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -25,52 +26,48 @@ namespace eIDEAS.UnitTests
         }
 
         [Fact]
-        public async void TestIdeaModel()
+        public async void TestAmendmentModel()
         {
-
+            
             //Create a new Unit in the database
-            Idea idea = new Idea();
-            idea.DateCreated = new DateTime(2018, 10, 19, 11, 59, 59);
-            idea.DateEdited = new DateTime(2018, 10, 19, 11, 59, 59);
-            idea.Description = "A test idea description";
-            idea.SolutionPlan = "A sample solution plan";
-            idea.Status = Models.Enums.StatusEnum.Adopt;
-            idea.Title = "A sample idea title for testing";
-            idea.UnitID = 1;
-            idea.UserID = new Guid();
+            Amendment amendment = new Amendment();
+            amendment.DateCreated = new DateTime(2018, 10, 16, 11, 59, 59);
+            amendment.Comment = "This is a sample comment";
+            amendment.IdeaID = 1;
+            amendment.UserID = new Guid();
 
             //Add the model to the database
-            _context.Idea.Add(idea);
+            _context.Amendment.Add(amendment);
 
             //Wait for the database to update changes
             await _context.SaveChangesAsync();
 
             //Confirm that the changes exist in the database.
-            IEnumerable<Idea> ideaList = _context.Idea.Where(row => row.ID == idea.ID).ToList();
-            Assert.Equal(ideaList.ElementAt(0), idea);
+            IEnumerable<Amendment> amendmentList = _context.Amendment.Where(row => row.ID == amendment.ID).ToList();
+            Assert.Equal(amendmentList.ElementAt(0), amendment);
 
             //Update the model in the database.
-            idea.Status = Models.Enums.StatusEnum.Abandon;
+            amendment.Comment = "This is an updated comment";
 
-            _context.Idea.Update(idea);
+            _context.Amendment.Update(amendment);
 
             //Wait for changes to be saved.
             await _context.SaveChangesAsync();
 
             //Query the database again
-            ideaList = _context.Idea.Where(row => row.ID == idea.ID).ToList();
+            amendmentList = _context.Amendment.Where(row => row.ID == amendment.ID).ToList();
 
             //Ensure that the model has the updated information and updates are working.
-            Assert.Equal(ideaList.ElementAt(0), idea);
+            Assert.Equal(amendmentList.ElementAt(0), amendment);
 
             //Delete the fake data from the database so that the data does not stay in the tables.
-            _context.Idea.Remove(idea);
+            _context.Amendment.Remove(amendment);
 
             //Wait for the changes to be saved
             await _context.SaveChangesAsync();
 
             //Ensure that the row doesn't exist
-            Assert.Empty(_context.Idea.Where(row => row.ID == idea.ID).ToList());
+            Assert.Empty(_context.Amendment.Where(row => row.ID == amendment.ID).ToList());
         }
         
     }

@@ -163,7 +163,7 @@ namespace eIDEAS.UnitTests
         public async void DeletePageErrorsOnInvalidId()
         {
             int i = 999999;
-            while(_context.Division.Where(div => div.ID == 1).ToList().Count > 0)
+            while(_context.Division.Where(div => div.ID == i).ToList().Count > 0)
             {
                 i++;
             }
