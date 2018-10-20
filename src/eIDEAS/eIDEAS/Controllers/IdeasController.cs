@@ -27,13 +27,10 @@ namespace eIDEAS.Controllers
 
         // GET: Ideas?filterType={filterType}
         [HttpGet]
-        public async Task<IActionResult> Index(String filterType)
+        public async Task<IActionResult> Index(string filterType)
         {
+            //Create a list to store ideas
             List <Idea> ideas = new List<Idea>();
-
-            //If a filter type was not specified, default to the "MyIdeas" page.
-            if (filterType == null)
-                filterType = "MyIdeas";
 
             //Create basic model for the ideas to show. Initially set to have no rows
             List<IdeaPresentationViewModel> ideaViewModel = new List<IdeaPresentationViewModel>();
@@ -48,22 +45,33 @@ namespace eIDEAS.Controllers
             //Create a dictionary to store user information
             Dictionary<Guid, ApplicationUser> userDictionary = new Dictionary<Guid, ApplicationUser>();
 
-            //Determine what ideas the user wants to see
-            if (filterType == "MyIdeas")
-            {         
-                //Get a model that filters on the user's ideas
-                ideas = await _context.Idea.Where(idea => idea.UserID.ToString() == loggedInUserID).ToListAsync();
-
-                //Name the page appropriately
-                ViewBag.PageName = "My Ideas";
-            }
-            else if (filterType == "TeamIdeas")
+            //Determine which ideas the user wants to see
+            switch(filterType)
             {
-                //Get a model that filters on the user's unit's ideas
-                ideas = await _context.Idea.Where(idea => idea.UnitID == loggedInUserUnit.ID).ToListAsync();
+                case "MyDrafts":
+                    //Get a model that filters on the user's drafts
+                    ideas = await _context.Idea.Where(idea => idea.IsDraft && idea.UnitID == loggedInUserUnit.ID).ToListAsync();
 
-                //Name the page appropriately
-                ViewBag.PageName = "Team Ideas";     
+                    //Name the page appropriately
+                    ViewBag.PageName = "Team Ideas";
+                    break;
+
+                case "TeamIdeas":
+                    //Get a model that filters on the user's unit's ideas
+                    ideas = await _context.Idea.Where(idea => !idea.IsDraft && idea.UnitID == loggedInUserUnit.ID).ToListAsync();
+
+                    //Name the page appropriately
+                    ViewBag.PageName = "Team Ideas";
+                    break;
+
+                case "MyIdeas":
+                default:
+                    //Get a model that filters on the user's ideas
+                    ideas = await _context.Idea.Where(idea => !idea.IsDraft && idea.UserID.ToString() == loggedInUserID).ToListAsync();
+
+                    //Name the page appropriately
+                    ViewBag.PageName = "My Ideas";
+                    break;
             }
 
             //Create the idea presentation viewmodel
@@ -76,30 +84,36 @@ namespace eIDEAS.Controllers
                     userDictionary.Add(idea.UserID, ideaAuthor);
                 }
 
-                //Retrieve amendments
+                //Retrieve amendments for submitted ideas
                 List<AmendmentPresentationViewModel> amendmentViewModel = new List<AmendmentPresentationViewModel>();
-                var amendments = _context.Amendment.Where(amendment => amendment.IdeaID == idea.ID);
 
-                foreach (Amendment amendment in amendments)
+                //Drafts cannot possibly have amendments yet
+                if (filterType != "MyDrafts")
                 {
-                    //If the user dictionary does not have the amendment author, add it
-                    if (!userDictionary.ContainsKey(amendment.UserID))
+                    var amendments = _context.Amendment.Where(amendment => amendment.IdeaID == idea.ID);
+
+                    foreach (Amendment amendment in amendments)
                     {
-                        ApplicationUser amendmentAuthor = await _context.Users.Where(user => user.Id == amendment.UserID.ToString()).FirstOrDefaultAsync();
-                        userDictionary.Add(amendment.UserID, amendmentAuthor);
+                        //If the user dictionary does not have the amendment author, add it
+                        if (!userDictionary.ContainsKey(amendment.UserID))
+                        {
+                            ApplicationUser amendmentAuthor = await _context.Users.Where(user => user.Id == amendment.UserID.ToString()).FirstOrDefaultAsync();
+                            userDictionary.Add(amendment.UserID, amendmentAuthor);
+                        }
+
+                        var amendmentPresentation = new AmendmentPresentationViewModel
+                        {
+                            AuthorFirstName = userDictionary[amendment.UserID].FirstName,
+                            AuthorLastName = userDictionary[amendment.UserID].LastName,
+                            Comment = amendment.Comment,
+                            PostingDate = amendment.DateCreated
+                        };
+
+                        amendmentViewModel.Add(amendmentPresentation);
                     }
-
-                    var amendmentPresentation = new AmendmentPresentationViewModel
-                    {
-                        AuthorFirstName = userDictionary[amendment.UserID].FirstName,
-                        AuthorLastName = userDictionary[amendment.UserID].LastName,
-                        Comment = amendment.Comment,
-                        PostingDate = amendment.DateCreated
-                    };
-
-                    amendmentViewModel.Add(amendmentPresentation);
                 }
 
+                //Create the idea presentation
                 var ideaPresentation = new IdeaPresentationViewModel
                 {
                     Overview = idea,
