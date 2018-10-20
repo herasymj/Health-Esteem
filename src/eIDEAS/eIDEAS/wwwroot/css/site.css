@@ -58,8 +58,8 @@ hr {
     background-color: #888888;
 }
 
-/* Problem Description and Solution Plan for an idea */
-.problem-description, .solution-plan {
+/* Problem Description, Solution Plan and Amendments for an idea */
+.problem-description, .solution-plan, .amendment {
     background-color: #FFFFFF;
 }
 
