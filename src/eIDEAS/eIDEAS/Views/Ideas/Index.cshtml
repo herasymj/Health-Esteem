@@ -15,8 +15,6 @@
 
 @foreach (var idea in Model)
 {
-    var localIdeaSubmissionTime = idea.Overview.DateCreated.ToLocalTime();
-
     //Create variables used for the display of the status progress bar
     string doClass = "progress-bar-waiting";
     string checkClass = "progress-bar-waiting";
@@ -68,7 +66,7 @@
                 <div class="col-md-11">
                     <div class="row">
                         <div class="col-md-5">
-                            <p class="no-margin">Submitted on @localIdeaSubmissionTime by @idea.AuthorFirstName @idea.AuthorLastName</p>
+                            <p class="no-margin">Submitted on @idea.Overview.DateCreated.ToLocalTime(); by @idea.AuthorFirstName @idea.AuthorLastName</p>
                             <p>to <strong>@idea.UnitName</strong></p>
                         </div>
                         <div class="col-md-6 " style="padding-top: 20px">
@@ -133,7 +131,7 @@
                     <div class="row">
                         <div class="col-md-10 col-md-offset-2" align="right">
                             <span>
-                                Posted by <strong>@amendment.AuthorFirstName @amendment.AuthorLastName</strong> on @amendment.PostingDate
+                                Posted by <strong>@amendment.AuthorFirstName @amendment.AuthorLastName</strong> on @amendment.PostingDate.ToLocalTime()
                             </span>
                         </div>
                     </div>
@@ -143,14 +141,17 @@
                     <div class="row" style="margin-top: 10px;">
                         <div class="col-md-10 col-md-offset-2" align="right">
                             <span>
-                                <button data-toggle="collapse" data-target="#idea-@idea.Overview.ID-add-amendment">Toggle Amendment Form</button>
+                                <button class="btn btn-sm btn-default" data-toggle="collapse" data-target="#idea-@idea.Overview.ID-add-amendment">Toggle Amendment Form</button>
                             </span>
                         </div>
                     </div>
                     <div id="idea-@idea.Overview.ID-add-amendment" class="row collapse">
                         <div class="col-md-10 col-md-offset-2" align="right">
-                            <textarea class="form-control" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
-                            <button>Submit Amendment</button>
+                            <form asp-controller="Amendments" asp-action="Create" method="post">
+                                <input type="hidden" name="IdeaID" id="IdeaID" value="@idea.Overview.ID">
+                                <textarea name="Comment" id="Comment" class="form-control" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
+                                <button class="btn btn-sm btn-default" type="submit">Submit Amendment</button>
+                            </form>
                         </div>
                     </div>
                 }
