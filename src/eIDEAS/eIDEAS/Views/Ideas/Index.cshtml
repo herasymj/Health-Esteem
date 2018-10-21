@@ -54,6 +54,9 @@
             break;
     }
 
+    //An idea is completed if it is in the Adopt, Adapt or Abandon stage
+    bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
+
     <div class="panel panel-default idea-overview">
         <div class="row">
             <div class="col-md-12">
@@ -79,9 +82,12 @@
                                         <div class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <a asp-action="UpdateStatus" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
-                                </div>
+                                @if (!isCompleted)
+                                {
+                                    <div class="col-md-2">
+                                        <a asp-action="UpdateStatus" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default" role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

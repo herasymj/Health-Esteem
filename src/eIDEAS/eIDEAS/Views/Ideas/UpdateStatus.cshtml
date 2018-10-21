@@ -4,6 +4,30 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    //Create a list to hold possible PDCA status changes for the idea
+    List<StatusEnum> possibleStatusChanges = new List<StatusEnum>();
+
+    //The status can always remain as the current status
+    possibleStatusChanges.Add(Model.Status);
+
+    //Additional status options depend on the current status
+    switch(Model.Status)
+    {
+        case StatusEnum.Plan:
+            possibleStatusChanges.Add(StatusEnum.Do);
+            break;
+        case StatusEnum.Do:
+            possibleStatusChanges.Add(StatusEnum.Check);
+            break;
+        case StatusEnum.Check:
+            possibleStatusChanges.Add(StatusEnum.Adopt);
+            possibleStatusChanges.Add(StatusEnum.Adapt);
+            break;
+    }
+
+    //An idea can always be abandoned
+    possibleStatusChanges.Add(StatusEnum.Abandon);
 }
 
 <h3>Update Idea Status</h3>
@@ -37,7 +61,12 @@
             <div class="form-group col-md-12 no-padding">
                 <div class="col-md-2 no-padding">
                     <label asp-for="Status" class="control-label"></label>
-                    <select asp-for="Status" class="form-control" id="status" asp-items="Html.GetEnumSelectList<StatusEnum>()"></select>
+                    <select asp-for="Status" class="form-control" id="status">
+                        @foreach (var possibleStatus in possibleStatusChanges)
+    {
+                            <option value="@possibleStatus">@possibleStatus.ToString()</option>
+                        }
+                    </select>
                 </div>
             </div>
             <div class="col-md-2 no-padding">
@@ -53,4 +82,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    }
