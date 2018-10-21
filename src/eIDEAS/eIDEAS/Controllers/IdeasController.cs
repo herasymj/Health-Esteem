@@ -223,7 +223,7 @@ namespace eIDEAS.Controllers
         // POST: Ideas/UpdateStatus/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateStatus(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated")] Idea idea)
+        public async Task<IActionResult> UpdateStatus(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated,IsDraft")] Idea idea)
         {
             if (id != idea.ID)
             {

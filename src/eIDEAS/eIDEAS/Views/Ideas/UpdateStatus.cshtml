@@ -10,12 +10,13 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Edit">
+        <form asp-action="UpdateStatus">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
             <input type="hidden" asp-for="UserID" />
             <input type="hidden" asp-for="UnitID" />
             <input type="hidden" asp-for="DateCreated" />
+            <input type="hidden" asp-for="IsDraft" />
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" readonly />
