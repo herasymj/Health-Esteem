@@ -53,7 +53,8 @@ namespace eIDEAS.Controllers
                     ideas = await _context.Idea.Where(idea => idea.IsDraft && idea.UnitID == loggedInUserUnit.ID).ToListAsync();
 
                     //Name the page appropriately
-                    ViewBag.PageName = "Team Ideas";
+                    ViewBag.PageName = "My Drafts";
+                    ViewBag.IsDraft = true;
                     break;
 
                 case "TeamIdeas":
@@ -62,6 +63,7 @@ namespace eIDEAS.Controllers
 
                     //Name the page appropriately
                     ViewBag.PageName = "Team Ideas";
+                    ViewBag.IsDraft = false;
                     break;
 
                 case "MyIdeas":
@@ -71,6 +73,7 @@ namespace eIDEAS.Controllers
 
                     //Name the page appropriately
                     ViewBag.PageName = "My Ideas";
+                    ViewBag.IsDraft = false;
                     break;
             }
 
@@ -201,8 +204,8 @@ namespace eIDEAS.Controllers
             return View(idea);
         }
 
-        // GET: Ideas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Ideas/UpdateStatus/5
+        public async Task<IActionResult> UpdateStatus(int? id)
         {
             if (id == null)
             {
@@ -217,10 +220,10 @@ namespace eIDEAS.Controllers
             return View(idea);
         }
 
-        // POST: Ideas/Edit/5
+        // POST: Ideas/UpdateStatus/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated")] Idea idea)
+        public async Task<IActionResult> UpdateStatus(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated")] Idea idea)
         {
             if (id != idea.ID)
             {
@@ -245,6 +248,69 @@ namespace eIDEAS.Controllers
                     {
                         throw;
                     }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(idea);
+        }
+
+        // GET: Ideas/UpdateDraft/5
+        public async Task<IActionResult> EditDraft(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var idea = await _context.Idea.FindAsync(id);
+            if (idea == null)
+            {
+                return NotFound();
+            }
+            return View(idea);
+        }
+
+        // POST: Ideas/UpdateDraft/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditDraft(int id, [Bind("ID,UserID,UnitID,Title,Description,SolutionPlan,Status,DateCreated")] Idea idea, bool isDraft)
+        {
+            if (id != idea.ID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    DateTime currentTime = DateTime.UtcNow;
+
+                    idea.IsDraft = isDraft;
+                    idea.DateEdited = currentTime;
+
+                    if(!isDraft)
+                    {
+                        idea.DateCreated = currentTime;
+                    }
+
+                    _context.Update(idea);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!IdeaExists(idea.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                if(isDraft)
+                {
+                    return RedirectToAction(nameof(Index), new { filterType = "MyDrafts" });
                 }
                 return RedirectToAction(nameof(Index));
             }

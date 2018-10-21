@@ -1,19 +1,24 @@
 ﻿@model eIDEAS.Models.Idea
+@using eIDEAS.Models.Enums;
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3>Create Idea</h3>
+<h3>Edit Draft</h3>
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID"/>
+            <input type="hidden" asp-for="UserID"/>
+            <input type="hidden" asp-for="UnitID"/>
+            <input type="hidden" asp-for="Status"/>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" placeholder="Enter title" />
+                <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-row">
@@ -28,21 +33,16 @@
                     <span asp-validation-for="SolutionPlan" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group col-md-12 no-padding">
-                <div class="col-md-3 no-padding">
-                    <label asp-for="UnitID" class="control-label"></label>
-                    <select asp-for="UnitID" class="form-control">
-                        <option value="@ViewBag.UnitID">@ViewBag.UnitName</option>
-                    </select>
-                    <span asp-validation-for="UnitID" class="text-danger"></span>
-                </div>                
-            </div>
             <div class="form-group">
-                <input type="submit" value="Save as Draft" class="btn btn-default" asp-route-isDraft="true" />
+                <input type="submit" value="Update Draft" class="btn btn-default" asp-route-isDraft="true" />
                 <input type="submit" value="Submit Idea" class="btn btn-default" asp-route-isDraft="false" />
             </div>
         </form>
     </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

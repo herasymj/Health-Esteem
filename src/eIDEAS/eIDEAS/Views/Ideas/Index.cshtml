@@ -56,42 +56,44 @@
             break;
     }
 
-
     <div class="panel panel-default idea-overview">
         <div class="row">
-            <div class="col-md-11">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-5">
-                        <p class="no-margin">Submitted on @localIdeaSubmissionTime by @idea.AuthorFirstName @idea.AuthorLastName</p>
-                        <p>to <strong>@idea.UnitName</strong></p>
-                    </div>
-                    <div class="col-md-6 " style="padding-top: 20px">
-                        <div class="row">
-                            <div class="col-md-10">
-                                <div class="progress no-margin">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
-                                    <div class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
-                                    <div class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
-                                    <div class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
+            <div class="col-md-12">
+                <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
+            </div>
+        </div>
+        @if (!ViewBag.IsDraft)
+        {
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p class="no-margin">Submitted on @localIdeaSubmissionTime by @idea.AuthorFirstName @idea.AuthorLastName</p>
+                            <p>to <strong>@idea.UnitName</strong></p>
+                        </div>
+                        <div class="col-md-6 " style="padding-top: 20px">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="progress no-margin">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
+                                        <div class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
+                                        <div class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
+                                        <div class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-2">
-                                <a asp-action="Edit" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
+                                <div class="col-md-2">
+                                    <a asp-action="UpdateStatus" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-md-1">
+                    <img class="expand" data-toggle="collapse" data-target="#idea-@idea.Overview.ID-details" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png"/>
+                </div>
             </div>
-            <div class="col-md-1">
-                <img class="expand" data-toggle="collapse" data-target="#idea-@idea.Overview.ID-details" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" style="margin-top: 28px" />
-            </div>
-        </div>
-        <div id="idea-@idea.Overview.ID-details" class="row collapse">
+        }
+        <div id="idea-@idea.Overview.ID-details" class="row @(ViewBag.IsDraft ? "" : "collapse")">
             <div class="col-md-6">
                 <div class="row">
                     <div class="col-md-12">
@@ -136,19 +138,32 @@
                         </div>
                     </div>
                 }
-                <div class="row" style="margin-top: 10px;">
-                    <div class="col-md-10 col-md-offset-2" align="right">
-                        <span>
-                            <button data-toggle="collapse" data-target="#idea-@idea.Overview.ID-add-amendment">Toggle Amendment Form</button>
-                        </span>
+                @if (!ViewBag.IsDraft)
+                {
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-10 col-md-offset-2" align="right">
+                            <span>
+                                <button data-toggle="collapse" data-target="#idea-@idea.Overview.ID-add-amendment">Toggle Amendment Form</button>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div id="idea-@idea.Overview.ID-add-amendment" class="row collapse">
-                    <div class="col-md-10 col-md-offset-2" align="right">
-                        <textarea class="form-control" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
-                        <button>Submit Amendment</button>
-                    </div>                       
-                </div>
+                    <div id="idea-@idea.Overview.ID-add-amendment" class="row collapse">
+                        <div class="col-md-10 col-md-offset-2" align="right">
+                            <textarea class="form-control" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
+                            <button>Submit Amendment</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-10 col-md-offset-2" align="right">
+                            <span>
+                                <a asp-action="EditDraft" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Edit Draft</a>
+                            </span>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>

@@ -110,7 +110,7 @@ namespace eIDEAS.UnitTests
             }
 
             //Access the edit page
-            var actionResult = controller.Edit(i);
+            var actionResult = controller.UpdateStatus(i);
             actionResult.Wait();
             var editPage = actionResult.Result;
 
@@ -135,7 +135,7 @@ namespace eIDEAS.UnitTests
             await _context.SaveChangesAsync();
 
             //Access the edit page.
-            var actionResult = controller.Edit(newIdeas.ID);
+            var actionResult = controller.UpdateStatus(newIdeas.ID);
             actionResult.Wait();
             var editPage = actionResult.Result as ViewResult;
 
@@ -151,7 +151,7 @@ namespace eIDEAS.UnitTests
         {
             //Ensure that if a null id is passed a nofound result is returned.
             //Ensure that if an id that does't exist is passed, a Not Found is thrown
-            var actionResult = controller.Edit(null);
+            var actionResult = controller.UpdateStatus(null);
             actionResult.Wait();
             var editPage = actionResult.Result;
 
