@@ -18,7 +18,7 @@ namespace eIDEAS.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult FAQ()
         {
             ViewData["Message"] = "Your application description page.";
 
