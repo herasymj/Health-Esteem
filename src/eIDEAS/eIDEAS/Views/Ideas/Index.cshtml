@@ -125,41 +125,11 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var amendment in idea.Amendments)
-                {
-                    <div class="row" style="margin-top: 10px">
-                        <div class="col-md-10 col-md-offset-2">
-                            <div class="amendment" style="padding: 5px">
-                                @amendment.Comment
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-10 col-md-offset-2" align="right">
-                            <span>
-                                Posted by <strong>@amendment.AuthorFirstName @amendment.AuthorLastName</strong> on @amendment.PostingDate.ToLocalTime()
-                            </span>
-                        </div>
-                    </div>
-                }
                 @if (!ViewBag.IsDraft)
                 {
-                    <div class="row" style="margin-top: 10px;">
-                        <div class="col-md-10 col-md-offset-2" align="right">
-                            <span>
-                                <button class="btn btn-sm btn-default" data-toggle="collapse" data-target="#idea-@idea.Overview.ID-add-amendment">Toggle Amendment Form</button>
-                            </span>
-                        </div>
-                    </div>
-                    <div id="idea-@idea.Overview.ID-add-amendment" class="row collapse">
-                        <div class="col-md-10 col-md-offset-2" align="right">
-                            <form asp-controller="Amendments" asp-action="Create" method="post">
-                                <input type="hidden" name="IdeaID" id="IdeaID" value="@idea.Overview.ID">
-                                <textarea name="Comment" id="Comment" class="form-control" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
-                                <button class="btn btn-sm btn-default" type="submit">Submit Amendment</button>
-                            </form>
-                        </div>
-                    </div>
+                    @Html.Partial("../Amendments/Index", idea.Amendments, new ViewDataDictionary(ViewData){
+                        { "IdeaID", @idea.Overview.ID }
+                    })
                 }
                 else
                 {

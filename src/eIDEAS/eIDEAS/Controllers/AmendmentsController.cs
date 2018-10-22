@@ -22,27 +22,54 @@ namespace eIDEAS.Controllers
             _userManager = userManager;
         }
 
+        public ActionResult AmendmentsRefreshHandler()
+        {
+            return View();
+        }
+
         // POST: Amendments/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task Create([Bind("IdeaID,Comment")] Amendment amendment)
+        public async Task<IActionResult> Update(int ideaID, string comment)
         {
-            if (ModelState.IsValid)
+            var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+
+            var amendment = new Amendment();
+
+            //Create the amendment
+            amendment.IdeaID = ideaID;
+            amendment.Comment = comment;
+            amendment.UserID = new Guid(loggedInUserID);
+            amendment.DateCreated = DateTime.UtcNow;
+            _context.Add(amendment);
+            await _context.SaveChangesAsync();
+
+            //Give the amendment author 100 participation points
+            var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+            loggedInUser.ParticipationPoints += 100;
+            _context.Update(loggedInUser);
+            await _context.SaveChangesAsync();
+
+            //Get and return amendments
+            //Retrieve amendments for submitted ideas
+            List<AmendmentPresentationViewModel> amendmentViewModel = new List<AmendmentPresentationViewModel>();
+
+            var amendments = _context.Amendment.Where(a => a.IdeaID == ideaID);
+
+            foreach (Amendment amendmentVal in amendments)
             {
-                var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+                 ApplicationUser amendmentAuthor = _context.Users.Where(user => user.Id == amendment.UserID.ToString()).FirstOrDefault();
 
-                //Create the amendment
-                amendment.UserID = new Guid(loggedInUserID);
-                amendment.DateCreated = DateTime.UtcNow;
-                _context.Add(amendment);
-                await _context.SaveChangesAsync();
+                var amendmentPresentation = new AmendmentPresentationViewModel
+                {
+                    AuthorFirstName = amendmentAuthor.FirstName,
+                    AuthorLastName = amendmentAuthor.LastName,
+                    Comment = amendmentVal.Comment,
+                    PostingDate = amendmentVal.DateCreated
+                };
 
-                //Give the amendment author 100 participation points
-                var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
-                loggedInUser.ParticipationPoints += 100;
-                _context.Update(loggedInUser);
-                await _context.SaveChangesAsync();
+                amendmentViewModel.Add(amendmentPresentation);
             }
+            return PartialView("_AmendmentPartial", amendmentViewModel);
         }
     }
 }
