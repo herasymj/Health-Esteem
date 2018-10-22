@@ -187,16 +187,12 @@ namespace eIDEAS.Controllers
 
                 //Attempt to add the idea to the database
                 _context.Add(idea);
-
-                //save changes and return to home
                 await _context.SaveChangesAsync();
 
-                //add points to user table
-                //150 creation
+                //Give the idea author 150 idea points
                 var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
                 loggedInUser.IdeaPoints += 150;
                 _context.Update(loggedInUser);
-
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));

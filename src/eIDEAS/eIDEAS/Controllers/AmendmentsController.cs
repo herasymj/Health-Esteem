@@ -29,10 +29,18 @@ namespace eIDEAS.Controllers
         {
             if (ModelState.IsValid)
             {
-                amendment.UserID = new Guid(_userManager.GetUserId(HttpContext.User));
-                amendment.DateCreated = DateTime.UtcNow;
+                var loggedInUserID = _userManager.GetUserId(HttpContext.User);
 
+                //Create the amendment
+                amendment.UserID = new Guid(loggedInUserID);
+                amendment.DateCreated = DateTime.UtcNow;
                 _context.Add(amendment);
+                await _context.SaveChangesAsync();
+
+                //Give the amendment author 100 participation points
+                var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+                loggedInUser.ParticipationPoints += 100;
+                _context.Update(loggedInUser);
                 await _context.SaveChangesAsync();
             }
         }
