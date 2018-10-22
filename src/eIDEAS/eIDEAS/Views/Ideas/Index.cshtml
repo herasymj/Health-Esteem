@@ -7,6 +7,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script>
+    //For amendment submission
+    function ReloadAmendments(id){
+        comment = document.getElementById("Comment-" + id).value;
+        if (!(/\S/.test(comment)))
+            return;
+        $.ajax({
+            url: '@Url.Action("Update","Amendments")',
+            type: "POST",
+            data: { 'ideaID': id, 'comment': comment},
+            success: function (result) {
+                // refreshes partial view
+                $('#amendment-partial-' + id).html(result);
+                document.getElementById('Comment-' + id).value = '';
+            }
+        });
+    }
+</script>
+
 <h2>@ViewBag.PageName</h2>
 
 <p>

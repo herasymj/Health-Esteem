@@ -1,25 +1,5 @@
 ﻿@model IEnumerable<AmendmentPresentationViewModel>
 
-<script resource="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/core.js"></script>
-
-<script>
-    function ReloadAmendments(){
-        id = document.getElementById("IdeaID-@ViewData["IdeaID"]").value;
-        comment = document.getElementById("Comment-@ViewData["IdeaID"]").value;
-        $.ajax({
-            url: '@Url.Action("Update","Amendments")',
-            type: "POST",
-            data: { 'ideaID': id, 'comment': comment},
-            success: function (result) {
-                // refreshes partial view
-                $('#amendment-partial-@ViewData["IdeaID"]').html(result);
-                document.getElementById('Comment-@ViewData["IdeaID"]').value = '';
-            }
-        });
-    }
-</script>
-
-
 <div id="amendment-partial-@ViewData["IdeaID"]">
     @Html.Partial("../Amendments/_AmendmentPartial", @Model)
 </div>
@@ -36,7 +16,7 @@
         <form>
             <input type="hidden" name="IdeaID" id="IdeaID-@ViewData["IdeaID"]" value="@ViewData["IdeaID"]">
             <textarea name="Comment" id="Comment-@ViewData["IdeaID"]" class="form-control" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
-            <input type="button" id="amendmentSubmit" class="btn btn-sm btn-default" value="Submit Amendment" onclick="ReloadAmendments()"/>
+            <input type="button" id="amendmentSubmit" class="btn btn-sm btn-default" value="Submit Amendment" onclick="ReloadAmendments(@ViewData["IdeaID"])" />
         </form>
     </div>
 </div>
