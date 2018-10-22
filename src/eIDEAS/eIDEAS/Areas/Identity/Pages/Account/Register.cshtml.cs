@@ -84,12 +84,12 @@ namespace eIDEAS.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var divisions = await _context.Division.ToListAsync();
+            var divisions = await _context.Division.Where(division => division.DateDeleted == null).ToListAsync();
 
             foreach (var division in divisions)
             {
                 var units = _context.Unit
-                    .Where(unit => unit.DivisionID == division.ID)
+                    .Where(unit => unit.DivisionID == division.ID && unit.DateDeleted == null)
                     .ToList();
 
                 DivisionUnits.Add(division, units);

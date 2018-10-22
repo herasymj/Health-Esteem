@@ -26,13 +26,13 @@ namespace eIDEAS.Controllers
         {
             List<UnitDivision> uds = new List<UnitDivision>();
 
-            foreach(Unit unit in await _context.Unit.ToListAsync())
+            foreach(Unit unit in await _context.Unit.Where(unit => unit.DateDeleted == null).ToListAsync())
             {
                 UnitDivision ud = new UnitDivision(_context)
                 {
                     unit = unit
                 };
-                ud.division = ud.GetDivisions(unit.DivisionID).First();
+                ud.division = ud.GetDivisions(unit.DivisionID).Where(division => division.DateDeleted == null).First();
                 uds.Add(ud);
             }
 
@@ -159,6 +159,18 @@ namespace eIDEAS.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var unit = await _context.Unit.FindAsync(id);
+            var users = await _context.Users.Where(user => user.UnitID == id).ToListAsync();
+            if (users.Count != 0)
+            {
+                //can't delete units that still have users
+                ViewData["error"] = "Can't delete, there are still users in this unit.";
+                return View(unit);
+            }
+            else
+            {
+                ViewData["error"] = null;
+            }
+            
             _context.Unit.Remove(unit);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
