@@ -17,18 +17,5 @@ namespace eIDEAS.Controllers
         {
             return View();
         }
-
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name")] Division division)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(division);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(division);
-        }*/
     }
 }
