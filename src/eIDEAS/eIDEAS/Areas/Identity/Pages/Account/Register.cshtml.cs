@@ -82,7 +82,7 @@ namespace eIDEAS.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(bool createdByAdmin = false)
         {
             var divisions = await _context.Division.Where(division => division.DateDeleted == null).ToListAsync();
 
@@ -98,7 +98,7 @@ namespace eIDEAS.Areas.Identity.Pages.Account
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(bool createdByAdmin, string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
@@ -119,6 +119,12 @@ namespace eIDEAS.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
+                    //If the account was created by an admin, return to the user overview page
+                    if (createdByAdmin)
+                    {
+                        return LocalRedirect("~/ApplicationUsers");
+                    }
+                    //Otherwise, log the new user into the application
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }

@@ -3,12 +3,18 @@
 @{
     ViewData["Title"] = "Registration";
 }
+@using System.Web
 
 <h2>@ViewData["Title"]</h2>
 
+@{ 
+    var queryParameters = Request.QueryString.ToString();
+    var createdByAdmin = queryParameters.Contains("createdByAdmin=true") ? true : false;
+}
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form asp-route-returnUrl="@Model.ReturnUrl" asp-route-createdByAdmin="@createdByAdmin" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Input.FirstName"></label>
