@@ -189,12 +189,20 @@ namespace eIDEAS.Controllers
                 _context.Add(idea);
                 await _context.SaveChangesAsync();
 
-                //Give the idea author 150 idea points
-                var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
-                loggedInUser.IdeaPoints += 150;
-                _context.Update(loggedInUser);
-                await _context.SaveChangesAsync();
+                //Give the idea author 150 idea points on idea submission
+                if (!isDraft)
+                {
+                    var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
+                    loggedInUser.IdeaPoints += 150;
+                    _context.Update(loggedInUser);
+                    await _context.SaveChangesAsync();
+                }
 
+                //Return to the appropriate page
+                if (isDraft)
+                {
+                    return RedirectToAction(nameof(Index), new { filterType = "MyDrafts" });
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(idea);
@@ -285,9 +293,17 @@ namespace eIDEAS.Controllers
                     idea.IsDraft = isDraft;
                     idea.DateEdited = currentTime;
 
+
+                    //Update the creation date and idea points upon idea submission
                     if(!isDraft)
                     {
                         idea.DateCreated = currentTime;
+
+                        var _loggedInUserID = _userManager.GetUserId(HttpContext.User);
+                        var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
+                        loggedInUser.IdeaPoints += 150;
+                        _context.Update(loggedInUser);
+                        await _context.SaveChangesAsync();
                     }
 
                     _context.Update(idea);

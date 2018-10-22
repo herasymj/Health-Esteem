@@ -77,7 +77,8 @@ namespace eIDEAS.Data
                     FirstName = "Tristan",
                     LastName = "Heisler",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    IdeaPoints = 450
                 },
                 new ApplicationUser
                 {
