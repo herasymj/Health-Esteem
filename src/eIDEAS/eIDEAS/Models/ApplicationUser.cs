@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace eIDEAS.Models
@@ -24,5 +25,7 @@ namespace eIDEAS.Models
         public int Permissions { get; set; }
 
         public string ProfilePic { get; set; }
+
+        public DateTime? DateDeleted { get; set; }
     }
 }

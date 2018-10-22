@@ -7,7 +7,11 @@ namespace eIDEAS.Models
     {
         public Guid ID { get; set; }
 
-        public string Name { get; set; }
+        [Display (Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
 
         [Display(Name = "Email Address")]
         public string Email { get; set; }
@@ -20,6 +24,6 @@ namespace eIDEAS.Models
         public int IdeaPoints { get; set; }
 
         [Display(Name = "Participation Points")]
-        public int ParticpationPoints { get; set; }
+        public int ParticipationPoints { get; set; }
     }
 }
