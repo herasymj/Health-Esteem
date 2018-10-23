@@ -20,7 +20,6 @@ namespace eIDEAS.Controllers
 
         public IActionResult FAQ()
         {
-            ViewData["Message"] = "Your application description page.";
 
             return View();
         }
