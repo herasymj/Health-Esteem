@@ -10,17 +10,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using eIDEAS.Models;
+using eIDEAS.Data;
 
 namespace eIDEAS.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(ApplicationDbContext context, SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
         {
+            _context = context;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -72,13 +75,22 @@ namespace eIDEAS.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                //Ensure that the user's account has not been deleted
+                ApplicationUser loginUser = _context.Users.Where(user => user.Email == Input.Email).FirstOrDefault();
+
+                if (loginUser?.DateDeleted != null)
+                {
+                    ModelState.AddModelError(string.Empty, "This account has been deleted. If you think this is a mistake, please contact your administrator.");
+                    return Page();
+                }
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect(returnUrl);                   
                 }
                 if (result.RequiresTwoFactor)
                 {

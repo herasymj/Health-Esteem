@@ -26,10 +26,10 @@ namespace eIDEAS.UnitTests
         }
 
         [Fact]
-        public void AboutPageExists()
+        public void FAQPageExists()
         {
-            ViewResult aboutPage = controller.About() as ViewResult;
-            Assert.NotNull(aboutPage);
+            ViewResult FAQPage = controller.FAQ() as ViewResult;
+            Assert.NotNull(FAQPage);
         }
 
         [Fact]

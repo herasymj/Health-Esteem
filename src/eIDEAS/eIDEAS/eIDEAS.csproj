@@ -14,7 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="0.9.10" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.4" PrivateAssets="All" />
     <PackageReference Include="Moq" Version="4.10.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -29,7 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Identity\Services\" />
+    <Content Update="Views\Ideas\EditDraft.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

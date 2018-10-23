@@ -1,4 +1,9 @@
-﻿/* Body */
+﻿/* Answer */
+.answer {
+    padding-left: 30px;
+}
+
+/* Body */
 body {
     padding-top: 50px;
     padding-bottom: 20px;
@@ -66,6 +71,11 @@ hr {
 /* QR code generator */
 #qrCode {
     margin: 15px;
+}
+
+/* Question */
+.question {
+    padding-top: 15px;
 }
 
 /* Textarea */

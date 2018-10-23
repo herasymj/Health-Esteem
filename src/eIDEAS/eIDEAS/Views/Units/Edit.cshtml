@@ -1,4 +1,4 @@
-﻿@model eIDEAS.Models.Unit
+﻿@model eIDEAS.Models.UnitDivision
 
 @{
     ViewData["Title"] = "Edit";
@@ -13,16 +13,20 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="unit.ID" />
             <div class="form-group">
-                <label asp-for="DivisionID" class="control-label"></label>
-                <input asp-for="DivisionID" class="form-control" />
-                <span asp-validation-for="DivisionID" class="text-danger"></span>
+                Division
+                <select asp-for="unit.DivisionID">
+                    @foreach (Division division in Model.GetDivisions(null))
+                    {
+                        <option class="unit-option" value="@division.ID">@division.Name</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="unit.Name" class="control-label"></label>
+                <input asp-for="unit.Name" class="form-control" />
+                <span asp-validation-for="unit.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

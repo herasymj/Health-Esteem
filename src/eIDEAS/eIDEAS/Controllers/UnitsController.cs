@@ -24,7 +24,19 @@ namespace eIDEAS.Controllers
         // GET: Units
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Unit.ToListAsync());
+            List<UnitDivision> uds = new List<UnitDivision>();
+
+            foreach(Unit unit in await _context.Unit.Where(unit => unit.DateDeleted == null).ToListAsync())
+            {
+                UnitDivision ud = new UnitDivision(_context)
+                {
+                    unit = unit
+                };
+                ud.division = ud.GetDivisions(unit.DivisionID).Where(division => division.DateDeleted == null).First();
+                uds.Add(ud);
+            }
+
+            return View(uds);
         }
 
         // GET: Units/Details/5
@@ -42,13 +54,15 @@ namespace eIDEAS.Controllers
                 return NotFound();
             }
 
-            return View(unit);
+            UnitDivision ud = new UnitDivision(_context) { unit = unit };
+            ud.division = ud.GetDivisions(unit.DivisionID).First();
+            return View(ud);
         }
 
         // GET: Units/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new UnitDivision(_context));
         }
 
         // POST: Units/Create
@@ -56,15 +70,15 @@ namespace eIDEAS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,DivisionID,Name")] Unit unit)
+        public async Task<IActionResult> Create(UnitDivision ud)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(unit);
+                _context.Add(ud.unit);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(unit);
+            return View(ud.unit);
         }
 
         // GET: Units/Edit/5
@@ -80,7 +94,10 @@ namespace eIDEAS.Controllers
             {
                 return NotFound();
             }
-            return View(unit);
+
+            UnitDivision ud = new UnitDivision(_context) { unit = unit };
+            ud.division = ud.GetDivisions(unit.DivisionID).First();
+            return View(ud);
         }
 
         // POST: Units/Edit/5
@@ -88,9 +105,9 @@ namespace eIDEAS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,DivisionID,Name")] Unit unit)
+        public async Task<IActionResult> Edit(int id, UnitDivision ud)
         {
-            if (id != unit.ID)
+            if (id != ud.unit.ID)
             {
                 return NotFound();
             }
@@ -99,12 +116,12 @@ namespace eIDEAS.Controllers
             {
                 try
                 {
-                    _context.Update(unit);
+                    _context.Update(ud.unit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UnitExists(unit.ID))
+                    if (!UnitExists(ud.unit.ID))
                     {
                         return NotFound();
                     }
@@ -115,7 +132,7 @@ namespace eIDEAS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(unit);
+            return View(ud.unit);
         }
 
         // GET: Units/Delete/5
@@ -142,6 +159,18 @@ namespace eIDEAS.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var unit = await _context.Unit.FindAsync(id);
+            var users = await _context.Users.Where(user => user.UnitID == id).ToListAsync();
+            if (users.Count != 0)
+            {
+                //can't delete units that still have users
+                ViewData["error"] = "Can't delete, there are still users in this unit.";
+                return View(unit);
+            }
+            else
+            {
+                ViewData["error"] = null;
+            }
+            
             _context.Unit.Remove(unit);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

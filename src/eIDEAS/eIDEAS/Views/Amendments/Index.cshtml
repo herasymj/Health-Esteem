@@ -1,0 +1,22 @@
+﻿@model IEnumerable<AmendmentPresentationViewModel>
+
+<div id="amendment-partial-@ViewData["IdeaID"]">
+    @Html.Partial("../Amendments/_AmendmentPartial", @Model)
+</div>
+
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-10 col-md-offset-2" align="right">
+        <span>
+            <button class="btn btn-sm btn-default" data-toggle="collapse" data-target="#idea-@ViewData["IdeaID"]-add-amendment">Toggle Amendment Form</button>
+        </span>
+    </div>
+</div>
+<div id="idea-@ViewData["IdeaID"]-add-amendment" class="row collapse">
+    <div class="col-md-10 col-md-offset-2" align="right">
+        <form>
+            <input type="hidden" name="IdeaID" id="IdeaID-@ViewData["IdeaID"]" value="@ViewData["IdeaID"]">
+            <textarea name="Comment" id="Comment-@ViewData["IdeaID"]" class="form-control" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
+            <input type="button" id="amendmentSubmit" class="btn btn-sm btn-default" value="Submit Amendment" onclick="ReloadAmendments(@ViewData["IdeaID"])" />
+        </form>
+    </div>
+</div>
