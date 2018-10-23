@@ -41,16 +41,9 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DetailPageErrorsOnInvalidId()
         {
-            //Check to make sure there is nothing in the database for ID = 1
-            if (_context.Unit.Where(unit => unit.ID == 1).ToList().Count > 0)
-            {
-                //If something exists, remove it.
-                _context.Unit.Remove(_context.Unit.Where(unit => unit.ID == 1).First());
-                await _context.SaveChangesAsync();
-            }
-
+            int invalidId = -1;
             //Access the detail page where id=1 and wait for the page
-            var actionResult = controller.Details(1);
+            var actionResult = controller.Details(invalidId);
             actionResult.Wait();
             var detailPage = actionResult.Result;
 
@@ -95,14 +88,9 @@ namespace eIDEAS.UnitTests
         public async void EditPageErrorsOnInvalidId()
         {
             //Find an id that is not used.
-            int i = 999999;
-            while(_context.Unit.Where(unit => unit.ID == 1).ToList().Count > 0)
-            {
-                i++;
-            }
-
+            int invalidId = -1;
             //Access the edit page on the row that doesn't exist
-            var actionResult = controller.Edit(i);
+            var actionResult = controller.Edit(invalidId);
             actionResult.Wait();
             var editPage = actionResult.Result;
 
@@ -147,15 +135,9 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DeletePageErrorsOnInvalidId()
         {
-            int i = 999999;
-            //Find a row that doesn't exist
-            while(_context.Unit.Where(unit => unit.ID == 1).ToList().Count > 0)
-            {
-                i++;
-            }
-
+            int invalidId = -1;
             //Access the delete page for an entry that doesn't exist.
-            var actionResult = controller.Delete(i);
+            var actionResult = controller.Delete(invalidId);
             actionResult.Wait();
             var page = actionResult.Result;
 

@@ -41,15 +41,9 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DetailPageErrorsOnInvalidId()
         {
-            int i = 999999;
-            //Find a row that doesn't exist.
-            while(_context.Division.Where(div => div.ID == i).ToList().Count > 0)
-            {
-                i++;
-            }
-
+            int invalidId = -1;
             //Access the detail page where id=1 and wait for the page
-            var actionResult = controller.Details(i);
+            var actionResult = controller.Details(invalidId);
             var detailPage = actionResult.Result;
 
             //Ensure that a NotFoundResult is returned.
@@ -89,14 +83,9 @@ namespace eIDEAS.UnitTests
         [Fact]
         public void EditPageErrorsOnInvalidId()
         {
-            int i = 999999;
-            while(_context.Division.Where(div => div.ID == i).ToList().Count > 0)
-            {
-                i++;
-            }
-
+            int invalidId = -1;
             //Access the edit page
-            var actionResult = controller.Edit(i);
+            var actionResult = controller.Edit(invalidId);
             var editPage = actionResult.Result;
 
             //Ensure a NotFoundResult is returned.
@@ -138,14 +127,9 @@ namespace eIDEAS.UnitTests
         [Fact]
         public async void DeletePageErrorsOnInvalidId()
         {
-            int i = 999999;
-            while (_context.Division.Where(div => div.ID == i).ToList().Count > 0)
-            {
-                i++;
-            }
-
+            int invalidId = -1;
             //Access the delete page.
-            var actionResult = controller.Delete(i);
+            var actionResult = controller.Delete(invalidId);
             var page = actionResult.Result;
 
             //Ensure that a NotFoundResult is returned.
