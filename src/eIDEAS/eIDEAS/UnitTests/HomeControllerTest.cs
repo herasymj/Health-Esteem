@@ -9,10 +9,11 @@ namespace eIDEAS.UnitTests
 {
     public class HomeControllerTest
     {
+        private eIDEAS.Controllers.HomeController controller = new Controllers.HomeController();
+
         [Fact]
         public void LoginPageExists()
         {
-            eIDEAS.Controllers.HomeController controller = new Controllers.HomeController();
             ViewResult indexPage = controller.Index() as ViewResult;
             Assert.NotNull(indexPage);
         }
@@ -20,16 +21,28 @@ namespace eIDEAS.UnitTests
         [Fact]
         public void ContactPageExists()
         {
-            eIDEAS.Controllers.HomeController controller = new Controllers.HomeController();
             ViewResult contactPage = controller.Contact() as ViewResult;
             Assert.NotNull(contactPage);
         }
 
         [Fact]
-        public void AboutPageExists()
+        public void FAQPageExists()
         {
-            eIDEAS.Controllers.HomeController controller = new Controllers.HomeController();
-            ViewResult aboutPage = controller.About() as ViewResult;
+            ViewResult FAQPage = controller.FAQ() as ViewResult;
+            Assert.NotNull(FAQPage);
+        }
+
+        [Fact]
+        public void ErrorPageExists()
+        {
+            ViewResult aboutPage = controller.Error(404) as ViewResult;
+            Assert.NotNull(aboutPage);
+        }
+
+        [Fact]
+        public void PrivacyPageExists()
+        {
+            ViewResult aboutPage = controller.Privacy() as ViewResult;
             Assert.NotNull(aboutPage);
         }
     }

@@ -1,0 +1,21 @@
+﻿@using eIDEAS.Models
+@using eIDEAS.Models.Enums
+@model IEnumerable<AmendmentPresentationViewModel>
+
+@foreach (var amendment in @Model)
+{
+    <div class="row" style="margin-top: 10px">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="amendment" style="padding: 5px">
+                @amendment.Comment
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-2" align="right">
+            <span>
+                Posted by <strong>@amendment.AuthorFirstName @amendment.AuthorLastName</strong> on @amendment.PostingDate.ToLocalTime()
+            </span>
+        </div>
+    </div>
+}

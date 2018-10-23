@@ -10,8 +10,8 @@ using eIDEAS.Data;
 namespace eIDEAS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181008062311_Action")]
-    partial class Action
+    [Migration("20181022201044_Unit_Division_SoftDelete")]
+    partial class Unit_Division_SoftDelete
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,25 @@ namespace eIDEAS.Data.Migrations
                 .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("eIDEAS.Models.Amendment", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<int>("IdeaID");
+
+                    b.Property<Guid>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Amendment");
+                });
 
             modelBuilder.Entity("eIDEAS.Models.ApplicationUser", b =>
                 {
@@ -41,6 +60,8 @@ namespace eIDEAS.Data.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired();
 
+                    b.Property<int>("IdeaPoints");
+
                     b.Property<string>("LastName")
                         .IsRequired();
 
@@ -54,11 +75,17 @@ namespace eIDEAS.Data.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
 
+                    b.Property<int>("ParticipationPoints");
+
                     b.Property<string>("PasswordHash");
+
+                    b.Property<int>("Permissions");
 
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("ProfilePic");
 
                     b.Property<string>("SecurityStamp");
 
@@ -101,12 +128,16 @@ namespace eIDEAS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ClosingRemarks");
+
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime>("DateEdited");
 
                     b.Property<string>("Description")
                         .IsRequired();
+
+                    b.Property<bool>("IsDraft");
 
                     b.Property<string>("SolutionPlan")
                         .IsRequired();
@@ -123,6 +154,25 @@ namespace eIDEAS.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Idea");
+                });
+
+            modelBuilder.Entity("eIDEAS.Models.IdeaInteraction", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdeaID");
+
+                    b.Property<bool>("IsTracked");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("IdeaInteraction");
                 });
 
             modelBuilder.Entity("eIDEAS.Models.Unit", b =>

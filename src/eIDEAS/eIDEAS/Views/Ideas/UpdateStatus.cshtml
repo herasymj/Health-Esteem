@@ -1,0 +1,133 @@
+﻿@model eIDEAS.Models.Idea
+@using eIDEAS.Models.Enums;
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    //Create a list to hold possible PDCA status changes for the idea
+    List<StatusEnum> possibleStatusChanges = new List<StatusEnum>();
+
+    //The status can always remain as the current status
+    possibleStatusChanges.Add(Model.Status);
+
+    //Additional status options depend on the current status
+    switch (Model.Status)
+    {
+        case StatusEnum.Plan:
+            possibleStatusChanges.Add(StatusEnum.Do);
+            break;
+        case StatusEnum.Do:
+            possibleStatusChanges.Add(StatusEnum.Check);
+            break;
+        case StatusEnum.Check:
+            possibleStatusChanges.Add(StatusEnum.Adopt);
+            possibleStatusChanges.Add(StatusEnum.Adapt);
+            break;
+    }
+
+    //An idea can always be abandoned
+    possibleStatusChanges.Add(StatusEnum.Abandon);
+}
+
+<h3>Update Idea Status</h3>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="UpdateStatus" onsubmit="return validateForm();">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="UserID" />
+            <input type="hidden" asp-for="UnitID" />
+            <input type="hidden" asp-for="DateCreated" />
+            <input type="hidden" asp-for="IsDraft" />
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" readonly />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" placeholder="Enter problem description" readonly style="height: 150px;"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="SolutionPlan" class="control-label"></label>
+                    <textarea asp-for="SolutionPlan" class="form-control" placeholder="Enter solution plan" readonly style="height: 150px;"></textarea>
+                    <span asp-validation-for="SolutionPlan" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label asp-for="Status" class="control-label"></label>
+                    <select asp-for="Status" class="form-control" id="status">
+                        @foreach (var possibleStatus in possibleStatusChanges)
+                        {
+                            <option value="@possibleStatus">@possibleStatus</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div id="closingRemarks" class="row form-group collapse">
+                <div class="col-md-6">
+                    <label id="closingRemarksTitle" class="control-label">Closing Remarks</label>
+                    <textarea asp-for="ClosingRemarks" class="form-control" placeholder="Enter problem description" style="height: 150px;"></textarea>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <input type="submit" value="Update Status" class="btn btn-default" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+
+        //Handle the possibility of having to show an additional field when the status changes
+        function handleStatusChange(selectedStatus) {
+            //If the status is changing to Adapt or Abandon, closing remarks are needed
+            if (selectedStatus == "Adapt" || selectedStatus == "Abandon") {                
+                document.getElementById("closingRemarks").classList.remove("collapse");
+
+                //Additionally, update the display name of the closing remarks appropriately
+                if (selectedStatus == "Adapt") {
+                    document.getElementById("closingRemarksTitle").innerHTML = "Adaptation Plan";
+                }
+                else {
+                    document.getElementById("closingRemarksTitle").innerHTML = "Reason for Abandonment";
+                }
+            }
+            //If any other status is selected, closing remarks are irrelevant
+            else {                
+                document.getElementById("closingRemarks").classList.add("collapse");
+            }
+        }
+
+        //Call the above handle function whenever the selected status changes
+        $(function () {
+            //Call the handle function whenever the selected status changes
+            $('#status').change(function () {
+                handleStatusChange($(this).val());
+            });
+        });
+
+        //Handle form validation before submission
+        function validateForm() {
+            //Confirm that the user wants to update the idea status before submission
+            return confirm("Are you sure you want to update the status of this idea?\nThis action is irreversible.\n\nSelect 'OK' to submit the idea.\nSelect 'Cancel' to return to the form.");
+        }
+    </script>
+}

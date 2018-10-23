@@ -3,89 +3,122 @@
 @{
     ViewData["Title"] = "Registration";
 }
+@using System.Web
 
-<h2>@ViewData["Title"]</h2>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.FirstName"></label>
-                <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" />
+@{ 
+    var queryParameters = Request.QueryString.ToString();
+    var createdByAdmin = queryParameters.Contains("createdByAdmin=true") ? true : false;
+}
+<div class="row" style="margin-top: 30px;">
+    <div class="col-sm-6 container" style="margin-top: 5%;">
+        <h2>Welcome to eIDEAS</h2>
+        <p class="lead">
+            eIDEAS is a tool to help people collaborate and share ideas.
+        </p>
+        <p class="lead">
+            Under the mantra of Kaizen, eIDEAS provides functionality to work through the idea creation and implementation processes.
+        </p>
+        <p class="lead">
+            eIDEAS uses a <b>points</b> system to provide some rewards for collaborating. Current point rewards are structured as follows:
+        </p>
+        <ul>
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="border-color: #337ab7;">
+                <b>Creating an idea</b>
+                <span class="badge" style="background-color: #337ab7">150 Idea Points</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="border-color: #337ab7;">
+                <b>Amending an idea</b>
+                <span class="badge" style="background-color: #337ab7">100 Participation Points</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="border-color: #337ab7;">
+                <b>Scoring an idea</b>
+                <span class="badge" style="background-color: #337ab7">50 Participation Points</span>
+            </li>
+        </ul>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading text-center">Sign up for eIDEAS</div>
+            <div class="panel-body" style="background-color: #F5F5F5;">
+                <form asp-route-returnUrl="@Model.ReturnUrl" asp-route-createdByAdmin="@createdByAdmin" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Input.FirstName"></label>
+                        <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.LastName"></label>
+                        <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email"></label>
+                        <input asp-for="Input.Email" class="form-control" placeholder="Email Address" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Division</label>
+                        <select asp-for="Input.DivisionID" class="form-control" id="division">
+                            @foreach (var division in Model.DivisionUnits.Keys)
+                            {
+                                <option value="@division.ID.ToString()">@division.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <select asp-for="Input.UnitID" class="form-control" id="unit">
+                            @foreach (var division in Model.DivisionUnits)
+                            {
+                                @foreach (var unit in division.Value)
+                                {
+                                    <option class="unit-option" data-division="@division.Key.ID" value="@unit.ID.ToString()">@unit.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password"></label>
+                        <input asp-for="Input.Password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-default col-sm-offset-10">Register</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.LastName"></label>
-                <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" placeholder="Email Address" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Division</label>
-                <select asp-for="Input.DivisionID" class="form-control" id="division">
-                    @foreach (var division in Model.DivisionUnits.Keys)
-                    {
-                        <option value="@division.ID.ToString()">@division.Name</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Unit</label>
-                <select asp-for="Input.UnitID" class="form-control" id="unit">
-                    @foreach (var division in Model.DivisionUnits)
-                    {
-                        @foreach (var unit in division.Value)
-                        {
-                            <option class="unit-option" data-division="@division.Key.ID" value="@unit.ID.ToString()">@unit.Name</option>
-                        }
-                    }
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" placeholder="Password" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm Password" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-default">Register</button>
-        </form>
+        </div>
     </div>
 </div>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script type="text/javascript">
+            function updateApplicableUnits(selectedDivisionID) {
+                //For each unit, show it only if it is part of the selected division
+                $('.unit-option').each(function (i) {
+                    if ($(this).data('division') == selectedDivisionID) {
+                        $(this).show();
+                    }
+                    else {
+                        $(this).hide();
+                    }
+                });
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+                //Clear the value displayed for unit selected
+                $('#unit').val('');
+            }
 
-    <script type="text/javascript">
-        function updateApplicableUnits(selectedDivisionID) {
-            //For each unit, show it only if it is part of the selected division
-            $('.unit-option').each(function (i) {
-                if ($(this).data('division') == selectedDivisionID) {
-                    $(this).show();
-                }
-                else {
-                    $(this).hide();
-                }
+            $(function () {
+                //Upon loading the page, populate the appropriate units for eHealth
+                updateApplicableUnits(1);
+
+                //Whenever the selected division changes, display the corresponding units.
+                $('#division').change(function () {
+                    updateApplicableUnits($(this).val());
+                });
             });
-
-            //Clear the value displayed for unit selected
-            $('#unit').val('');
-        }
-
-        $(function () {
-            //Upon loading the page, populate the appropriate units for eHealth
-            updateApplicableUnits(1);
-
-            //Whenever the selected division changes, display the corresponding units.
-            $('#division').change(function () {
-                updateApplicableUnits($(this).val());
-            });
-        });
-    </script>
-}
+        </script>
+    }

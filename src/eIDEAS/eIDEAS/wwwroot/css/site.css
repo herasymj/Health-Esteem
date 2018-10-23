@@ -1,4 +1,9 @@
-﻿/* Body */
+﻿/* Answer */
+.answer {
+    padding-left: 30px;
+}
+
+/* Body */
 body {
     padding-top: 50px;
     padding-bottom: 20px;
@@ -58,14 +63,19 @@ hr {
     background-color: #888888;
 }
 
-/* Problem Description and Solution Plan for an idea */
-.problem-description, .solution-plan {
+/* Problem Description, Solution Plan and Amendments for an idea */
+.problem-description, .solution-plan, .amendment {
     background-color: #FFFFFF;
 }
 
 /* QR code generator */
 #qrCode {
     margin: 15px;
+}
+
+/* Question */
+.question {
+    padding-top: 15px;
 }
 
 /* Textarea */

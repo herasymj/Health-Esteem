@@ -24,7 +24,7 @@ namespace eIDEAS.Controllers
         // GET: Divisions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Division.ToListAsync());
+            return View(await _context.Division.Where(division => division.DateDeleted == null).ToListAsync());
         }
 
         // GET: Divisions/Details/5
@@ -142,7 +142,20 @@ namespace eIDEAS.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var division = await _context.Division.FindAsync(id);
-            _context.Division.Remove(division);
+            var units = await _context.Unit.Where(unit => unit.DivisionID == id).ToListAsync();
+            if (units.Count != 0)
+            {
+                //can't delete divisions that still have units
+                ViewData["error"] = "Can't delete, there are still units in this division.";
+                return View(division);
+            }
+            else
+            {
+                ViewData["error"] = null;
+            }
+
+            division.DateDeleted = DateTime.UtcNow;
+            _context.Division.Update(division);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
