@@ -196,7 +196,7 @@ namespace eIDEAS.UnitTests
             actionResult.Wait();
 
             //Ensure that the row got deleted.
-            Assert.True(_context.Division.Where(div => div.ID == newDivision.ID).ToList().Count == 0);
+            Assert.True(_context.Division.Where(div => div.ID == newDivision.ID).First().DateDeleted != null);
             //Ensure that the user is returned back to the index page.
             //The result from the controller is a redirect.
             var redirect = actionResult.Result;

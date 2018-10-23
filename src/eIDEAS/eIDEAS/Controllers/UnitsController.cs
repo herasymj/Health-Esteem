@@ -170,8 +170,9 @@ namespace eIDEAS.Controllers
             {
                 ViewData["error"] = null;
             }
-            
-            _context.Unit.Remove(unit);
+
+            unit.DateDeleted = DateTime.UtcNow;
+            _context.Unit.Update(unit);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
