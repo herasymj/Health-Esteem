@@ -34,6 +34,7 @@
 
 @foreach (var idea in Model)
 {
+    int status = (int)idea.Overview.Status;
     //Create variables used for the display of the status progress bar
     string doClass = "progress-bar-waiting";
     string checkClass = "progress-bar-waiting";
@@ -76,7 +77,13 @@
     //An idea is completed if it is in the Adopt, Adapt or Abandon stage
     bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
 
-    <div class="panel panel-default idea-overview">
+    <style>
+        .idea-panel-clickable:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+
+    <div class="panel panel-default idea-overview idea-panel-clickable" data-ideaid="@idea.Overview.ID" style="cursor: pointer;">
         <div class="row">
             <div class="col-md-12">
                 <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
@@ -95,39 +102,71 @@
                             <div class="row">
                                 <div class="col-md-10">
                                     <div class="progress no-margin">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
-                                        <div class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
-                                        <div class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
-                                        <div class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
+                                        <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
+                                        <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
+                                        <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
+                                        <div id="@idea.Overview.ID-progress-act" class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
                                     </div>
                                 </div>
                                 @if (!isCompleted)
                                 {
                                     <div class="col-md-2">
-                                        <a asp-action="UpdateStatus" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default" role="button" style="padding: 1px 5px 0px 5px">Update Status</a>
+                                        <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
+
+                                            <div class="col-md-6">
+                                                <button id="@idea.Overview.ID-button-advance" class="btn btn-default idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-play"></i></button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <a class="btn btn-default idea-panel-abandon" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
+                                            </div>
+                                        </div>
+                                        <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
+
+                                            <div class="col-md-4">
+                                                <a class="btn btn-default idea-panel-adopt" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-check"></i></a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a class="btn btn-default idea-panel-adapt" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:darkorange;"><i class="fas fa-balance-scale"></i></a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a class="btn btn-default idea-panel-abandon" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
+                                            </div>
+
+                                        </div>
+
+
+
                                     </div>
                                 }
                             </div>
                         </div>
                     </div>
+                    <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;">
+                        <div class="col-md-6 col-md-push-6 col-sm-12 ">
+                            <textarea id="@idea.Overview.ID-textbox-message" class="form-control pull-right idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
+                            <br />
+                            <a id="@idea.Overview.ID-button-finalize" class="btn btn-primary pull-right idea-panel-finalize form-control" data-status="@status" data-ideaid="@idea.Overview.ID" role="button">Finalize</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-1">
-                    <img class="expand" data-toggle="collapse" data-target="#idea-@idea.Overview.ID-details" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png"/>
+                    <img class="expand" data-toggle="collapse" data-target="#idea-@idea.Overview.ID-details" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" />
                 </div>
             </div>
+
         }
         <div id="idea-@idea.Overview.ID-details" class="row @(ViewBag.IsDraft ? "" : "collapse")">
             <div class="col-md-6">
                 <div class="row">
                     <div class="col-md-12">
                         <h5><strong>Description</strong></h5>
-                    </div>                        
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="problem-description" style="padding: 5px">
                             @Html.DisplayFor(modelItem => idea.Overview.Description)
-                        </div>                            
+                        </div>
                     </div>
                 </div>
             </div>
@@ -165,13 +204,208 @@
     </div>
 }
 
+@section Scripts {
+    <script type="text/javascript">
 
-<script type="text/javascript">
-    //This function toggles the display of the arrow indicating if a idea view is expanded. It is called whenever such an arrow is clicked.
-    function toggleArrow(arrowImage) {
-        if (arrowImage.src.endsWith('arrow-right.png'))
-            arrowImage.src = "images/arrow-down.png"
-        else
-            arrowImage.src = "images/arrow-right.png";
-    }
-</script>
+        /*
+         * TODO: Fix tristans buttons (The lil dropdown)
+         * TODO: Make buttons look nicer (advance, abaondon, etc.)
+         * TODO: Popups on all the buttons
+         * TODO: Add tooltips to the buttons
+         * TODO: Make buttons style inline if they are in small window
+         * TODO: Shrink finalize button cause wilson
+         * TODO: Get rid of magical numbers and use consts instead
+         * TODO: Cleanup and comment code
+         * TODO: Add placeholder text to message box depending on the action type. ie. Enter abandonment reason, Enter adaptation plan
+         * TODO: Add some feedback via Bootstrap alerts
+         */
+
+        //This function toggles the display of the arrow indicating if a idea view is expanded. It is called whenever such an arrow is clicked.
+        function toggleArrow(arrowImage) {
+
+            // TODO: This is broken right now, manually add functionality to show and hide the hidden part
+
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+            if (arrowImage.src.endsWith('arrow-right.png'))
+                arrowImage.src = "images/arrow-down.png"
+            else
+                arrowImage.src = "images/arrow-right.png";
+        }
+
+        function updateTimeline(ideaid, status) {
+            // Do
+            if (status >= 1) {
+                $('#' + ideaid + '-progress-do').addClass('progress-bar-info');
+                $('#' + ideaid + '-progress-do').removeClass('progress-bar-waiting');
+            }
+
+
+            // Check
+            if (status >= 2) {
+                $('#' + ideaid + '-progress-check').addClass('progress-bar-info');
+                $('#' + ideaid + '-progress-check').removeClass('progress-bar-waiting');
+            }
+
+            // Adopt
+            if (status == 3) {
+                $('#' + ideaid + '-progress-act').addClass('progress-bar-success');
+                $('#' + ideaid + '-progress-act').text('Adopt');
+                $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
+            }
+
+            // Adapt
+            if (status == 4) {
+                $('#' + ideaid + '-progress-act').addClass('progress-bar-warning');
+                $('#' + ideaid + '-progress-act').text('Adapt');
+                $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
+            }
+
+            // Abandon
+            if (status == 5) {
+                $('#' + ideaid + '-progress-act').addClass('progress-bar-danger');
+                $('#' + ideaid + '-progress-act').text('Abandon');
+                $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
+            }
+                
+        }
+
+        function updateButtons(ideaid, status) {
+
+            // Change the current status data associated with the advance button
+            if (status >= 1) {
+                $('#' + ideaid + '-button-advance').data('status', status);
+            }
+
+            // Change which group of buttons are showing - if any
+            if (status < 2) {
+                $('#' + ideaid + '-button-group-advance').show();
+                $('#' + ideaid + '-button-group-finalize').hide();
+            } else if (status == 2) {
+                $('#' + ideaid + '-button-group-advance').hide();
+                $('#' + ideaid + '-button-group-finalize').show();
+            } else {
+                $('#' + ideaid + '-button-group-advance').hide();
+                $('#' + ideaid + '-button-group-finalize').hide();
+            }
+            
+        }
+
+        function updatePage(ideaid, status) {
+            updateTimeline(ideaid, status);
+            updateButtons(ideaid, status);
+        }
+
+
+
+        function finalizeStatus(ideaid, status, message) {
+
+            // TODO: Finishing adjusting this request to support a message
+
+            $.ajax({
+                url: '/Ideas/Status/' + ideaid,
+                type: "POST",
+                data: { 'status': status, 'message': message },
+                success: function (result) {
+                    console.log(JSON.stringify(result));
+                    updatePage(ideaid, status);
+                },
+                error: function (result) {
+                    console.log("Error");
+                }
+            });
+        }
+
+        function updateStatus(ideaid, status) {
+            $.ajax({
+                url: '/Ideas/Status/' + ideaid,
+                type: "POST",
+                data: { 'status': status, 'message': null },
+                success: function (result) {
+                    console.log(JSON.stringify(result));
+                    updatePage(ideaid, status);
+                },
+                error: function (result) {
+                    console.log("Error");
+                }
+            });
+        }
+
+        $('.idea-panel-clickable').click(function () {
+            var ideaid = $(this).data('ideaid');
+            document.location = "/Ideas/UpdateStatus/" + ideaid;
+        });
+
+        $('.idea-panel-advance').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            var ideaid = $(this).data('ideaid');
+            var status = $(this).data('status') + 1;
+            if (status < 3) {
+                updateStatus(ideaid, status);
+            } else {
+                alert('Stop trying to hack the app');
+            }
+       
+        });
+
+        $('.idea-panel-finalize').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            var ideaid = $(this).data('ideaid');
+            var desiredStatus = $(this).data('status');
+            var message = $('#' + ideaid + '-textbox-message').val();
+
+            finalizeStatus(ideaid, desiredStatus, message);
+
+            $('#' + ideaid + '-input-group-finalize').hide();
+        });
+
+        $('.idea-panel-adopt').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            var ideaid = $(this).data('ideaid');
+            var status = 3;
+
+            //$('#' + ideaid + '-input-group-finalize').show();
+            //$('#' + ideaid + '-button-finalize').data('status', status);
+
+            updateStatus(ideaid, status);
+        });
+
+        $('.idea-panel-abandon').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            var ideaid = $(this).data('ideaid');
+            var status = 5;
+
+            $('#' + ideaid + '-input-group-finalize').show();
+            $('#' + ideaid + '-button-finalize').data('status', status);
+
+            //updateStatus(ideaid, status);
+        });
+
+        $('.idea-panel-adapt').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            var ideaid = $(this).data('ideaid');
+            var status = 4;
+
+            $('#' + ideaid + '-input-group-finalize').show();
+            $('#' + ideaid + '-button-finalize').data('status', status);
+
+            //updateStatus(ideaid, status);
+        });
+
+        $('.idea-panel-finalize-message').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+        });
+
+    </script>
+}

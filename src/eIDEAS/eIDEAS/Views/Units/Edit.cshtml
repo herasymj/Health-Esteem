@@ -15,8 +15,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="unit.ID" />
             <div class="form-group">
-                Division
-                <select asp-for="unit.DivisionID">
+                <label class="control-label">Division</label>
+                <select asp-for="unit.DivisionID" class="form-control">
                     @foreach (Division division in Model.GetDivisions(null))
                     {
                         <option class="unit-option" value="@division.ID">@division.Name</option>

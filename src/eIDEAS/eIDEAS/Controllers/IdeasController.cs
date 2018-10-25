@@ -258,6 +258,33 @@ namespace eIDEAS.Controllers
             return View(idea);
         }
 
+        // POST: Ideas/Status/5
+        [HttpPost]
+        public async Task<IActionResult> Status(int id, StatusEnum status, string message)
+        {
+            try
+            {
+                var idea = await _context.Idea.FindAsync(id);
+                idea.Status = status;
+                idea.ClosingRemarks = message;
+                idea.DateEdited = DateTime.UtcNow;
+                _context.Update(idea);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!IdeaExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Json(new { success = true, responseText = "This is fine!" });
+        }
+
         // GET: Ideas/UpdateDraft/5
         public async Task<IActionResult> EditDraft(int? id)
         {
