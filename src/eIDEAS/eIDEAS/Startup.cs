@@ -57,7 +57,13 @@ namespace eIDEAS
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            var configuration = new ConfigurationBuilder()
+                                    .AddEnvironmentVariables()
+                                    .AddJsonFile(env.ContentRootPath + "/appsettings.json")
+                                    .Build();
+                                    
+            var app_env = configuration["Development"];
+            if (app_env == "True")
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
