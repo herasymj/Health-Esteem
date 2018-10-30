@@ -209,14 +209,13 @@
 
         /*
          * TODO: Make buttons look nicer (advance, abaondon, etc.)
-         * TODO: Popups on all the buttons
          * TODO: Add tooltips to the buttons
          * TODO: Make buttons style inline if they are in small window
          * TODO: Shrink finalize button cause wilson
          * TODO: Get rid of magical numbers and use consts instead
          * TODO: Cleanup and comment code
          * TODO: Add placeholder text to message box depending on the action type. ie. Enter abandonment reason, Enter adaptation plan
-         * TODO: Add some feedback via Bootstrap alerts
+         * TODO: Ideas on the drafts page should route to edit draft rather than update status
          */
 
         //This function toggles the display of the arrow indicating if a idea view is expanded. It is called whenever such an arrow is clicked.
@@ -238,7 +237,6 @@
                 $('#' + ideaid + '-progress-do').addClass('progress-bar-info');
                 $('#' + ideaid + '-progress-do').removeClass('progress-bar-waiting');
             }
-
 
             // Check
             if (status >= 2) {
@@ -295,11 +293,10 @@
             updateButtons(ideaid, status);
         }
 
-
-
         function finalizeStatus(ideaid, status, message) {
 
-            // TODO: Finishing adjusting this request to support a message
+            if (!confirm("Are you sure you want to finalize this idea?"))
+                return;
 
             $.ajax({
                 url: '/Ideas/Status/' + ideaid,
@@ -335,9 +332,13 @@
             document.location = "/Ideas/UpdateStatus/" + ideaid;
         });
 
+        // Advance an idea
         $('.idea-panel-advance').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
+
+            if (!confirm("Are you sure you want to advance this idea?"))
+                return;
 
             var ideaid = $(this).data('ideaid');
             var status = $(this).data('status') + 1;
@@ -362,9 +363,13 @@
             $('#' + ideaid + '-input-group-finalize').hide();
         });
 
+        // Adopt an idea
         $('.idea-panel-adopt').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
+
+            if (!confirm("Are you sure you want to adopt this idea?"))
+                return;
 
             var ideaid = $(this).data('ideaid');
             var status = 3;
@@ -375,6 +380,7 @@
             updateStatus(ideaid, status);
         });
 
+        // Abandon an idea
         $('.idea-panel-abandon').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
@@ -388,6 +394,7 @@
             //updateStatus(ideaid, status);
         });
 
+        // Adapt an idea
         $('.idea-panel-adapt').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
