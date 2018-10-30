@@ -3,12 +3,13 @@
 @inject UserManager<ApplicationUser> UserManager
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">Ideas</a>
-        <ul class="dropdown-menu" >
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown">Ideas</a>
+        <ul class="dropdown-menu">
             <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="MyDrafts">My Drafts</a></li>
             <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="MyIdeas">My Ideas</a></li>
             <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="TeamIdeas">Team Ideas</a></li>
-            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
         </ul>
     </li>
+    <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
 }

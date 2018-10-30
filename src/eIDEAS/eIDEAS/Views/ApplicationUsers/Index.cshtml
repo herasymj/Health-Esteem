@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<ApplicationUserPresentationViewModel>
 @{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Users";
 }
-@Html.Partial("_adminLayout")
 <h1 class="text-center">Users</h1>
 <table class="table table-striped">
     <thead>

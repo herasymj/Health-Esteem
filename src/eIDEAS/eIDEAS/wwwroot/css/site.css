@@ -101,6 +101,7 @@ textarea {
     transition: 0.3s;
     padding-top: 30px;
     margin-top: 50px;
+
 }
 
 .sidenav a {
@@ -115,19 +116,14 @@ textarea {
 .sidenav a:hover {
     color: #f1f1f1;
 }
-
-.sidenav .closebtn {
-    position: absolute;
-    padding-left: 0px;
-    top: 0px;
-    right: 0px;
-    font-size: 36px;
-}
-
 .sidenav .heading-text {
     position: absolute;
     top: 0;
     right: 0px;
     bottom: 0px;
     font-size: 20px;
+}
+.adminbody{
+    padding-left: 250px;
+    padding-right: 50px;
 }
