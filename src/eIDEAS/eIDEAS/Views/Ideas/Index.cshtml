@@ -7,25 +7,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script>
-    //For amendment submission
-    function ReloadAmendments(id){
-        comment = document.getElementById("Comment-" + id).value;
-        if (!(/\S/.test(comment)))
-            return;
-        $.ajax({
-            url: '@Url.Action("Update","Amendments")',
-            type: "POST",
-            data: { 'ideaID': id, 'comment': comment},
-            success: function (result) {
-                // refreshes partial view
-                $('#amendment-partial-' + id).html(result);
-                document.getElementById('Comment-' + id).value = '';
-            }
-        });
-    }
-</script>
-
 <h2>@ViewBag.PageName</h2>
 
 <p>
@@ -83,7 +64,7 @@
         }
     </style>
 
-    <div class="panel panel-default idea-overview idea-panel-clickable" data-ideaid="@idea.Overview.ID" style="cursor: pointer;">
+    <div class="panel panel-default idea-overview @(ViewBag.isDraft ? "" : "idea-panel-clickable")" data-ideaid="@idea.Overview.ID" style="cursor: pointer;">
         <div class="row">
             <div class="col-md-12">
                 <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
@@ -111,7 +92,8 @@
                                 @if (!isCompleted)
                                 {
                                     <div class="col-md-2">
-                                        <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
+                                        <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do))
+                                            { <text> style="display:none" </text>  } }>
 
                                             <div class="col-md-6">
                                                 <button id="@idea.Overview.ID-button-advance" class="btn btn-default idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-play"></i></button>
@@ -120,7 +102,8 @@
                                                 <a class="btn btn-default idea-panel-abandon" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
                                             </div>
                                         </div>
-                                        <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
+                                        <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check))
+                                            { <text> style="display:none" </text>  } }>
 
                                             <div class="col-md-4">
                                                 <a class="btn btn-default idea-panel-adopt" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-check"></i></a>
@@ -137,7 +120,7 @@
 
 
                                     </div>
-                                }
+                                            }
                             </div>
                         </div>
                     </div>
@@ -150,12 +133,12 @@
                     </div>
                 </div>
                 <div class="col-md-1">
-                    <img class="expand" data-toggle="collapse" data-target="#idea-@idea.Overview.ID-details" data-expanded="false" onclick="toggleArrow(this)" src="~/images/arrow-right.png" />
+                    <img class="idea-panel-expand" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
                 </div>
             </div>
 
         }
-        <div id="idea-@idea.Overview.ID-details" class="row @(ViewBag.IsDraft ? "" : "collapse")">
+        <div id="idea-@idea.Overview.ID-details" class="row" style="@(ViewBag.isDraft ? "" : "display:none;")">
             <div class="col-md-6">
                 <div class="row">
                     <div class="col-md-12">
@@ -188,6 +171,23 @@
                     @Html.Partial("../Amendments/Index", idea.Amendments, new ViewDataDictionary(ViewData){
                         { "IdeaID", @idea.Overview.ID }
                     })
+
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-10 col-md-offset-2" align="right">
+                            <span>
+                                <button class="btn btn-sm btn-default idea-panel-expand-ammendments" data-target="#idea-@idea.Overview.ID-amendments">Toggle Amendment Form</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="idea-@idea.Overview.ID-amendments" class="row" style="display:none;">
+                        <div class="col-md-10 col-md-offset-2" align="right">
+                            <form>
+                                <input type="hidden" name="IdeaID" id="IdeaID-@idea.Overview.ID" value="@idea.Overview.ID">
+                                <textarea name="Comment" id="Comment-@idea.Overview.ID" class="form-control idea-panel-finalize-message" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
+                                <input type="button" id="amendmentSubmit" class="btn btn-sm btn-default idea-panel-submit-ammendment" data-target="@idea.Overview.ID" value="Submit Amendment" />
+                            </form>
+                        </div>
+                    </div>
                 }
                 else
                 {
@@ -208,7 +208,6 @@
     <script type="text/javascript">
 
         /*
-         * TODO: Fix tristans buttons (The lil dropdown)
          * TODO: Make buttons look nicer (advance, abaondon, etc.)
          * TODO: Popups on all the buttons
          * TODO: Add tooltips to the buttons
@@ -405,6 +404,56 @@
         $('.idea-panel-finalize-message').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
+        });
+
+        $('.idea-panel-expand').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+            target = $($(this).data('target'));
+
+            if ($(this).attr('src').endsWith('arrow-right.png')) {
+                $(this).attr('src', "images/arrow-down.png");
+                target.slideDown(500);
+            }
+            else {
+                $(this).attr('src', "images/arrow-right.png");
+                target.slideUp(500);
+            }
+                
+        });
+
+        $('.idea-panel-expand-ammendments').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            target = $($(this).data('target'));
+
+            if ($(target).is(":hidden"))
+                target.slideDown(500);
+            else
+                target.slideUp(500);
+        });
+
+        //For amendment submission
+        $('.idea-panel-submit-ammendment').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            id = $(this).data('target');
+
+            comment = document.getElementById("Comment-" + id).value;
+            if (!(/\S/.test(comment)))
+                return;
+            $.ajax({
+                url: '@Url.Action("Update","Amendments")',
+                type: "POST",
+                data: { 'ideaID': id, 'comment': comment},
+                success: function (result) {
+                    // refreshes partial view
+                    $('#amendment-partial-' + id).html(result);
+                    document.getElementById('Comment-' + id).value = '';
+                }
+            });
         });
 
     </script>
