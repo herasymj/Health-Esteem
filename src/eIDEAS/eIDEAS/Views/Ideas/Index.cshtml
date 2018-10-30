@@ -96,23 +96,23 @@
                                             { <text> style="display:none" </text>  } }>
 
                                             <div class="col-md-6">
-                                                <button id="@idea.Overview.ID-button-advance" class="btn btn-default idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-play"></i></button>
+                                                <button id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-default idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-play"></i></button>
                                             </div>
                                             <div class="col-md-6">
-                                                <a class="btn btn-default idea-panel-abandon" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
+                                                <a class="btn btn-default idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
                                             </div>
                                         </div>
                                         <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check))
                                             { <text> style="display:none" </text>  } }>
 
                                             <div class="col-md-4">
-                                                <a class="btn btn-default idea-panel-adopt" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-check"></i></a>
+                                                <a class="btn btn-default idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-check"></i></a>
                                             </div>
                                             <div class="col-md-4">
-                                                <a class="btn btn-default idea-panel-adapt" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:darkorange;"><i class="fas fa-balance-scale"></i></a>
+                                                <a class="btn btn-default idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:darkorange;"><i class="fas fa-balance-scale"></i></a>
                                             </div>
                                             <div class="col-md-4">
-                                                <a class="btn btn-default idea-panel-abandon" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
+                                                <a class="btn btn-default idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
                                             </div>
 
                                         </div>
@@ -209,7 +209,6 @@
 
         /*
          * TODO: Make buttons look nicer (advance, abaondon, etc.)
-         * TODO: Add tooltips to the buttons
          * TODO: Make buttons style inline if they are in small window
          * TODO: Shrink finalize button cause wilson
          * TODO: Get rid of magical numbers and use consts instead
@@ -217,19 +216,6 @@
          * TODO: Add placeholder text to message box depending on the action type. ie. Enter abandonment reason, Enter adaptation plan
          * TODO: Ideas on the drafts page should route to edit draft rather than update status
          */
-
-        //This function toggles the display of the arrow indicating if a idea view is expanded. It is called whenever such an arrow is clicked.
-        function toggleArrow(arrowImage) {
-
-            // TODO: This is broken right now, manually add functionality to show and hide the hidden part
-
-            event.cancelBubble = true;
-            if (event.stopPropagation) event.stopPropagation();
-            if (arrowImage.src.endsWith('arrow-right.png'))
-                arrowImage.src = "images/arrow-down.png"
-            else
-                arrowImage.src = "images/arrow-right.png";
-        }
 
         function updateTimeline(ideaid, status) {
             // Do
@@ -461,6 +447,10 @@
                     document.getElementById('Comment-' + id).value = '';
                 }
             });
+        });
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
         });
 
     </script>
