@@ -171,24 +171,6 @@ namespace eIDEAS.Controllers
             return View(ideaViewModel);
         }
 
-        // GET: Ideas/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var idea = await _context.Idea
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (idea == null)
-            {
-                return NotFound();
-            }
-
-            return View(idea);
-        }
-
         // GET: Ideas/Create
         public IActionResult Create()
         {

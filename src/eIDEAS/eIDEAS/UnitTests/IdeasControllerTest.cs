@@ -48,50 +48,7 @@ namespace eIDEAS.UnitTests
             var hc = new Controllers.IdeasController(_context, userManager.Object);
             
             this.controller = hc;
-        }
-        
-       
-
-        [Fact]
-        public async void DetailPageErrorsOnInvalidId()
-        {
-            int invalidId = -1;
-            //Access the detail page where id=1 and wait for the page
-            var actionResult = controller.Details(invalidId);
-            var detailPage = actionResult.Result;
-
-            //Ensure that a NotFoundResult is returned.
-            Assert.True(detailPage is NotFoundResult);
-        }
-
-        [Fact]
-        public async void DetailPageReturnsViewIfValid()
-        {
-            //If a division with the ID doesn't exist, create one and save the database.
-            Idea newIdeas = new Idea();
-            newIdeas.UserID = new Guid();
-            newIdeas.UnitID = 1;
-            newIdeas.Title = "rrrr";
-            newIdeas.Description = "dasd";
-            newIdeas.SolutionPlan = "dsd";
-            newIdeas.Status = 0;
-            newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
-            newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
-
-            _context.Idea.Add(newIdeas);
-            await _context.SaveChangesAsync();
-
-            //Get the details page for the division
-            var actionResult = controller.Details(newIdeas.ID);
-            actionResult.Wait();
-            var detailPage = actionResult.Result as ViewResult;
-
-            //Ensure that a view is returned.
-            Assert.NotNull(detailPage);
-
-            //Delete the row after it is inserted
-            _context.Idea.Remove(newIdeas);
-        }
+        }   
 
         [Fact]
         public async void EditPageErrorsOnInvalidId()
