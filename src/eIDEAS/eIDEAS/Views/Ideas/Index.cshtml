@@ -9,9 +9,42 @@
 
 <h2>@ViewBag.PageName</h2>
 
-<p>
-    <a asp-action="Create">Create Idea</a>
-</p>
+<div class="row">
+    <div class="col-xs-12">
+        <div style="float: left">
+            <p>
+                <a class="btn btn-primary" asp-action="Create">Create Idea</a>
+            </p>
+        </div>
+        <div class="col-md-4" style="float: right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                    @if (ViewBag.filterType != "MyDrafts")
+                    {
+                        <div class="dropdown" style="display: inline">
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-filter"></span></a>
+                            <ul class="dropdown-menu" style="left: -119px; top: 15px">
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="All">All</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="New">New</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Top">Top</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Plan">Planning</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Do">Doing</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Check">Checking</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Adopt">Adopting</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Adapt">Adapting</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Abandon">Abandoning</a></li>
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @foreach (var idea in Model)
 {
