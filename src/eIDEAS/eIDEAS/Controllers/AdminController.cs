@@ -10,7 +10,7 @@ namespace eIDEAS.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction(nameof(Homepage));
         }
 
         public IActionResult Homepage()

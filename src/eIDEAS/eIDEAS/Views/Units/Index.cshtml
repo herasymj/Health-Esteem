@@ -3,11 +3,11 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<h2>Units</h2>
+<h1 class="text-center">Units</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary col-md-2 col-md-offset-10" asp-action="Create">Create New Unit</a>
 </p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -22,19 +22,19 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.division.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.unit.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.unit.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.unit.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.unit.ID">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.division.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.unit.Name)
+            </td>
+            <td align="right">
+                <a class="btn-xs btn-primary col-xs-offset-3" asp-action="Edit" asp-route-id="@item.unit.ID">Edit</a> |
+                <a class="btn-xs btn-primary" asp-action="Details" asp-route-id="@item.unit.ID">Details</a> |
+                <a class="btn-xs btn-primary" asp-action="Delete" asp-route-id="@item.unit.ID">Delete</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
