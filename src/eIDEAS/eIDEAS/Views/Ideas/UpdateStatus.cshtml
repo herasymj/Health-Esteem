@@ -87,7 +87,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <button class="btn btn-default" onclick="goBack()">Return to Ideas</button>
 </div>
 
 @section Scripts
@@ -95,6 +95,10 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script type="text/javascript">
+        //Allow the user to return to the previous page
+        function goBack() {
+            window.history.back();
+        }
 
         //Handle the possibility of having to show an additional field when the status changes
         function handleStatusChange(selectedStatus) {
