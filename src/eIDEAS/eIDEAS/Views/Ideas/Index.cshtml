@@ -75,14 +75,14 @@
             <div class="row">
                 <div class="col-md-11">
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <p class="no-margin">Submitted on @idea.Overview.DateCreated.ToLocalTime(); by @idea.AuthorFirstName @idea.AuthorLastName</p>
                             <p>to <strong>@idea.UnitName</strong></p>
                         </div>
-                        <div class="col-md-6 " style="padding-top: 20px">
+                        <div class="col-md-7">
                             <div class="row">
-                                <div class="col-md-10">
-                                    <div class="progress no-margin">
+                                <div class="col-md-9">
+                                    <div class="progress">
                                         <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
                                         <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
                                         <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
@@ -91,36 +91,30 @@
                                 </div>
                                 @if (!isCompleted)
                                 {
-                                    <div class="col-md-2">
-                                        <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do))
-                                            { <text> style="display:none" </text>  } }>
+                                    <div class="col-md-3">
+                                        <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
 
-                                            <div class="col-md-6">
-                                                <button id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-default idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-play"></i></button>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <a class="btn btn-default idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
+                                            <div class="btn-group">
+                                                <button id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
+
+                                                <button type="button" class="btn btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
                                             </div>
                                         </div>
-                                        <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check))
-                                            { <text> style="display:none" </text>  } }>
+                                        <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
 
-                                            <div class="col-md-4">
-                                                <a class="btn btn-default idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:green;"><i class="fas fa-check"></i></a>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <a class="btn btn-default idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:darkorange;"><i class="fas fa-balance-scale"></i></a>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <a class="btn btn-default idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
+                                            <div class="btn-group">
+
+                                                <button type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
+
+                                                <button type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
+
+                                                <button type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+
                                             </div>
 
                                         </div>
-
-
-
                                     </div>
-                                            }
+                                }
                             </div>
                         </div>
                     </div>
@@ -250,7 +244,7 @@
                 $('#' + ideaid + '-progress-act').text('Abandon');
                 $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
             }
-                
+
         }
 
         function updateButtons(ideaid, status) {
@@ -271,7 +265,7 @@
                 $('#' + ideaid + '-button-group-advance').hide();
                 $('#' + ideaid + '-button-group-finalize').hide();
             }
-            
+
         }
 
         function updatePage(ideaid, status) {
@@ -333,7 +327,7 @@
             } else {
                 alert('Stop trying to hack the app');
             }
-       
+
         });
 
         $('.idea-panel-finalize').click(function () {
@@ -412,7 +406,7 @@
                 $(this).attr('src', "images/arrow-right.png");
                 target.slideUp(500);
             }
-                
+
         });
 
         $('.idea-panel-expand-ammendments').click(function () {
