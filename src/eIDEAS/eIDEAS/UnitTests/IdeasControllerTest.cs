@@ -51,60 +51,6 @@ namespace eIDEAS.UnitTests
         }   
 
         [Fact]
-        public async void EditPageErrorsOnInvalidId()
-        {
-            int invalidId = -1;
-            //Access the edit page
-            var actionResult = controller.UpdateStatus(invalidId);
-            actionResult.Wait();
-            var editPage = actionResult.Result;
-
-            //Ensure a NotFoundResult is returned.
-            Assert.True(editPage is NotFoundResult);
-        }
-
-        [Fact]
-        public async void EditPageReturnsViewIfValid()
-        {
-            Idea newIdeas = new Idea();
-            newIdeas.UserID = new Guid();
-            newIdeas.UnitID = 1;
-            newIdeas.Title = "rrrr";
-            newIdeas.Description = "dasd";
-            newIdeas.SolutionPlan = "dsd";
-            newIdeas.Status = 0;
-            newIdeas.DateCreated = new DateTime(2008, 5, 1, 8, 30, 52);
-            newIdeas.DateEdited = new DateTime(2008, 5, 1, 8, 30, 53);
-
-            _context.Idea.Add(newIdeas);
-            await _context.SaveChangesAsync();
-
-            //Access the edit page.
-            var actionResult = controller.UpdateStatus(newIdeas.ID);
-            actionResult.Wait();
-            var editPage = actionResult.Result as ViewResult;
-
-            //Ensure that the detail page is returned.
-            Assert.NotNull(editPage);
-
-            //Delete the fake data
-            _context.Idea.Remove(newIdeas);
-        }
-
-        [Fact]
-        public void EditPageErrorsOnNullId()
-        {
-            //Ensure that if a null id is passed a nofound result is returned.
-            //Ensure that if an id that does't exist is passed, a Not Found is thrown
-            var actionResult = controller.UpdateStatus(null);
-            actionResult.Wait();
-            var editPage = actionResult.Result;
-
-            //Ensure a NotFoundResult is returned.
-            Assert.True(editPage is NotFoundResult);
-        }
-
-        [Fact]
         public async void DeletePageErrorsOnInvalidId()
         {
             int invalidId = -1;

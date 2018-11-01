@@ -228,22 +228,6 @@ namespace eIDEAS.Controllers
             return View(idea);
         }
 
-        // GET: Ideas/UpdateStatus/5
-        public async Task<IActionResult> UpdateStatus(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var idea = await _context.Idea.FindAsync(id);
-            if (idea == null)
-            {
-                return NotFound();
-            }
-            return View(idea);
-        }
-
         // POST: Ideas/UpdateStatus/5
         [HttpPost]
         [ValidateAntiForgeryToken]

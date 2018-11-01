@@ -92,12 +92,12 @@
     bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
 
     <style>
-        .idea-panel-clickable:hover {
+        .idea-panel:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
     </style>
 
-    <div class="panel panel-default idea-overview @(ViewBag.isDraft ? "" : "idea-panel-clickable")" data-ideaid="@idea.Overview.ID" style="cursor: pointer;">
+    <div class="panel panel-default idea-overview idea-panel" data-ideaid="@idea.Overview.ID" style="cursor: pointer;">
         <div class="row">
             <div class="col-md-12">
                 <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
@@ -242,7 +242,6 @@
 
         /*
          * TODO: Make buttons look nicer (advance, abaondon, etc.)
-         * TODO: Popups on all the buttons
          * TODO: Add tooltips to the buttons
          * TODO: Make buttons style inline if they are in small window
          * TODO: Shrink finalize button cause wilson
@@ -320,7 +319,6 @@
                 $('#' + ideaid + '-button-group-advance').hide();
                 $('#' + ideaid + '-button-group-finalize').hide();
             }
-            
         }
 
         function updatePage(ideaid, status) {
@@ -328,45 +326,40 @@
             updateButtons(ideaid, status);
         }
 
-
-
         function finalizeStatus(ideaid, status, message) {
 
-            // TODO: Finishing adjusting this request to support a message
-
-            $.ajax({
-                url: '/Ideas/Status/' + ideaid,
-                type: "POST",
-                data: { 'status': status, 'message': message },
-                success: function (result) {
-                    console.log(JSON.stringify(result));
-                    updatePage(ideaid, status);
-                },
-                error: function (result) {
-                    console.log("Error");
-                }
-            });
+            if (window.confirm("Are you sure you want to update the status of this idea?\nThis action is irreversible.\n\nSelect 'OK' to update the status.\nSelect 'Cancel' to return to the page.")) {
+                $.ajax({
+                    url: '/Ideas/Status/' + ideaid,
+                    type: "POST",
+                    data: { 'status': status, 'message': message },
+                    success: function (result) {
+                        console.log(JSON.stringify(result));
+                        updatePage(ideaid, status);
+                    },
+                    error: function (result) {
+                        console.log("Error");
+                    }
+                });
+            }
         }
 
         function updateStatus(ideaid, status) {
-            $.ajax({
-                url: '/Ideas/Status/' + ideaid,
-                type: "POST",
-                data: { 'status': status, 'message': null },
-                success: function (result) {
-                    console.log(JSON.stringify(result));
-                    updatePage(ideaid, status);
-                },
-                error: function (result) {
-                    console.log("Error");
-                }
-            });
+            if (window.confirm("Are you sure you want to update the status of this idea?\nThis action is irreversible.\n\nSelect 'OK' to update the status.\nSelect 'Cancel' to return to the page.")) {
+                $.ajax({
+                    url: '/Ideas/Status/' + ideaid,
+                    type: "POST",
+                    data: { 'status': status, 'message': null },
+                    success: function (result) {
+                        console.log(JSON.stringify(result));
+                        updatePage(ideaid, status);
+                    },
+                    error: function (result) {
+                        console.log("Error");
+                    }
+                });
+            }
         }
-
-        $('.idea-panel-clickable').click(function () {
-            var ideaid = $(this).data('ideaid');
-            document.location = "/Ideas/UpdateStatus/" + ideaid;
-        });
 
         $('.idea-panel-advance').click(function () {
             event.cancelBubble = true;
@@ -374,12 +367,11 @@
 
             var ideaid = $(this).data('ideaid');
             var status = $(this).data('status') + 1;
-            if (status < 3) {
+            if (status <= 3) {
                 updateStatus(ideaid, status);
             } else {
                 alert('Stop trying to hack the app');
-            }
-       
+            }   
         });
 
         $('.idea-panel-finalize').click(function () {
@@ -401,10 +393,6 @@
 
             var ideaid = $(this).data('ideaid');
             var status = 3;
-
-            //$('#' + ideaid + '-input-group-finalize').show();
-            //$('#' + ideaid + '-button-finalize').data('status', status);
-
             updateStatus(ideaid, status);
         });
 
@@ -417,8 +405,6 @@
 
             $('#' + ideaid + '-input-group-finalize').show();
             $('#' + ideaid + '-button-finalize').data('status', status);
-
-            //updateStatus(ideaid, status);
         });
 
         $('.idea-panel-adapt').click(function () {
@@ -430,8 +416,6 @@
 
             $('#' + ideaid + '-input-group-finalize').show();
             $('#' + ideaid + '-button-finalize').data('status', status);
-
-            //updateStatus(ideaid, status);
         });
 
         $('.idea-panel-finalize-message').click(function () {
