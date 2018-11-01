@@ -27,10 +27,10 @@ namespace eIDEAS.Controllers
 
         // GET: Ideas?filterType={filterType}
         [HttpGet]
-        public async Task<IActionResult> Index(string filterType)
+        public async Task<IActionResult> Index(string filterType, string filterStyle)
         {
             //Create a list to store ideas
-            List <Idea> ideas = new List<Idea>();
+            IQueryable<Idea> ideaQuery;
 
             //Create basic model for the ideas to show. Initially set to have no rows
             List<IdeaPresentationViewModel> ideaViewModel = new List<IdeaPresentationViewModel>();
@@ -50,32 +50,70 @@ namespace eIDEAS.Controllers
             {
                 case "MyDrafts":
                     //Get a model that filters on the user's drafts
-                    ideas = await _context.Idea.Where(idea => idea.IsDraft && idea.UnitID == loggedInUserUnit.ID).ToListAsync();
+                    ideaQuery = _context.Idea.Where(idea => idea.IsDraft && idea.UnitID == loggedInUserUnit.ID);
 
                     //Name the page appropriately
                     ViewBag.PageName = "My Drafts";
+                    ViewBag.filterType = "MyDrafts";
                     ViewBag.IsDraft = true;
                     break;
 
                 case "TeamIdeas":
                     //Get a model that filters on the user's unit's ideas
-                    ideas = await _context.Idea.Where(idea => !idea.IsDraft && idea.UnitID == loggedInUserUnit.ID).ToListAsync();
+                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft && idea.UnitID == loggedInUserUnit.ID);
 
                     //Name the page appropriately
                     ViewBag.PageName = "Team Ideas";
+                    ViewBag.filterType = "TeamIdeas";
                     ViewBag.IsDraft = false;
                     break;
 
                 case "MyIdeas":
                 default:
                     //Get a model that filters on the user's ideas
-                    ideas = await _context.Idea.Where(idea => !idea.IsDraft && idea.UserID.ToString() == loggedInUserID).ToListAsync();
+                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft && idea.UserID.ToString() == loggedInUserID);
 
                     //Name the page appropriately
                     ViewBag.PageName = "My Ideas";
+                    ViewBag.filterType = "MyIdeas";
                     ViewBag.IsDraft = false;
                     break;
             }
+
+            //Determine what type of filter the user wants to perform on the view
+            switch (filterStyle)
+            {
+                case "Top":
+                    break;
+                case "New":
+                    ideaQuery = ideaQuery.OrderBy(idea => idea.DateCreated);
+                    break;
+                case "Plan":
+                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Plan);
+                    break;
+                case "Do":
+                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Do);
+                    break;
+                case "Check":
+                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Check);
+                    break;
+                case "Adopt":
+                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Adopt);
+                    break;
+                case "Adapt":
+                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Adapt);
+                    break;
+                case "Abandon":
+                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Abandon);
+                    break;
+                case "All":
+                default:
+                    break;
+
+            }
+
+            //Preapare the ideas as a list
+            List<Idea> ideas = ideaQuery.ToList();
 
             //Create the idea presentation viewmodel
             foreach (Idea idea in ideas)
@@ -133,24 +171,6 @@ namespace eIDEAS.Controllers
             return View(ideaViewModel);
         }
 
-        // GET: Ideas/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var idea = await _context.Idea
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (idea == null)
-            {
-                return NotFound();
-            }
-
-            return View(idea);
-        }
-
         // GET: Ideas/Create
         public IActionResult Create()
         {
@@ -204,22 +224,6 @@ namespace eIDEAS.Controllers
                     return RedirectToAction(nameof(Index), new { filterType = "MyDrafts" });
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            return View(idea);
-        }
-
-        // GET: Ideas/UpdateStatus/5
-        public async Task<IActionResult> UpdateStatus(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var idea = await _context.Idea.FindAsync(id);
-            if (idea == null)
-            {
-                return NotFound();
             }
             return View(idea);
         }

@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<ApplicationUserPresentationViewModel>
 @{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Users";
 }
-@Html.Partial("_adminLayout")
 <h1 class="text-center">Users</h1>
+<p style="margin-bottom:30px;">
+    <a class="btn btn-primary col-md-2 col-md-offset-10" asp-area="Identity" asp-page="/Account/Register" asp-route-createdByAdmin="true">Create New User</a>
+</p>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -50,7 +53,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => user.ParticipationPoints)
                 </td>
-                <td>
+                <td align="right">
                     <a class="btn-xs btn-primary" asp-action="Edit" asp-route-id="@user.ID">Edit</a> |
                     <a class="btn-xs btn-primary" asp-action="Delete" asp-route-id="@user.ID">Delete</a>
                 </td>
@@ -58,6 +61,3 @@
         }
     </tbody>
 </table>
-<p style="margin-bottom:30px;">
-    <a class="btn btn-primary col-md-2 col-md-offset-10" asp-area="Identity" asp-page="/Account/Register" asp-route-createdByAdmin="true">Create New User</a>
-</p>
