@@ -120,22 +120,16 @@
                                 {
                                     <div class="col-md-3">
                                         <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
-
                                             <div class="btn-group">
                                                 <button id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
-
                                                 <button type="button" class="btn btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
                                             </div>
                                         </div>
                                         <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
                                             <div class="btn-group">
-
                                                 <button type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
-
                                                 <button type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
-
                                                 <button type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
-
                                             </div>
                                         </div>
                                     </div>
@@ -226,7 +220,7 @@
     <script type="text/javascript">
 
         /*
-         * TODO: Make buttons look nicer (advance, abaondon, etc.)
+         * TODO: Make buttons look nicer (advance, abandon, etc.)
          * TODO: Make buttons style inline if they are in small window
          * TODO: Shrink finalize button cause wilson
          * TODO: Get rid of magical numbers and use consts instead
@@ -272,7 +266,6 @@
         }
 
         function updateButtons(ideaid, status) {
-
             // Change the current status data associated with the advance button
             if (status >= 1) {
                 $('#' + ideaid + '-button-advance').data('status', status);
@@ -297,7 +290,7 @@
         }
 
         function finalizeStatus(ideaid, status, message) {
-            if (!confirm("Are you sure you want to update the status of this idea?\nThis action is irreversible.\n\nSelect 'OK' to update the status.\nSelect 'Cancel' to return to the page."))
+            if (!confirm("Are you sure you want to finalize the status of this idea?\nThis action is irreversible."))
                 return;
 
             $.ajax({
@@ -315,20 +308,18 @@
         }
 
         function updateStatus(ideaid, status) {
-            if (window.confirm("Are you sure you want to update the status of this idea?\nThis action is irreversible.\n\nSelect 'OK' to update the status.\nSelect 'Cancel' to return to the page.")) {
-                $.ajax({
-                    url: '/Ideas/Status/' + ideaid,
-                    type: "POST",
-                    data: { 'status': status, 'message': null },
-                    success: function (result) {
-                        console.log(JSON.stringify(result));
-                        updatePage(ideaid, status);
-                    },
-                    error: function (result) {
-                        console.log("Error");
-                    }
-                });
-            }
+            $.ajax({
+                url: '/Ideas/Status/' + ideaid,
+                type: "POST",
+                data: { 'status': status, 'message': null },
+                success: function (result) {
+                    console.log(JSON.stringify(result));
+                    updatePage(ideaid, status);
+                },
+                error: function (result) {
+                    console.log("Error");
+                }
+            });
         }
 
         // Advance an idea
@@ -336,7 +327,7 @@
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
-            if (!confirm("Are you sure you want to advance this idea?"))
+            if (!confirm("Are you sure you want to advance the status of this idea?\nThis action is irreversible."))
                 return;
 
             var ideaid = $(this).data('ideaid');
@@ -366,7 +357,7 @@
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
-            if (!confirm("Are you sure you want to adopt this idea?"))
+            if (!confirm("Are you sure you want to adopt the status of this idea?\nThis action is irreversible."))
                 return;
 
             var ideaid = $(this).data('ideaid');
