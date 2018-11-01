@@ -91,13 +91,7 @@
     //An idea is completed if it is in the Adopt, Adapt or Abandon stage
     bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
 
-    <style>
-        .idea-panel:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-    </style>
-
-    <div class="panel panel-default idea-overview idea-panel" data-ideaid="@idea.Overview.ID" style="cursor: pointer;">
+    <div class="panel panel-default idea-overview" data-ideaid="@idea.Overview.ID">
         <div class="row">
             <div class="col-md-12">
                 <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
@@ -147,13 +141,9 @@
                                             <div class="col-md-4">
                                                 <a class="btn btn-default idea-panel-abandon" data-ideaid="@idea.Overview.ID" role="button" style="padding: 1px 5px 0px 5px; color:red;"><i class="fas fa-times"></i></a>
                                             </div>
-
                                         </div>
-
-
-
                                     </div>
-                                            }
+                                }
                             </div>
                         </div>
                     </div>
@@ -169,7 +159,6 @@
                     <img class="idea-panel-expand" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
                 </div>
             </div>
-
         }
         <div id="idea-@idea.Overview.ID-details" class="row" style="@(ViewBag.isDraft ? "" : "display:none;")">
             <div class="col-md-6">

@@ -48,6 +48,10 @@ hr {
     padding: 0px 10px 10px 10px
 }
 
+.idea-panel-expand {
+    cursor: pointer
+}
+
 /* Override margin from bootstrap */
 .no-margin {
     margin: 0px
