@@ -20,9 +20,52 @@ namespace eIDEAS.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string filterType)
         {
-            var leaderboardModel = _context.Users.OrderByDescending(user => user.IdeaPoints).ToList();
+            List<LeaderboardPresentationViewModel> leaderboardModel = new List<LeaderboardPresentationViewModel>();
+
+            switch (filterType)
+            {
+                case "Team":
+                    IEnumerable<ApplicationUser> userList = _context.Users.ToList();
+
+                    foreach (var user in userList)
+                    {
+
+                        bool isAdded = false;
+                        var unitName = _context.Unit.Where(unit => unit.ID == user.UnitID).FirstOrDefault().Name;
+
+                        foreach (var leaderbord in leaderboardModel)
+                        {
+                            //Determine if the division exists in the list.
+                            
+                            if(leaderbord.name == unitName)
+                            {
+                                leaderbord.ideaPoints += user.IdeaPoints;
+                                leaderbord.participationPoints += user.ParticipationPoints;
+                                isAdded = true;
+                                break;
+                            }
+                        }
+
+                        if (isAdded == false)
+                        {
+                            LeaderboardPresentationViewModel leaderboard = new LeaderboardPresentationViewModel();
+                            leaderboard.name = unitName;
+                            leaderboard.ideaPoints = user.IdeaPoints;
+                            leaderboard.participationPoints = user.ParticipationPoints;
+
+                            leaderboardModel.Add(leaderboard);
+                        }
+                    }
+                    break;
+                case "Individual":
+                default:
+                    IEnumerable<ApplicationUser> userLeaderboard = _context.Users.OrderByDescending(user => user.IdeaPoints).ToList();
+                    leaderboardModel = userLeaderboard.Select(x => new LeaderboardPresentationViewModel(x)).ToList();
+                    break;
+            }
+            
             return View(leaderboardModel);
         }
     }
