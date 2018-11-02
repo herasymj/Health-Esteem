@@ -1,11 +1,10 @@
 ﻿@model IEnumerable<LeaderboardPresentationViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Leaderboard";
 }
 
-<h2>Leaderboard</h2>
-<a asp-area="" asp-controller="Leaderboard" asp-action="Index" asp-route-filterType="Team">Team Points</a>
+<h2>@ViewData["Title"]</h2>
 <div class="row">
     <div class="col-md-6" style="float: left">
         <table class="table table-striped">

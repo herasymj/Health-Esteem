@@ -11,7 +11,13 @@
             <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="TeamIdeas">Team Ideas</a></li>
         </ul>
     </li>
-    <li><a asp-area="" asp-controller="Leaderboard" asp-action="Index">Leaderboard</a></li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown">Leaderboard</a>
+        <ul class="dropdown-menu">
+            <li><a asp-area="" asp-controller="Leaderboard" asp-action="Index" asp-route-filterType="Individual">Individual</a></li>
+            <li><a asp-area="" asp-controller="Leaderboard" asp-action="Index" asp-route-filterType="Team">Team</a></li>
+        </ul>
+    </li>
     <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
 
 }
