@@ -102,14 +102,14 @@
             <div class="row">
                 <div class="col-md-11">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <p class="no-margin">Submitted on @idea.Overview.DateCreated.ToLocalTime(); by @idea.AuthorFirstName @idea.AuthorLastName</p>
                             <p>to <strong>@idea.UnitName</strong></p>
                         </div>
                         <div class="col-md-7">
                             <div class="row">
                                 <div class="col-md-9">
-                                    <div class="progress">
+                                    <div class="progress" style="height:20px;">
                                         <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
                                         <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
                                         <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
@@ -122,19 +122,19 @@
                                         <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
 
                                             <div class="btn-group">
-                                                <button id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
 
-                                                <button type="button" class="btn btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
                                             </div>
                                         </div>
                                         <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
                                             <div class="btn-group">
 
-                                                <button type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
 
-                                                <button type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
 
-                                                <button type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
 
                                             </div>
                                         </div>
