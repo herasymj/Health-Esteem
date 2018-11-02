@@ -1,10 +1,11 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@model IEnumerable<LeaderboardPresentationViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h2>Leaderboard</h2>
+<a asp-area="" asp-controller="Leaderboard" asp-action="Index" asp-route-filterType="Team">Team Points</a>
 <div class="row">
     <div class="col-md-6" style="float: left">
         <table class="table table-striped">
@@ -16,9 +17,9 @@
             @foreach (var user in Model)
             {
             <tr>
-                <td>@user.FirstName @user.LastName</td>
-                <td>@user.IdeaPoints</td>
-                <td>@user.ParticipationPoints</td>
+                <td>@user.name</td>
+                <td>@user.ideaPoints</td>
+                <td>@user.participationPoints</td>
             </tr>
             }
         </table>
