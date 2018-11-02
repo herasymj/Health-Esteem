@@ -222,10 +222,10 @@
 
         /*
          * TODO: Shrink finalize button cause wilson
-         * TODO: Cleanup and comment code
          * TODO: Add placeholder text to message box depending on the action type. ie. Enter abandonment reason, Enter adaptation plan
          */
 
+        // Returns human readable date difference
         var statuses = {'plan': 0, 'do': 1, 'check': 2, 'adopt': 3, 'adapt': 4, 'abandon': 5};
 
         function timeDifference(previous) {
@@ -243,27 +243,51 @@
             var elapsed = current - previous;
 
             if (elapsed < msPerMinute) {
-                return Math.round(elapsed / 1000) + ' seconds ago';
+                var seconds = Math.round(elapsed / 1000);
+                if (seconds == 1)
+                    return 'a second ago'
+                else
+                    return seconds + ' seconds ago';
             }
 
             else if (elapsed < msPerHour) {
-                return Math.round(elapsed / msPerMinute) + ' minutes ago';
+                var minutes = Math.round(elapsed / msPerMinute);
+                if (minutes == 1)
+                    return 'a minute ago'
+                else
+                    return minutes + ' minutes ago';
             }
 
             else if (elapsed < msPerDay) {
-                return Math.round(elapsed / msPerHour) + ' hours ago';
+                var hours = Math.round(elapsed / msPerHour);
+                if (hours == 1)
+                    return 'a hour ago'
+                else
+                    return hours + ' hours ago';
             }
 
             else if (elapsed < msPerMonth) {
-                return Math.round(elapsed / msPerDay) + ' days ago';
+                var days = Math.round(elapsed / msPerDay);
+                if (days == 1)
+                    return 'a day ago'
+                else
+                    return days + ' days ago';
             }
 
             else if (elapsed < msPerYear) {
-                return Math.round(elapsed / msPerMonth) + ' months ago';
+                var months = Math.round(elapsed / msPerMonth);
+                if (months == 1)
+                    return 'a month ago'
+                else
+                    return months + ' months ago';
             }
 
             else {
-                return Math.round(elapsed / msPerYear) + ' years ago';
+                var years = Math.round(elapsed / msPerYear);
+                if (years == 1)
+                    return 'a year ago'
+                else
+                    return years + ' years ago';
             }
         }
 
