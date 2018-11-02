@@ -103,7 +103,8 @@
                 <div class="col-md-11">
                     <div class="row">
                         <div class="col-md-5">
-                            <p class="no-margin">Submitted on @idea.Overview.DateCreated.ToLocalTime(); by @idea.AuthorFirstName @idea.AuthorLastName</p>
+                            <p class="no-margin">Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">@idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</p>
+                            
                             <p>to <strong>@idea.UnitName</strong></p>
                         </div>
                         <div class="col-md-7">
@@ -120,22 +121,16 @@
                                 {
                                     <div class="col-md-3">
                                         <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
-
                                             <div class="btn-group">
                                                 <button style="height:20px;padding-top:0px;padding-bottom:0px;" id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
-
                                                 <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
                                             </div>
                                         </div>
                                         <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
                                             <div class="btn-group">
-
                                                 <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
-
                                                 <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
-
                                                 <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
-
                                             </div>
                                         </div>
                                     </div>
@@ -226,44 +221,82 @@
     <script type="text/javascript">
 
         /*
-         * TODO: Make buttons look nicer (advance, abaondon, etc.)
-         * TODO: Make buttons style inline if they are in small window
          * TODO: Shrink finalize button cause wilson
-         * TODO: Get rid of magical numbers and use consts instead
          * TODO: Cleanup and comment code
          * TODO: Add placeholder text to message box depending on the action type. ie. Enter abandonment reason, Enter adaptation plan
-         * TODO: Ideas on the drafts page should route to edit draft rather than update status
          */
 
+        var statuses = {'plan': 0, 'do': 1, 'check': 2, 'adopt': 3, 'adapt': 4, 'abandon': 5};
+
+        function timeDifference(previous) {
+
+            var current = new Date().getTime();
+
+            previous = Date.parse(previous);
+
+            var msPerMinute = 60 * 1000;
+            var msPerHour = msPerMinute * 60;
+            var msPerDay = msPerHour * 24;
+            var msPerMonth = msPerDay * 30;
+            var msPerYear = msPerDay * 365;
+
+            var elapsed = current - previous;
+
+            if (elapsed < msPerMinute) {
+                return Math.round(elapsed / 1000) + ' seconds ago';
+            }
+
+            else if (elapsed < msPerHour) {
+                return Math.round(elapsed / msPerMinute) + ' minutes ago';
+            }
+
+            else if (elapsed < msPerDay) {
+                return Math.round(elapsed / msPerHour) + ' hours ago';
+            }
+
+            else if (elapsed < msPerMonth) {
+                return Math.round(elapsed / msPerDay) + ' days ago';
+            }
+
+            else if (elapsed < msPerYear) {
+                return Math.round(elapsed / msPerMonth) + ' months ago';
+            }
+
+            else {
+                return Math.round(elapsed / msPerYear) + ' years ago';
+            }
+        }
+
+        // Updates the colorizing of the progress bar
         function updateTimeline(ideaid, status) {
             // Do
-            if (status >= 1) {
+            if (status >= statuses['do']) {
                 $('#' + ideaid + '-progress-do').addClass('progress-bar-info');
                 $('#' + ideaid + '-progress-do').removeClass('progress-bar-waiting');
             }
 
             // Check
-            if (status >= 2) {
+            if (status >= statuses['check']) {
                 $('#' + ideaid + '-progress-check').addClass('progress-bar-info');
                 $('#' + ideaid + '-progress-check').removeClass('progress-bar-waiting');
             }
 
             // Adopt
-            if (status == 3) {
+            if (status == statuses['adopt']) {
                 $('#' + ideaid + '-progress-act').addClass('progress-bar-success');
                 $('#' + ideaid + '-progress-act').text('Adopt');
                 $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
             }
 
             // Adapt
-            if (status == 4) {
+            if (status == statuses['adapt']) {
                 $('#' + ideaid + '-progress-act').addClass('progress-bar-warning');
                 $('#' + ideaid + '-progress-act').text('Adapt');
                 $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
             }
 
             // Abandon
-            if (status == 5) {
+            if (status == statuses['abandon']) {
                 $('#' + ideaid + '-progress-act').addClass('progress-bar-danger');
                 $('#' + ideaid + '-progress-act').text('Abandon');
                 $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
@@ -271,18 +304,18 @@
 
         }
 
+        // Updating which buttons are shown after advancing/finalizing an idea
         function updateButtons(ideaid, status) {
-
             // Change the current status data associated with the advance button
-            if (status >= 1) {
+            if (status >= statuses['do']) {
                 $('#' + ideaid + '-button-advance').data('status', status);
             }
 
             // Change which group of buttons are showing - if any
-            if (status < 2) {
+            if (status < statuses['check']) {
                 $('#' + ideaid + '-button-group-advance').show();
                 $('#' + ideaid + '-button-group-finalize').hide();
-            } else if (status == 2) {
+            } else if (status == statuses['check']) {
                 $('#' + ideaid + '-button-group-advance').hide();
                 $('#' + ideaid + '-button-group-finalize').show();
             } else {
@@ -291,13 +324,15 @@
             }
         }
 
+        // Helper function for updating a panel UI
         function updatePage(ideaid, status) {
             updateTimeline(ideaid, status);
             updateButtons(ideaid, status);
         }
 
+        // Updating a status for adapt, abandon (Extra message field required)
         function finalizeStatus(ideaid, status, message) {
-            if (!confirm("Are you sure you want to update the status of this idea?\nThis action is irreversible.\n\nSelect 'OK' to update the status.\nSelect 'Cancel' to return to the page."))
+            if (!confirm("Are you sure you want to finalize the status of this idea?\nThis action is irreversible."))
                 return;
 
             $.ajax({
@@ -314,21 +349,20 @@
             });
         }
 
+        // Updating a status for plan, do, check, adopt
         function updateStatus(ideaid, status) {
-            if (window.confirm("Are you sure you want to update the status of this idea?\nThis action is irreversible.\n\nSelect 'OK' to update the status.\nSelect 'Cancel' to return to the page.")) {
-                $.ajax({
-                    url: '/Ideas/Status/' + ideaid,
-                    type: "POST",
-                    data: { 'status': status, 'message': null },
-                    success: function (result) {
-                        console.log(JSON.stringify(result));
-                        updatePage(ideaid, status);
-                    },
-                    error: function (result) {
-                        console.log("Error");
-                    }
-                });
-            }
+            $.ajax({
+                url: '/Ideas/Status/' + ideaid,
+                type: "POST",
+                data: { 'status': status, 'message': null },
+                success: function (result) {
+                    console.log(JSON.stringify(result));
+                    updatePage(ideaid, status);
+                },
+                error: function (result) {
+                    console.log("Error");
+                }
+            });
         }
 
         // Advance an idea
@@ -336,18 +370,19 @@
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
-            if (!confirm("Are you sure you want to advance this idea?"))
+            if (!confirm("Are you sure you want to advance the status of this idea?\nThis action is irreversible."))
                 return;
 
             var ideaid = $(this).data('ideaid');
             var status = $(this).data('status') + 1;
-            if (status <= 3) {
+            if (status <= statuses['adopt']) {
                 updateStatus(ideaid, status);
             } else {
                 alert('Stop trying to hack the app');
             }
         });
 
+        // Finalizing an idea after submitting abandon/adapting with a message
         $('.idea-panel-finalize').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
@@ -366,24 +401,12 @@
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
-            if (!confirm("Are you sure you want to adopt this idea?"))
+            if (!confirm("Are you sure you want to adopt the status of this idea?\nThis action is irreversible."))
                 return;
 
             var ideaid = $(this).data('ideaid');
-            var status = 3;
+            var status = statuses['adopt'];
             updateStatus(ideaid, status);
-        });
-
-        // Abandon an idea
-        $('.idea-panel-abandon').click(function () {
-            event.cancelBubble = true;
-            if (event.stopPropagation) event.stopPropagation();
-
-            var ideaid = $(this).data('ideaid');
-            var status = 5;
-
-            $('#' + ideaid + '-input-group-finalize').show();
-            $('#' + ideaid + '-button-finalize').data('status', status);
         });
 
         // Adapt an idea
@@ -392,7 +415,19 @@
             if (event.stopPropagation) event.stopPropagation();
 
             var ideaid = $(this).data('ideaid');
-            var status = 4;
+            var status = statuses['adapt'];
+
+            $('#' + ideaid + '-input-group-finalize').show();
+            $('#' + ideaid + '-button-finalize').data('status', status);
+        });
+
+        // Abandon an idea
+        $('.idea-panel-abandon').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            var ideaid = $(this).data('ideaid');
+            var status = statuses['abandon'];
 
             $('#' + ideaid + '-input-group-finalize').show();
             $('#' + ideaid + '-button-finalize').data('status', status);
@@ -403,6 +438,7 @@
             if (event.stopPropagation) event.stopPropagation();
         });
 
+        // Expand/Contract panel to see description, solution plan, etc.
         $('.idea-panel-expand').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
@@ -416,9 +452,9 @@
                 $(this).attr('src', "images/arrow-right.png");
                 target.slideUp(500);
             }
-
         });
 
+        // Expand/Contract ammendments form
         $('.idea-panel-expand-ammendments').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
@@ -453,8 +489,14 @@
             });
         });
 
+        // Sets up tooltips
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
+
+            $('.panel-timestamp').each(function () {
+                var utctime = $(this).data('utctime')
+                $(this).html(timeDifference(utctime));
+            });
         });
 
     </script>
