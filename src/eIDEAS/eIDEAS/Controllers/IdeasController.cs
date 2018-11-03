@@ -85,9 +85,6 @@ namespace eIDEAS.Controllers
             {
                 case "Top":
                     break;
-                case "New":
-                    ideaQuery = ideaQuery.OrderBy(idea => idea.DateCreated);
-                    break;
                 case "Plan":
                     ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Plan);
                     break;
@@ -108,6 +105,7 @@ namespace eIDEAS.Controllers
                     break;
                 case "All":
                 default:
+                    ideaQuery = ideaQuery.OrderBy(idea => idea.DateCreated);
                     break;
 
             }

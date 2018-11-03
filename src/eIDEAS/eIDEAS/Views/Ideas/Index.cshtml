@@ -29,7 +29,6 @@
                             <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-filter"></span></a>
                             <ul class="dropdown-menu" style="left: -119px; top: 15px">
                                 <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="All">All</a></li>
-                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="New">New</a></li>
                                 <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Top">Top</a></li>
                                 <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Plan">Planning</a></li>
                                 <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Do">Doing</a></li>
@@ -185,43 +184,41 @@
                         </div>
                         
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            @if (!ViewBag.IsDraft)
-                            {
-                                @Html.Partial("../Amendments/Index", idea.Amendments, new ViewDataDictionary(ViewData){
-                                    { "IdeaID", @idea.Overview.ID }
-                                })
+                    <div class="col-md-6">
+                        @if (!ViewBag.IsDraft)
+                        {
+                            @Html.Partial("../Amendments/Index", idea.Amendments, new ViewDataDictionary(ViewData){
+                                { "IdeaID", @idea.Overview.ID }
+                            })
 
-                                <div class="row" style="margin-top: 10px;">
-                                    <div class="col-md-10 col-md-offset-2" align="right">
-                                        <span>
-                                            <button class="btn btn-sm btn-default idea-panel-expand-ammendments" data-target="#idea-@idea.Overview.ID-amendments">Toggle Amendment Form</button>
-                                        </span>
-                                    </div>
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-10 col-md-offset-2" align="right">
+                                    <span>
+                                        <button class="btn btn-sm btn-default idea-panel-expand-ammendments" data-target="#idea-@idea.Overview.ID-amendments">Toggle Amendment Form</button>
+                                    </span>
                                 </div>
-                                <div id="idea-@idea.Overview.ID-amendments" class="row" style="display:none;">
-                                    <div class="col-md-10 col-md-offset-2" align="right">
-                                        <form>
-                                            <input type="hidden" name="IdeaID" id="IdeaID-@idea.Overview.ID" value="@idea.Overview.ID">
-                                            <textarea name="Comment" id="Comment-@idea.Overview.ID" class="form-control idea-panel-finalize-message" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
-                                            <input type="button" id="amendmentSubmit" class="btn btn-sm btn-default idea-panel-submit-ammendment" data-target="@idea.Overview.ID" value="Submit Amendment" />
-                                        </form>
-                                    </div>
+                            </div>
+                            <div id="idea-@idea.Overview.ID-amendments" class="row" style="display:none;">
+                                <div class="col-md-10 col-md-offset-2" align="right">
+                                    <form>
+                                        <input type="hidden" name="IdeaID" id="IdeaID-@idea.Overview.ID" value="@idea.Overview.ID">
+                                        <textarea name="Comment" id="Comment-@idea.Overview.ID" class="form-control idea-panel-finalize-message" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
+                                        <input type="button" id="amendmentSubmit" class="btn btn-sm btn-default idea-panel-submit-ammendment" data-target="@idea.Overview.ID" value="Submit Amendment" />
+                                    </form>
                                 </div>
-                            }
-                            else
-                            {
-                                <div class="row" style="margin-top: 10px;">
-                                    <div class="col-md-10 col-md-offset-2" align="right">
-                                        <span>
-                                            <a asp-action="EditDraft" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Edit Draft</a>
-                                        </span>
-                                    </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-10 col-md-offset-2" align="right">
+                                    <span>
+                                        <a asp-action="EditDraft" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Edit Draft</a>
+                                    </span>
                                 </div>
-                            }
+                            </div>
+                        }
 
-                        </div>
                     </div>
                 </div>
             </div>
