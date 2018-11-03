@@ -91,10 +91,10 @@
     //An idea is completed if it is in the Adopt, Adapt or Abandon stage
     bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
 
-    <div class="panel panel-default idea-overview" data-ideaid="@idea.Overview.ID">
+    <div class="panel panel-default idea-overview" data-ideaid="@idea.Overview.ID" style="background-color:#F2F2F2;">
         <div class="row">
             <div class="col-md-12">
-                <h4><strong>@Html.DisplayFor(modelItem => idea.Overview.Title)</strong></h4>
+                <span class="lead">@Html.DisplayFor(modelItem => idea.Overview.Title)</span>
             </div>
         </div>
         @if (!ViewBag.IsDraft)
@@ -103,13 +103,14 @@
                 <div class="col-md-11">
                     <div class="row">
                         <div class="col-md-5">
-                            <p class="no-margin">Submitted on @idea.Overview.DateCreated.ToLocalTime() by @idea.AuthorFirstName @idea.AuthorLastName</p>
+                            <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">@idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
+
                             <p>to <strong>@idea.UnitName</strong></p>
                         </div>
                         <div class="col-md-7">
                             <div class="row">
                                 <div class="col-md-9">
-                                    <div class="progress">
+                                    <div class="progress" style="height:20px;margin-top:10px;">
                                         <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
                                         <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
                                         <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
@@ -121,15 +122,15 @@
                                     <div class="col-md-3">
                                         <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
                                             <div class="btn-group">
-                                                <button id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
-                                                <button type="button" class="btn btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
                                             </div>
                                         </div>
                                         <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
-                                                <button type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -151,66 +152,78 @@
             </div>
         }
         <div id="idea-@idea.Overview.ID-details" class="row" style="@(ViewBag.isDraft ? "" : "display:none;")">
-            <div class="col-md-6">
+            <div class="col-md-12">
+                <hr />
                 <div class="row">
-                    <div class="col-md-12">
-                        <h5><strong>Description</strong></h5>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="problem-description" style="padding: 5px">
-                            @Html.DisplayFor(modelItem => idea.Overview.Description)
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h5><strong>Solution Plan</strong></h5>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="solution-plan" style="padding: 5px">
-                            @Html.DisplayFor(modelItem => idea.Overview.SolutionPlan)
-                        </div>
-                    </div>
-                </div>
-                @if (!ViewBag.IsDraft)
-                {
-                    @Html.Partial("../Amendments/Index", idea.Amendments, new ViewDataDictionary(ViewData){
-                        { "IdeaID", @idea.Overview.ID }
-                    })
 
-                    <div class="row" style="margin-top: 10px;">
-                        <div class="col-md-10 col-md-offset-2" align="right">
-                            <span>
-                                <button class="btn btn-sm btn-default idea-panel-expand-ammendments" data-target="#idea-@idea.Overview.ID-amendments">Toggle Amendment Form</button>
-                            </span>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5><strong>Description</strong></h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="aproblem-description" style="padding: 5px">
+                                    @Html.DisplayFor(modelItem => idea.Overview.Description)
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div id="idea-@idea.Overview.ID-amendments" class="row" style="display:none;">
-                        <div class="col-md-10 col-md-offset-2" align="right">
-                            <form>
-                                <input type="hidden" name="IdeaID" id="IdeaID-@idea.Overview.ID" value="@idea.Overview.ID">
-                                <textarea name="Comment" id="Comment-@idea.Overview.ID" class="form-control idea-panel-finalize-message" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
-                                <input type="button" id="amendmentSubmit" class="btn btn-sm btn-default idea-panel-submit-ammendment" data-target="@idea.Overview.ID" value="Submit Amendment" />
-                            </form>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5><strong>Solution Plan</strong></h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="asolution-plan" style="padding: 5px">
+                                    @Html.DisplayFor(modelItem => idea.Overview.SolutionPlan)
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if (!ViewBag.IsDraft)
+                            {
+                                @Html.Partial("../Amendments/Index", idea.Amendments, new ViewDataDictionary(ViewData){
+                                    { "IdeaID", @idea.Overview.ID }
+                                })
+
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-10 col-md-offset-2" align="right">
+                                        <span>
+                                            <button class="btn btn-sm btn-default idea-panel-expand-ammendments" data-target="#idea-@idea.Overview.ID-amendments">Toggle Amendment Form</button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div id="idea-@idea.Overview.ID-amendments" class="row" style="display:none;">
+                                    <div class="col-md-10 col-md-offset-2" align="right">
+                                        <form>
+                                            <input type="hidden" name="IdeaID" id="IdeaID-@idea.Overview.ID" value="@idea.Overview.ID">
+                                            <textarea name="Comment" id="Comment-@idea.Overview.ID" class="form-control idea-panel-finalize-message" placeholder="Enter your amendment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
+                                            <input type="button" id="amendmentSubmit" class="btn btn-sm btn-default idea-panel-submit-ammendment" data-target="@idea.Overview.ID" value="Submit Amendment" />
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-10 col-md-offset-2" align="right">
+                                        <span>
+                                            <a asp-action="EditDraft" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Edit Draft</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+
                         </div>
                     </div>
-                }
-                else
-                {
-                    <div class="row" style="margin-top: 10px;">
-                        <div class="col-md-10 col-md-offset-2" align="right">
-                            <span>
-                                <a asp-action="EditDraft" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Edit Draft</a>
-                            </span>
-                        </div>
-                    </div>
-                }
+                </div>
             </div>
         </div>
     </div>
@@ -220,44 +233,106 @@
     <script type="text/javascript">
 
         /*
-         * TODO: Make buttons look nicer (advance, abandon, etc.)
-         * TODO: Make buttons style inline if they are in small window
          * TODO: Shrink finalize button cause wilson
-         * TODO: Get rid of magical numbers and use consts instead
-         * TODO: Cleanup and comment code
          * TODO: Add placeholder text to message box depending on the action type. ie. Enter abandonment reason, Enter adaptation plan
-         * TODO: Ideas on the drafts page should route to edit draft rather than update status
          */
 
+        // Returns human readable date difference
+        var statuses = {'plan': 0, 'do': 1, 'check': 2, 'adopt': 3, 'adapt': 4, 'abandon': 5};
+
+        function timeDifference(previous) {
+
+            var current = new Date().getTime();
+
+            previous = Date.parse(previous);
+
+            var msPerMinute = 60 * 1000;
+            var msPerHour = msPerMinute * 60;
+            var msPerDay = msPerHour * 24;
+            var msPerMonth = msPerDay * 30;
+            var msPerYear = msPerDay * 365;
+
+            var elapsed = current - previous;
+
+            if (elapsed < msPerMinute) {
+                var seconds = Math.round(elapsed / 1000);
+                if (seconds == 1)
+                    return 'a second ago'
+                else
+                    return seconds + ' seconds ago';
+            }
+
+            else if (elapsed < msPerHour) {
+                var minutes = Math.round(elapsed / msPerMinute);
+                if (minutes == 1)
+                    return 'a minute ago'
+                else
+                    return minutes + ' minutes ago';
+            }
+
+            else if (elapsed < msPerDay) {
+                var hours = Math.round(elapsed / msPerHour);
+                if (hours == 1)
+                    return 'a hour ago'
+                else
+                    return hours + ' hours ago';
+            }
+
+            else if (elapsed < msPerMonth) {
+                var days = Math.round(elapsed / msPerDay);
+                if (days == 1)
+                    return 'a day ago'
+                else
+                    return days + ' days ago';
+            }
+
+            else if (elapsed < msPerYear) {
+                var months = Math.round(elapsed / msPerMonth);
+                if (months == 1)
+                    return 'a month ago'
+                else
+                    return months + ' months ago';
+            }
+
+            else {
+                var years = Math.round(elapsed / msPerYear);
+                if (years == 1)
+                    return 'a year ago'
+                else
+                    return years + ' years ago';
+            }
+        }
+
+        // Updates the colorizing of the progress bar
         function updateTimeline(ideaid, status) {
             // Do
-            if (status >= 1) {
+            if (status >= statuses['do']) {
                 $('#' + ideaid + '-progress-do').addClass('progress-bar-info');
                 $('#' + ideaid + '-progress-do').removeClass('progress-bar-waiting');
             }
 
             // Check
-            if (status >= 2) {
+            if (status >= statuses['check']) {
                 $('#' + ideaid + '-progress-check').addClass('progress-bar-info');
                 $('#' + ideaid + '-progress-check').removeClass('progress-bar-waiting');
             }
 
             // Adopt
-            if (status == 3) {
+            if (status == statuses['adopt']) {
                 $('#' + ideaid + '-progress-act').addClass('progress-bar-success');
                 $('#' + ideaid + '-progress-act').text('Adopt');
                 $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
             }
 
             // Adapt
-            if (status == 4) {
+            if (status == statuses['adapt']) {
                 $('#' + ideaid + '-progress-act').addClass('progress-bar-warning');
                 $('#' + ideaid + '-progress-act').text('Adapt');
                 $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
             }
 
             // Abandon
-            if (status == 5) {
+            if (status == statuses['abandon']) {
                 $('#' + ideaid + '-progress-act').addClass('progress-bar-danger');
                 $('#' + ideaid + '-progress-act').text('Abandon');
                 $('#' + ideaid + '-progress-act').removeClass('progress-bar-waiting');
@@ -265,17 +340,18 @@
 
         }
 
+        // Updating which buttons are shown after advancing/finalizing an idea
         function updateButtons(ideaid, status) {
             // Change the current status data associated with the advance button
-            if (status >= 1) {
+            if (status >= statuses['do']) {
                 $('#' + ideaid + '-button-advance').data('status', status);
             }
 
             // Change which group of buttons are showing - if any
-            if (status < 2) {
+            if (status < statuses['check']) {
                 $('#' + ideaid + '-button-group-advance').show();
                 $('#' + ideaid + '-button-group-finalize').hide();
-            } else if (status == 2) {
+            } else if (status == statuses['check']) {
                 $('#' + ideaid + '-button-group-advance').hide();
                 $('#' + ideaid + '-button-group-finalize').show();
             } else {
@@ -284,11 +360,13 @@
             }
         }
 
+        // Helper function for updating a panel UI
         function updatePage(ideaid, status) {
             updateTimeline(ideaid, status);
             updateButtons(ideaid, status);
         }
 
+        // Updating a status for adapt, abandon (Extra message field required)
         function finalizeStatus(ideaid, status, message) {
             if (!confirm("Are you sure you want to finalize the status of this idea?\nThis action is irreversible."))
                 return;
@@ -307,6 +385,7 @@
             });
         }
 
+        // Updating a status for plan, do, check, adopt
         function updateStatus(ideaid, status) {
             $.ajax({
                 url: '/Ideas/Status/' + ideaid,
@@ -332,13 +411,14 @@
 
             var ideaid = $(this).data('ideaid');
             var status = $(this).data('status') + 1;
-            if (status <= 3) {
+            if (status <= statuses['adopt']) {
                 updateStatus(ideaid, status);
             } else {
                 alert('Stop trying to hack the app');
             }
         });
 
+        // Finalizing an idea after submitting abandon/adapting with a message
         $('.idea-panel-finalize').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
@@ -361,20 +441,8 @@
                 return;
 
             var ideaid = $(this).data('ideaid');
-            var status = 3;
+            var status = statuses['adopt'];
             updateStatus(ideaid, status);
-        });
-
-        // Abandon an idea
-        $('.idea-panel-abandon').click(function () {
-            event.cancelBubble = true;
-            if (event.stopPropagation) event.stopPropagation();
-
-            var ideaid = $(this).data('ideaid');
-            var status = 5;
-
-            $('#' + ideaid + '-input-group-finalize').show();
-            $('#' + ideaid + '-button-finalize').data('status', status);
         });
 
         // Adapt an idea
@@ -383,7 +451,19 @@
             if (event.stopPropagation) event.stopPropagation();
 
             var ideaid = $(this).data('ideaid');
-            var status = 4;
+            var status = statuses['adapt'];
+
+            $('#' + ideaid + '-input-group-finalize').show();
+            $('#' + ideaid + '-button-finalize').data('status', status);
+        });
+
+        // Abandon an idea
+        $('.idea-panel-abandon').click(function () {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            var ideaid = $(this).data('ideaid');
+            var status = statuses['abandon'];
 
             $('#' + ideaid + '-input-group-finalize').show();
             $('#' + ideaid + '-button-finalize').data('status', status);
@@ -394,6 +474,7 @@
             if (event.stopPropagation) event.stopPropagation();
         });
 
+        // Expand/Contract panel to see description, solution plan, etc.
         $('.idea-panel-expand').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
@@ -407,9 +488,9 @@
                 $(this).attr('src', "images/arrow-right.png");
                 target.slideUp(500);
             }
-
         });
 
+        // Expand/Contract ammendments form
         $('.idea-panel-expand-ammendments').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
@@ -444,8 +525,14 @@
             });
         });
 
+        // Sets up tooltips
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
+
+            $('.panel-timestamp').each(function () {
+                var utctime = $(this).data('utctime')
+                $(this).html(timeDifference(utctime));
+            });
         });
 
     </script>

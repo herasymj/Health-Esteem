@@ -1,0 +1,36 @@
+﻿@model IEnumerable<StatisticPresentationModel>
+
+<div class="row feature-stats-collection">
+    <div class="col-md-6">
+        @{ 
+            var counter = 0;
+            foreach (var statistic in Model)
+            {
+                counter++;
+                if (counter % 2 == 1)
+                {
+                <div class="feature-stats panel">
+                    <div class="stat-title">@statistic.Name</div>
+                    <div class="panel-body stat-value">@statistic.Value</div>
+                </div>
+                }
+            }
+        }
+    </div>
+    <div class="col-md-6">
+        @{
+            counter = 0;
+            foreach (var statistic in Model)
+            {
+                counter++;
+                if (counter % 2 == 0)
+                {
+                    <div class="feature-stats panel">
+                        <div class="stat-title">@statistic.Name</div>
+                        <div class="panel-body stat-value">@statistic.Value</div>
+                    </div>
+                }
+            }
+        }
+    </div>
+</div>

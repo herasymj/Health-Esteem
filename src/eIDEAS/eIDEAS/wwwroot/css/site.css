@@ -131,3 +131,18 @@ textarea {
     padding-left: 250px;
     padding-right: 50px;
 }
+
+.feature-stats {
+    border-style: solid;
+    border-radius: 12px;
+    background-color: #EEEEEE;
+    padding: 15px;
+}
+
+.stat-title {
+    font-size: 24px;
+}
+
+.stat-value {
+    font-size: 48px;
+}

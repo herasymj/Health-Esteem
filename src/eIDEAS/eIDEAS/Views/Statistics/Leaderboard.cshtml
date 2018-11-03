@@ -1,10 +1,10 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@model IEnumerable<LeaderboardPresentationViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Leaderboard";
 }
 
-<h2>Leaderboard</h2>
+<h2>@ViewData["Title"]</h2>
 <div class="row">
     <div class="col-md-6" style="float: left">
         <table class="table table-striped">
@@ -16,9 +16,9 @@
             @foreach (var user in Model)
             {
             <tr>
-                <td>@user.FirstName @user.LastName</td>
-                <td>@user.IdeaPoints</td>
-                <td>@user.ParticipationPoints</td>
+                <td>@user.name</td>
+                <td>@user.ideaPoints</td>
+                <td>@user.participationPoints</td>
             </tr>
             }
         </table>
