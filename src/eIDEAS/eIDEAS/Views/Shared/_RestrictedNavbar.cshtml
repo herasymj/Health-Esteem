@@ -14,8 +14,9 @@
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown">Leaderboard</a>
         <ul class="dropdown-menu">
-            <li><a asp-area="" asp-controller="Leaderboard" asp-action="Index" asp-route-filterType="Individual">Individual</a></li>
-            <li><a asp-area="" asp-controller="Leaderboard" asp-action="Index" asp-route-filterType="Team">Team</a></li>
+            <li><a asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a></li>
+            <li><a asp-area="" asp-controller="Statistics" asp-action="Leaderboard" asp-route-filterType="Individual">Individual</a></li>
+            <li><a asp-area="" asp-controller="Statistics" asp-action="Leaderboard" asp-route-filterType="Team">Team</a></li>
         </ul>
     </li>
     <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
