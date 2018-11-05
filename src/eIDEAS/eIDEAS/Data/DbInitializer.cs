@@ -206,6 +206,94 @@ namespace eIDEAS.Data
                 }
             );
             context.SaveChanges();
+
+            var jennID = context.Users.Where(user => user.FirstName == "Jennifer").FirstOrDefault();
+            var shawnID = context.Users.Where(user => user.FirstName == "Shawn").FirstOrDefault();
+            var wilsonID = context.Users.Where(user => user.FirstName == "Wilson").FirstOrDefault();
+            var quinnID = context.Users.Where(user => user.FirstName == "Quinn").FirstOrDefault();
+
+            var idea1 = context.Idea.Where(idea => idea.Title == "Sample Idea Being Checked").FirstOrDefault();
+            var idea2 = context.Idea.Where(idea => idea.Title == "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.").FirstOrDefault();
+            var idea3 = context.Idea.Where(idea => idea.Title == "Sample Idea One").FirstOrDefault();
+
+            context.IdeaInteraction.AddRange(
+                new IdeaInteraction
+                {
+                    UserId = new Guid(sampleUser.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 4
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(sampleUser.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 1
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(sampleUser.Id),
+                    IdeaID = idea3.ID
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(jennID.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 1
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(quinnID.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 2
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(shawnID.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 5
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(wilsonID.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 4
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(jennID.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 5
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(quinnID.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 1
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(shawnID.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 5
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(wilsonID.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 4
+                }
+            );
+            context.SaveChanges();
         }
     }
 }
