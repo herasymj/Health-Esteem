@@ -416,7 +416,7 @@ namespace eIDEAS.Controllers
         //Tracked
         // POST: Idea/Track
         [HttpPost]
-        public async void TrackStatus(int ideaID, bool tracked)
+        public async Task<bool> TrackStatus(int ideaID, bool tracked)
         {
             //Retrieve the logged in user's information and idea interaction
             var loggedInUserID = _userManager.GetUserId(HttpContext.User);
@@ -435,20 +435,21 @@ namespace eIDEAS.Controllers
                     IsTracked = tracked
                 };
 
-                _context.Add(currentUserInteraction);
-                await _context.SaveChangesAsync();
+                _context.IdeaInteraction.Add(currentUserInteraction);
             }
             else //update interaction
             {
                 currentUserInteraction.IsTracked = tracked;
-                _context.Update(currentUserInteraction);
-                await _context.SaveChangesAsync();
+                _context.IdeaInteraction.Update(currentUserInteraction);
             }
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         //Ratings
         [HttpPost]
-        public JsonResult Rate(int ideaID, int rating)
+        public async Task<IActionResult> Rate(int ideaID, int rating)
         {
             //Get the average rating and if it is tracked
             var loggedInUserID = _userManager.GetUserId(HttpContext.User);
@@ -457,7 +458,7 @@ namespace eIDEAS.Controllers
                 && interaction.IdeaID == ideaID
                 ).FirstOrDefault();
 
-            //if there is no interaction, create one and give points
+            //If there is no interaction, create one and give points
             if (currentUserInteraction == null)
             {
                 currentUserInteraction = new IdeaInteraction
@@ -469,9 +470,9 @@ namespace eIDEAS.Controllers
                 };
 
                 _context.Add(currentUserInteraction);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
-                //points
+                //Give particiption points
                 var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
                 loggedInUser.ParticipationPoints += 50;
                 _context.Update(loggedInUser);
@@ -479,24 +480,24 @@ namespace eIDEAS.Controllers
             }
             else
             {
-                //if origional rating is null give points
+                //If the original rating is null, give the rater participation points
                 if(!(currentUserInteraction.Rating <= 5 && currentUserInteraction.Rating >= 1))
                 {
                     var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
                     loggedInUser.ParticipationPoints += 50;
                     _context.Update(loggedInUser);
-                    _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                 }
                 currentUserInteraction.Rating = rating;
                 _context.Update(currentUserInteraction);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
-            //calculate average
+            //Calculate the new average rating
             var ideaInteractions = _context.IdeaInteraction.Where(i => i.IdeaID == ideaID).ToList();
             double avgRating = Math.Round(ideaInteractions.Where(i => i.Rating != 0).Select(i => i.Rating).Average(), 1);
 
-            //return the new avg rating for idea
+            //Return the new average rating for idea
             return Json(avgRating);
         }
     }
