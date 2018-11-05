@@ -168,7 +168,7 @@ namespace eIDEAS.Controllers
                     _context.Add(currentUserInteraction);
                     _context.SaveChanges();
                 }
-                double avgRating = Math.Round(ideaInteractions.Select(i => i.Rating).Average(), 1);
+                double avgRating = ideaInteractions.Count() == 0 ? -1 : Math.Round(ideaInteractions.Select(i => i.Rating).Average(), 1);
 
                 //Create the idea presentation
                 var ideaPresentation = new IdeaPresentationViewModel
