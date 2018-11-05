@@ -152,10 +152,31 @@ namespace eIDEAS.Controllers
                     }
                 }
 
+                //Get the average rating and if it is tracked
+                var ideaInteractions = _context.IdeaInteraction.Where(i => i.IdeaID == idea.ID).ToList();
+                var currentUserInteraction = ideaInteractions.Where(interaction => interaction.UserId.ToString() == loggedInUserID).FirstOrDefault();
+                //if there is no interaction, create one
+                if(currentUserInteraction == null)
+                {
+                    currentUserInteraction = new IdeaInteraction
+                    {
+                        IdeaID = idea.ID,
+                        UserId = new Guid(loggedInUserID),
+                        IsTracked = false
+                    };
+
+                    _context.Add(currentUserInteraction);
+                    _context.SaveChanges();
+                }
+                double avgRating = Math.Round(ideaInteractions.Select(i => i.Rating).Average(), 1);
+
                 //Create the idea presentation
                 var ideaPresentation = new IdeaPresentationViewModel
                 {
                     Overview = idea,
+                    AverageRating = avgRating,
+                    UserRating = currentUserInteraction.Rating,
+                    IsTracked = currentUserInteraction.IsTracked,
                     AuthorFirstName = userDictionary[idea.UserID].FirstName,
                     AuthorLastName = userDictionary[idea.UserID].LastName,
                     UnitName = loggedInUserUnit.Name,
@@ -390,6 +411,93 @@ namespace eIDEAS.Controllers
         private bool IdeaExists(int id)
         {
             return _context.Idea.Any(e => e.ID == id);
+        }
+
+        //Tracked
+        // POST: Idea/Track
+        [HttpPost]
+        public async void TrackStatus(int ideaID, bool tracked)
+        {
+            //Retrieve the logged in user's information and idea interaction
+            var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+            var currentUserInteraction = _context.IdeaInteraction.Where(
+                interaction => interaction.UserId.ToString() == loggedInUserID
+                && interaction.IdeaID == ideaID
+                ).FirstOrDefault();
+
+            //if there is no interaction, create one
+            if (currentUserInteraction == null)
+            {
+                currentUserInteraction = new IdeaInteraction
+                {
+                    IdeaID = ideaID,
+                    UserId = new Guid(loggedInUserID),
+                    IsTracked = tracked
+                };
+
+                _context.Add(currentUserInteraction);
+                await _context.SaveChangesAsync();
+            }
+            else //update interaction
+            {
+                currentUserInteraction.IsTracked = tracked;
+                _context.Update(currentUserInteraction);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        //Ratings
+        [HttpPost]
+        public JsonResult Rate(int ideaID, int rating)
+        {
+            //Get the average rating and if it is tracked
+            var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+            var currentUserInteraction = _context.IdeaInteraction.Where(
+                interaction => interaction.UserId.ToString() == loggedInUserID
+                && interaction.IdeaID == ideaID
+                ).FirstOrDefault();
+
+            //if there is no interaction, create one and give points
+            if (currentUserInteraction == null)
+            {
+                currentUserInteraction = new IdeaInteraction
+                {
+                    IdeaID = ideaID,
+                    UserId = new Guid(loggedInUserID),
+                    IsTracked = false,
+                    Rating = rating
+                };
+
+                _context.Add(currentUserInteraction);
+                _context.SaveChanges();
+
+                //points
+                var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+                loggedInUser.ParticipationPoints += 50;
+                _context.Update(loggedInUser);
+                _context.SaveChanges();
+            }
+            else
+            {
+                //if origional rating is null give points
+                if(!(currentUserInteraction.Rating <= 5 && currentUserInteraction.Rating >= 1))
+                {
+                    var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+                    loggedInUser.ParticipationPoints += 50;
+                    _context.Update(loggedInUser);
+                    _context.SaveChangesAsync();
+                }
+                currentUserInteraction.Rating = rating;
+                _context.Update(currentUserInteraction);
+                _context.SaveChanges();
+            }
+
+            //calculate average
+            var ideaInteractions = _context.IdeaInteraction.Where(i => i.IdeaID == ideaID).ToList();
+            double avgRating = Math.Round(ideaInteractions.Select(i => i.Rating).Average(), 1);
+
+            //return the new avg rating for idea
+            return Json(avgRating);
         }
     }
 }

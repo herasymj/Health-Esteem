@@ -142,7 +142,7 @@ namespace eIDEAS.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var division = await _context.Division.FindAsync(id);
-            var units = await _context.Unit.Where(unit => unit.DivisionID == id).ToListAsync();
+            var units = await _context.Unit.Where(unit => unit.DivisionID == id && unit.DateDeleted == null).ToListAsync();
             if (units.Count != 0)
             {
                 //can't delete divisions that still have units

@@ -27,7 +27,7 @@ namespace eIDEAS.Models
         public List<Division> GetDivisions(int? id)
         {
             if (id == null)
-                return _context.Division.ToList();
+                return _context.Division.Where(division => division.DateDeleted == null).ToList();
             return _context.Division.Where(division => division.ID == id).ToList();
         }
     }
