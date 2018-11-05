@@ -168,7 +168,7 @@ namespace eIDEAS.Controllers
                     _context.Add(currentUserInteraction);
                     _context.SaveChanges();
                 }
-                double avgRating = ideaInteractions.Count() == 0 ? -1 : Math.Round(ideaInteractions.Select(i => i.Rating).Average(), 1);
+                double avgRating = ideaInteractions.Where(i => i.Rating != 0).Count() == 0 ? -1 : Math.Round(ideaInteractions.Where(i => i.Rating != 0).Select(i => i.Rating).Average(), 1);
 
                 //Create the idea presentation
                 var ideaPresentation = new IdeaPresentationViewModel
@@ -494,7 +494,7 @@ namespace eIDEAS.Controllers
 
             //calculate average
             var ideaInteractions = _context.IdeaInteraction.Where(i => i.IdeaID == ideaID).ToList();
-            double avgRating = Math.Round(ideaInteractions.Select(i => i.Rating).Average(), 1);
+            double avgRating = Math.Round(ideaInteractions.Where(i => i.Rating != 0).Select(i => i.Rating).Average(), 1);
 
             //return the new avg rating for idea
             return Json(avgRating);
