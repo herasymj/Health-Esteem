@@ -34,6 +34,11 @@ namespace eIDEAS.Controllers
             double averageParticipationPointsPerMonth;
             double averageIdeaPointsPerMonth;
             Guid loggedInUserID;
+            List<Idea> ideaList = new List<Idea>();
+            List<double> averageRatings = new List<double>();
+            int ratingsGiven;
+
+            double averageIdeaRating;
 
             ViewData["FilterType"] = filterType == null ? "Global" : filterType;
 
@@ -43,9 +48,9 @@ namespace eIDEAS.Controllers
                     //Retrieve the logged in user's information
                     loggedInUserID = new Guid(_userManager.GetUserId(HttpContext.User));
 
-                    totalIdeas = _context.Idea.Where(idea => idea.UserID == loggedInUserID).Count();
-                    ideasThisMonth = _context.Idea.Where(idea => idea.DateCreated.Month == DateTime.Today.Month && idea.DateCreated.Year == DateTime.Today.Year && idea.UserID == loggedInUserID).Count();
-                    ideasThisYear = _context.Idea.Where(idea => idea.DateCreated.Year == DateTime.Today.Year && idea.UserID == loggedInUserID).Count();
+                    totalIdeas = _context.Idea.Where(idea => idea.UserID == loggedInUserID && idea.IsDraft == false).Count();
+                    ideasThisMonth = _context.Idea.Where(idea => idea.DateCreated.Month == DateTime.Today.Month && idea.DateCreated.Year == DateTime.Today.Year && idea.UserID == loggedInUserID && idea.IsDraft == false).Count();
+                    ideasThisYear = _context.Idea.Where(idea => idea.DateCreated.Year == DateTime.Today.Year && idea.UserID == loggedInUserID && idea.IsDraft == false).Count();
 
                     //Sum up the total idea points for all users
                     totalIdeaPoints = _context.Users.Where(user => user.Id == loggedInUserID.ToString()).ToList().Sum(user => user.IdeaPoints);
@@ -55,6 +60,29 @@ namespace eIDEAS.Controllers
 
                     //Months since first idea.
                     averageIdeasPerMonth = totalIdeas / monthsSinceFirstIdea;
+
+                    //Calculate the average idea rating for the individual
+                    //Get a list of all ideas the user has created this month.
+                    ideaList = _context.Idea.Where(idea => idea.UserID == loggedInUserID && idea.IsDraft == false).ToList();
+
+                    //Determine the average rating for each idea.
+                    foreach(Idea idea in ideaList)
+                    {
+                        //Get all idea interactions for the idea.
+                        var ideaInteractions = _context.IdeaInteraction.Where(interactions => interactions.IdeaID == idea.ID && interactions.Rating != 0).ToList();
+                        //Get the average rating from the list
+                        if (ideaInteractions.Count() == 0)
+                        {
+                            continue;
+                        }
+                        var averageRating = ideaInteractions.Average(interaction => interaction.Rating);
+                        averageRatings.Add(averageRating);
+                    }
+
+                    averageIdeaRating = averageRatings.Average();
+
+                    //Determine total number of ratings given
+                    ratingsGiven = _context.IdeaInteraction.Where(interaction => interaction.UserId == loggedInUserID && interaction.Rating != 0).Count();
 
                     averageParticipationPointsPerMonth = totalParticipationPoints / monthsSinceFirstIdea;
                     averageIdeaPointsPerMonth = totalIdeaPoints / monthsSinceFirstIdea;
@@ -67,9 +95,9 @@ namespace eIDEAS.Controllers
                     //Retrieve the logged in user's unit information
                     int loggedInUserUnit = _context.Unit.Where(unit => unit.ID == loggedInUser.UnitID).FirstOrDefault().ID;
 
-                    totalIdeas = _context.Idea.Where(idea => idea.UnitID == loggedInUserUnit).Count();
-                    ideasThisMonth = _context.Idea.Where(idea => idea.DateCreated.Month == DateTime.Today.Month && idea.DateCreated.Year == DateTime.Today.Year && idea.UnitID == loggedInUserUnit).Count();
-                    ideasThisYear = _context.Idea.Where(idea => idea.DateCreated.Year == DateTime.Today.Year && idea.UnitID == loggedInUserUnit).Count();
+                    totalIdeas = _context.Idea.Where(idea => idea.UnitID == loggedInUserUnit && idea.IsDraft == false).Count();
+                    ideasThisMonth = _context.Idea.Where(idea => idea.DateCreated.Month == DateTime.Today.Month && idea.DateCreated.Year == DateTime.Today.Year && idea.UnitID == loggedInUserUnit && idea.IsDraft == false).Count();
+                    ideasThisYear = _context.Idea.Where(idea => idea.DateCreated.Year == DateTime.Today.Year && idea.UnitID == loggedInUserUnit && idea.IsDraft == false).Count();
 
                     //Sum up the total idea points for all users
                     totalIdeaPoints = _context.Users.Where(user => user.UnitID == loggedInUserUnit).ToList().Sum(user => user.IdeaPoints);
@@ -80,15 +108,40 @@ namespace eIDEAS.Controllers
                     //Months since first idea.
                     averageIdeasPerMonth = totalIdeas / monthsSinceFirstIdea;
 
+                    //Calculate the average idea rating for the individual
+                    //Get a list of all ideas the user has created this month.
+                    ideaList = _context.Idea.Where(idea => idea.UnitID == loggedInUserUnit && idea.IsDraft == false).ToList();
+                    
+                    //Determine the average rating for each idea.
+                    foreach (Idea idea in ideaList)
+                    {
+                        //Get all idea interactions for the idea.
+                        var ideaInteractions = _context.IdeaInteraction.Where(interactions => interactions.IdeaID == idea.ID && interactions.Rating != 0).ToList();
+                        //Get the average rating from the list
+                        if (ideaInteractions.Count() == 0)
+                        {
+                            continue;
+                        }
+                        var averageRating = ideaInteractions.Average(interaction => interaction.Rating);
+                        averageRatings.Add(averageRating);
+                    }
+                    //Calculate final average rating
+                    averageIdeaRating = averageRatings.Average();
+
+                    //Determine total number of ratings given
+                    //Get list of userIDs that are on your team
+                    var userIdList = _context.Users.Where(user => user.UnitID == loggedInUserUnit).Select(user => new Guid(user.Id)).ToList();
+                    ratingsGiven = _context.IdeaInteraction.Where(interaction => userIdList.Contains(interaction.UserId) && interaction.Rating != 0).Count();
+
                     averageParticipationPointsPerMonth = totalParticipationPoints / monthsSinceFirstIdea;
                     averageIdeaPointsPerMonth = totalIdeaPoints / monthsSinceFirstIdea;
                     break;
                 //Add query parameter
                 case "Global":
                 default:
-                    totalIdeas = _context.Idea.Count();
-                    ideasThisMonth = _context.Idea.Where(idea => idea.DateCreated.Month == DateTime.Today.Month && idea.DateCreated.Year == DateTime.Today.Year).Count();
-                    ideasThisYear = _context.Idea.Where(idea => idea.DateCreated.Year == DateTime.Today.Year).Count();
+                    totalIdeas = _context.Idea.Where(idea => idea.IsDraft == false).Count();
+                    ideasThisMonth = _context.Idea.Where(idea => idea.DateCreated.Month == DateTime.Today.Month && idea.DateCreated.Year == DateTime.Today.Year && idea.IsDraft == false).Count();
+                    ideasThisYear = _context.Idea.Where(idea => idea.DateCreated.Year == DateTime.Today.Year && idea.IsDraft == false).Count();
 
                     //Sum up the total idea points for all users
                     totalIdeaPoints = _context.Users.ToList().Sum(user => user.IdeaPoints);
@@ -99,28 +152,61 @@ namespace eIDEAS.Controllers
                     //Months since first idea.
                     averageIdeasPerMonth = totalIdeas / monthsSinceFirstIdea;
 
+                    //Calculate the average idea rating for the individual
+                    //Get a list of all ideas the user has created this month.
+                    ideaList = _context.Idea.Where(idea => idea.IsDraft == false).ToList();
+
+                    //Determine the average rating for each idea.
+                    foreach (Idea idea in ideaList)
+                    {
+                        //Get all idea interactions for the idea.
+                        var ideaInteractions = _context.IdeaInteraction.Where(interactions => interactions.IdeaID == idea.ID && interactions.Rating != 0).ToList();
+                        if(ideaInteractions.Count() == 0)
+                        {
+                            continue;
+                        }
+                        //Get the average rating from the list
+                        var averageRating = ideaInteractions.Average(interaction => interaction.Rating);
+                        averageRatings.Add(averageRating);
+                    }
+                    //Calculate final average rating
+                    averageIdeaRating = averageRatings.Average();
+
+                    //Determine total number of ratings given
+                    ratingsGiven = _context.IdeaInteraction.Where(interaction => interaction.Rating != 0).Count();
+                    
                     averageParticipationPointsPerMonth = totalParticipationPoints / monthsSinceFirstIdea;
                     averageIdeaPointsPerMonth = totalIdeaPoints / monthsSinceFirstIdea;
                     break;
         }
             List<StatisticPresentationModel> list = new List<StatisticPresentationModel>();
-
+            string prefix = "";
+            if(filterType == "Individual")
+            {
+                prefix = "My";
+            } else if(filterType == "Team")
+            {
+                prefix = "My Team's";
+            } else
+            {
+                prefix = "Total";
+            }
             
 
-            list.Add(new StatisticPresentationModel("Total Ideas", totalIdeas.ToString()));
-            list.Add(new StatisticPresentationModel("Another relevant total stat", "TO DO"));
+            list.Add(new StatisticPresentationModel(prefix + " Ideas", totalIdeas.ToString()));
+            list.Add(new StatisticPresentationModel(prefix + " Ratings Given", ratingsGiven.ToString()));
 
-            list.Add(new StatisticPresentationModel("Ideas This Month", ideasThisMonth.ToString()));
-            list.Add(new StatisticPresentationModel("Ideas This Year", ideasThisYear.ToString()));
+            list.Add(new StatisticPresentationModel(prefix + " Ideas This Month", ideasThisMonth.ToString()));
+            list.Add(new StatisticPresentationModel(prefix + " Ideas This Year", ideasThisYear.ToString()));
 
-            list.Add(new StatisticPresentationModel("Total Participation Points", totalParticipationPoints.ToString()));
-            list.Add(new StatisticPresentationModel("Total Idea Points", totalIdeaPoints.ToString()));
+            list.Add(new StatisticPresentationModel(prefix + " Participation Points", totalParticipationPoints.ToString()));
+            list.Add(new StatisticPresentationModel(prefix + " Idea Points", totalIdeaPoints.ToString()));
 
-            list.Add(new StatisticPresentationModel("Average Participation Points Per Month", averageParticipationPointsPerMonth.ToString("0.00")));
-            list.Add(new StatisticPresentationModel("Average Idea Points Per Month", averageIdeaPointsPerMonth.ToString("0.00")));
+            list.Add(new StatisticPresentationModel(prefix + " Monthly Average Participation Points", averageParticipationPointsPerMonth.ToString("0.00")));
+            list.Add(new StatisticPresentationModel(prefix + " Monthly Average Idea Points", averageIdeaPointsPerMonth.ToString("0.00")));
 
-            list.Add(new StatisticPresentationModel("Average Monthly Ideas", averageIdeasPerMonth.ToString("0.00")));
-            list.Add(new StatisticPresentationModel("Average Idea Rating", "4.2"));
+            list.Add(new StatisticPresentationModel(prefix + " Monthly Average Ideas", averageIdeasPerMonth.ToString("0.00")));
+            list.Add(new StatisticPresentationModel(prefix + " Average Idea Rating", averageIdeaRating.ToString("0.00")));
 
             return View(list);
         }
