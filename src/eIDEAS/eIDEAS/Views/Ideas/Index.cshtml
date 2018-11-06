@@ -29,7 +29,9 @@
                             <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-filter"></span></a>
                             <ul class="dropdown-menu" style="left: -119px; top: 15px">
                                 <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="All">All</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="New">New</a></li>
                                 <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Top">Top</a></li>
+                                <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Tracked">Tracked</a></li>
                                 <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Plan">Planning</a></li>
                                 <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Do">Doing</a></li>
                                 <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Check">Checking</a></li>

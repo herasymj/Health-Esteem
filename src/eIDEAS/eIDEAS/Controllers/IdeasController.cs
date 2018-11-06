@@ -45,6 +45,9 @@ namespace eIDEAS.Controllers
             //Create a dictionary to store user information
             Dictionary<Guid, ApplicationUser> userDictionary = new Dictionary<Guid, ApplicationUser>();
 
+            //Create a list to store the filtered idea
+            List<Idea> filteredIdeas = new List<Idea>();
+
             //Determine which ideas the user wants to see
             switch(filterType)
             {
@@ -83,38 +86,61 @@ namespace eIDEAS.Controllers
             //Determine what type of filter the user wants to perform on the view
             switch (filterStyle)
             {
+                case "New":
+                    filteredIdeas = ideaQuery.Where(idea => DateTime.Today.Subtract(idea.DateCreated).Days <= 7).ToList();
+                    break;
                 case "Top":
+                    //Create a list of the average ratings
+                    List<Tuple<double, Idea>> ideaList = new List<Tuple<double, Idea>>();
+
+                    //Loop through all ideas in the current query.
+                    foreach (Idea idea in ideaQuery)
+                    {
+                        var ratingList = _context.IdeaInteraction.Where(i => i.IdeaID == idea.ID).ToList();
+                        double avgRating = ratingList.Where(i => i.Rating != 0).Count() == 0 ? -1 : Math.Round(ratingList.Where(i => i.Rating != 0).Select(i => i.Rating).Average(), 1);
+                        ideaList.Add(new Tuple<double, Idea>(avgRating, idea));
+                    }
+                    //Sort the list. Create the comparison between x and y to compare the first element in the tuple, descending order.
+                    ideaList.Sort((rating1, rating2) => rating2.Item1.CompareTo(rating1.Item1));
+                    filteredIdeas = ideaList.Select(idea => idea.Item2).ToList();
+                    break;
+                case "Tracked":
+                    List<int> trackedIdeaIDs = _context.IdeaInteraction.Where(interaction => interaction.UserId == new Guid(loggedInUserID) && interaction.IsTracked).Select(interaction => interaction.IdeaID).ToList();
+                    foreach (Idea idea in ideaQuery)
+                    {
+                        if(trackedIdeaIDs.Contains(idea.ID))
+                        {
+                            filteredIdeas.Add(idea);
+                        }
+                    }
                     break;
                 case "Plan":
-                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Plan);
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Plan).ToList();
                     break;
                 case "Do":
-                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Do);
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Do).ToList();
                     break;
                 case "Check":
-                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Check);
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Check).ToList();
                     break;
                 case "Adopt":
-                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Adopt);
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Adopt).ToList();
                     break;
                 case "Adapt":
-                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Adapt);
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Adapt).ToList();
                     break;
                 case "Abandon":
-                    ideaQuery = ideaQuery.Where(idea => idea.Status == StatusEnum.Abandon);
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Abandon).ToList();
                     break;
                 case "All":
                 default:
-                    ideaQuery = ideaQuery.OrderBy(idea => idea.DateCreated);
+                    filteredIdeas = ideaQuery.OrderBy(idea => idea.DateCreated).ToList();
                     break;
 
-            }
-
-            //Preapare the ideas as a list
-            List<Idea> ideas = ideaQuery.ToList();
+            }         
 
             //Create the idea presentation viewmodel
-            foreach (Idea idea in ideas)
+            foreach (Idea idea in filteredIdeas)
             {
                 //If the user dictionary does not have the idea author, add it
                 if (!userDictionary.ContainsKey(idea.UserID))
