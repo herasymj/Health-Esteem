@@ -261,13 +261,19 @@
     <script type="text/javascript">
 
         /*
-         * TODO: Shrink finalize button cause wilson
-         * TODO: Add placeholder text to message box depending on the action type. ie. Enter abandonment reason, Enter adaptation plan
+         * MVP 4 TODO:
+         * TODO: Shrink finalize button cause wilson - group discussion about this 
+         * TODO: Cancel/Close the finalize form if they decide they dont want to anymore
+         * TODO: Make the finalize form and ammendment forms have consistent styling
+         * TODO: Reorganize the data layout of tracking, rating, ammendments, and finalizing
+         * TODO: Invetigate firefox support
+         * TODO: Make the force a message error nicer
          */
 
-        // Returns human readable date difference
+        // Enum of status values to prevent magical numbers
         var statuses = {'plan': 0, 'do': 1, 'check': 2, 'adopt': 3, 'adapt': 4, 'abandon': 5};
 
+        // Returns human readable date difference
         function timeDifference(previous) {
 
             var current = new Date().getTime();
@@ -399,6 +405,12 @@
             if (!confirm("Are you sure you want to finalize the status of this idea?\nThis action is irreversible."))
                 return;
 
+            message = message.trim();
+            if (!message) {
+                alert('You must enter a message.');
+                return;
+            }
+
             $.ajax({
                 url: '/Ideas/Status/' + ideaid,
                 type: "POST",
@@ -481,6 +493,7 @@
             var ideaid = $(this).data('ideaid');
             var status = statuses['adapt'];
 
+            $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for adaption");
             $('#' + ideaid + '-input-group-finalize').show();
             $('#' + ideaid + '-button-finalize').data('status', status);
         });
@@ -493,6 +506,7 @@
             var ideaid = $(this).data('ideaid');
             var status = statuses['abandon'];
 
+            $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for abandonment");
             $('#' + ideaid + '-input-group-finalize').show();
             $('#' + ideaid + '-button-finalize').data('status', status);
         });
@@ -531,7 +545,7 @@
                 target.slideUp(500);
         });
 
-        //For amendment submission
+        // For amendment submission
         $('.idea-panel-submit-ammendment').click(function () {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
@@ -563,7 +577,7 @@
             });
         });
 
-        //Allow the user to track an idea
+        // Allow the user to track an idea
         $(".track-idea").click(function () {
             var ideaID = $(this).attr("data-idea-id");
             var isNowTracking = $(this).is(':checked');
@@ -574,7 +588,7 @@
             });
         });
 
-        //Allow the user to rate an idea
+        // Allow the user to rate an idea
         $(".btnrating").click(function () {
             //Obtain information required to update the rating
             var ideaID = $(this).attr("data-idea-id");
@@ -586,10 +600,10 @@
                 type: "POST",
                 data: { 'ideaID': ideaID, 'rating': selectedRating },
                 success: function (newAverageRating) {
-                    //Update the user's rating
+                    // Update the user's rating
                     $("#" + ideaID + "-previous-rating").val(selectedRating);
 
-                    //Update the appearance of the stars to reflec the user's rating
+                    // Update the appearance of the stars to reflect the user's rating
                     for (i = 1; i <= selectedRating; ++i) {
                         $("#" + ideaID + "-rating-star-" + i).toggleClass('btn-primary');
                         $("#" + ideaID + "-rating-star-" + i).toggleClass('btn-default');
@@ -599,7 +613,7 @@
                         $("#" + ideaID + "-rating-star-" + j).toggleClass('btn-default');
                     }
 
-                    //Update the average rating of the idea
+                    // Update the average rating of the idea
                     $("#" + ideaID + "-average-rating").empty();
                     $("#" + ideaID + "-average-rating").html(newAverageRating);
                 }
