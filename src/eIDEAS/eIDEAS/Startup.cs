@@ -61,7 +61,6 @@ namespace eIDEAS
                                     .AddEnvironmentVariables()
                                     .AddJsonFile(env.ContentRootPath + "/appsettings.json")
                                     .Build();
-                                    
             var app_env = configuration["Development"];
             if (app_env == "True")
             {
