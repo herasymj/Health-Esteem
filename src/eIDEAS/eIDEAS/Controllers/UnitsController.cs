@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using eIDEAS.Data;
 using eIDEAS.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace eIDEAS.Controllers
 {
@@ -15,15 +16,32 @@ namespace eIDEAS.Controllers
     public class UnitsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UnitsController(ApplicationDbContext context)
+
+        public UnitsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+        }
+
+        public bool IsAdmin()
+        {
+            var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+            ApplicationUser loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+
+            return loggedInUser.IsRole(Models.Enums.RoleEnum.Admin);
         }
 
         // GET: Units
         public async Task<IActionResult> Index()
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             List<UnitDivision> uds = new List<UnitDivision>();
 
             foreach(Unit unit in await _context.Unit.Where(unit => unit.DateDeleted == null).ToListAsync())
@@ -42,6 +60,12 @@ namespace eIDEAS.Controllers
         // GET: Units/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -62,6 +86,12 @@ namespace eIDEAS.Controllers
         // GET: Units/Create
         public IActionResult Create()
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View(new UnitDivision(_context));
         }
 
@@ -72,6 +102,12 @@ namespace eIDEAS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UnitDivision ud)
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(ud.unit);
@@ -84,6 +120,12 @@ namespace eIDEAS.Controllers
         // GET: Units/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -107,6 +149,12 @@ namespace eIDEAS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UnitDivision ud)
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id != ud.unit.ID)
             {
                 return NotFound();
@@ -138,6 +186,12 @@ namespace eIDEAS.Controllers
         // GET: Units/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -158,6 +212,12 @@ namespace eIDEAS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var unit = await _context.Unit.FindAsync(id);
             var users = await _context.Users.Where(user => user.UnitID == id).ToListAsync();
             if (users.Count != 0)

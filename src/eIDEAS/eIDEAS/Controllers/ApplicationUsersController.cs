@@ -21,8 +21,22 @@ namespace eIDEAS.Controllers
             _userManager = userManager;
         }
 
+        public bool IsAdmin()
+        {
+            var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+            ApplicationUser loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+
+            return loggedInUser.IsRole(Models.Enums.RoleEnum.Admin);
+        }
+
         public async Task<IActionResult> Index()
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             //Create a list to store desired user information
             List<ApplicationUserPresentationViewModel> userViewModel = new List<ApplicationUserPresentationViewModel>();
 
@@ -43,7 +57,13 @@ namespace eIDEAS.Controllers
         }
 
         public async Task<IActionResult> Edit(Guid? id)
-        { 
+        {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -66,6 +86,12 @@ namespace eIDEAS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("ID,FirstName,LastName,Email,IdeaPoints,ParticipationPoints")] ApplicationUserPresentationViewModel user)
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id != user.ID)
             {
                 return NotFound();
@@ -112,6 +138,12 @@ namespace eIDEAS.Controllers
 
         public async Task<IActionResult> Delete(Guid? id)
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -135,6 +167,12 @@ namespace eIDEAS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
+            //Is the user actually an admin
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             //Populate the date deleted field to indicate that this user has been deleted
             var deletedUser = await _context.Users.FindAsync(id.ToString());
             deletedUser.DateDeleted = DateTime.UtcNow;
