@@ -203,11 +203,44 @@ namespace eIDEAS.Controllers
             };
         }
 
-        //Ratings
+        //Check if user has admin access
         [HttpGet]
         public JsonResult Admin()
         {
             return Json(IsAdmin());
+        }
+
+        //
+        [HttpPost]
+        public async Task<IActionResult> ChangeRole(bool isChecked, RoleEnum role, Guid id)
+        {
+            //Get user
+            var editedUser = await _context.Users.FindAsync(id.ToString());
+
+            //determine role number
+            int roleNum = (int)role;
+
+            if(editedUser == null)
+            {
+                return Json(false);
+            }
+
+            //Either give or remove role
+            if (isChecked)
+            {
+                //give role
+                editedUser.Permissions |= (0b1 << (roleNum - 1));//set only bit that represents that role
+            }
+            else
+            {
+                //take role
+                editedUser.Permissions &= ~(0b1 << (roleNum - 1));//set role bit to 0 and only that one
+            }
+
+            _context.Update(editedUser);
+            await _context.SaveChangesAsync();
+
+            return Json("Success");
         }
     }
 }
