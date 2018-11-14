@@ -1,4 +1,5 @@
 ﻿@model eIDEAS.Models.ApplicationUserPresentationViewModel
+@using  eIDEAS.Models.Enums
 
 @{
     ViewData["Title"] = "Edit";
@@ -40,6 +41,15 @@
                 <span asp-validation-for="ParticipationPoints" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="UserRoles" class="control-label"></label><br />
+                @foreach (RoleEnum role in (RoleEnum[])Enum.GetValues(typeof(RoleEnum)))
+                {
+                    <input type="checkbox" id="@role" onchange="editRole(this.id)"
+                           @{if (Model.UserRoles.Contains(role)) { <text> checked</text>
+                        }} />@role<br />
+                    }
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Update User" class="btn btn-default" />
             </div>
         </form>
@@ -49,4 +59,43 @@
 <div>
     <a asp-action="Index">Back to User List</a>
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function editRole(role) {
+            if (document.getElementById(role).checked == true) {
+                $.ajax({
+                    url: '@Url.Action("ChangeRole", "ApplicationUsers")',
+                    data: {
+                        'isChecked': true,
+                        'role': role,
+                        'id': "@Model.ID"
+                    },
+                    type: "POST",
+                    success: function (result) {
+                        if (result == false) {
+                            alert("There was an error completing this task.");
+                        }
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: '@Url.Action("ChangeRole", "ApplicationUsers")',
+                    data: {
+                        'isChecked': false,
+                        'role': role,
+                        'id': "@Model.ID"
+                    },
+                    type: "POST",
+                    success: function (result) {
+                        if (result == false) {
+                            alert("There was an error completing this task.");
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}
+
 

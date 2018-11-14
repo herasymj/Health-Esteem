@@ -1,5 +1,6 @@
 ﻿using eIDEAS.Data;
 using eIDEAS.Models;
+using eIDEAS.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +51,8 @@ namespace eIDEAS.Controllers
             {
                 var divisionName = divisions.Where(division => division.ID == user.DivisionID).FirstOrDefault().Name;
                 var unitName = units.Where(unit => unit.ID == user.UnitID).FirstOrDefault().Name;
-                userViewModel.Add(generateUserViewModel(user, divisionName, unitName));
+                var roles = user.Roles();
+                userViewModel.Add(generateUserViewModel(user, divisionName, unitName, roles));
             }
 
             return View(userViewModel);
@@ -77,7 +79,8 @@ namespace eIDEAS.Controllers
 
             var division = await _context.Division.FindAsync(user.DivisionID);
             var unit = await _context.Unit.FindAsync(user.UnitID);
-            var userViewModel = generateUserViewModel(user, division.Name, unit.Name);
+            var roles = user.Roles();
+            var userViewModel = generateUserViewModel(user, division.Name, unit.Name, roles);
 
             return View(userViewModel);
         }
@@ -158,7 +161,8 @@ namespace eIDEAS.Controllers
             //Create the user presentation view model
             var division = await _context.Division.FindAsync(user.DivisionID);
             var unit = await _context.Unit.FindAsync(user.UnitID);
-            var userViewModel = generateUserViewModel(user, division.Name, unit.Name);
+            var roles = user.Roles();
+            var userViewModel = generateUserViewModel(user, division.Name, unit.Name, roles);
 
             return View(userViewModel);
         }
@@ -183,7 +187,7 @@ namespace eIDEAS.Controllers
 
 
         //Create the presentation view for a single user
-        private ApplicationUserPresentationViewModel generateUserViewModel(ApplicationUser user, string divisionName, string unitName)
+        private ApplicationUserPresentationViewModel generateUserViewModel(ApplicationUser user, string divisionName, string unitName, List<RoleEnum> roles)
         {
             return new ApplicationUserPresentationViewModel()
             {
@@ -194,8 +198,49 @@ namespace eIDEAS.Controllers
                 Division = divisionName,
                 Unit = unitName,
                 IdeaPoints = user.IdeaPoints,
-                ParticipationPoints = user.ParticipationPoints
+                ParticipationPoints = user.ParticipationPoints,
+                UserRoles = roles
             };
+        }
+
+        //Check if user has admin access
+        [HttpGet]
+        public JsonResult Admin()
+        {
+            return Json(IsAdmin());
+        }
+
+        //
+        [HttpPost]
+        public async Task<IActionResult> ChangeRole(bool isChecked, RoleEnum role, Guid id)
+        {
+            //Get user
+            var editedUser = await _context.Users.FindAsync(id.ToString());
+
+            //determine role number
+            int roleNum = (int)role;
+
+            if(editedUser == null)
+            {
+                return Json(false);
+            }
+
+            //Either give or remove role
+            if (isChecked)
+            {
+                //give role
+                editedUser.Permissions |= (0b1 << (roleNum - 1));//set only bit that represents that role
+            }
+            else
+            {
+                //take role
+                editedUser.Permissions &= ~(0b1 << (roleNum - 1));//set role bit to 0 and only that one
+            }
+
+            _context.Update(editedUser);
+            await _context.SaveChangesAsync();
+
+            return Json("Success");
         }
     }
 }
