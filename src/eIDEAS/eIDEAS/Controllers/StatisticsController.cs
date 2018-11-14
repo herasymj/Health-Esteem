@@ -78,8 +78,15 @@ namespace eIDEAS.Controllers
                         var averageRating = ideaInteractions.Average(interaction => interaction.Rating);
                         averageRatings.Add(averageRating);
                     }
-
-                    averageIdeaRating = averageRatings.Average();
+                    if(averageRatings.Count() == 0)
+                    {
+                        averageIdeaRating = 0;
+                    }
+                    else
+                    {
+                        averageIdeaRating = averageRatings.Average();
+                    }
+                    
 
                     //Determine total number of ratings given
                     ratingsGiven = _context.IdeaInteraction.Where(interaction => interaction.UserId == loggedInUserID && interaction.Rating != 0).Count();
@@ -126,7 +133,14 @@ namespace eIDEAS.Controllers
                         averageRatings.Add(averageRating);
                     }
                     //Calculate final average rating
-                    averageIdeaRating = averageRatings.Average();
+                    if (averageRatings.Count == 0)
+                    {
+                        averageIdeaRating = 0;
+                    }
+                    else
+                    {
+                        averageIdeaRating = averageRatings.Average();
+                    }
 
                     //Determine total number of ratings given
                     //Get list of userIDs that are on your team
