@@ -1,5 +1,7 @@
 ﻿using eIDEAS.Models;
 using eIDEAS.Models.Enums;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -99,7 +101,8 @@ namespace eIDEAS.Data
                     FirstName = "Jennifer",
                     LastName = "Herasymuik",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    Permissions = 1
                 },
                 new ApplicationUser
                 {
@@ -207,6 +210,7 @@ namespace eIDEAS.Data
             );
             context.SaveChanges();
 
+            //Get default user's
             var jennID = context.Users.Where(user => user.FirstName == "Jennifer").FirstOrDefault();
             var shawnID = context.Users.Where(user => user.FirstName == "Shawn").FirstOrDefault();
             var wilsonID = context.Users.Where(user => user.FirstName == "Wilson").FirstOrDefault();
@@ -294,6 +298,8 @@ namespace eIDEAS.Data
                 }
             );
             context.SaveChanges();
+
+            
         }
     }
 }

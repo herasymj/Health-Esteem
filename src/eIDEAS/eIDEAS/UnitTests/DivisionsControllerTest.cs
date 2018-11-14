@@ -8,6 +8,8 @@ using Xunit;
 using Microsoft.EntityFrameworkCore;
 using eIDEAS.Models;
 using eIDEAS.Areas.Identity.Pages.Account;
+using Microsoft.AspNetCore.Identity;
+using Moq;
 
 namespace eIDEAS.UnitTests
 {
@@ -23,7 +25,10 @@ namespace eIDEAS.UnitTests
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseInMemoryDatabase();
             this._context = new ApplicationDbContext(optionsBuilder.Options);
-            this.controller = new Controllers.DivisionsController(_context);
+            var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
+            var userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+
+            this.controller = new Controllers.DivisionsController(_context, userManager.Object);
         }
 
         [Fact]
