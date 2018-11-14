@@ -83,7 +83,8 @@ namespace eIDEAS.Data
                     DivisionID = 2,
                     UnitID = 5,
                     IdeaPoints = 450,
-                    ProfilePic = "~/images/default_profile_pic.png"
+                    ProfilePic = "~/images/default_profile_pic.png",
+                    Permissions = 7
                 },
                 new ApplicationUser
                 {
@@ -128,7 +129,8 @@ namespace eIDEAS.Data
                     LastName = "Bast",
                     DivisionID = 2,
                     UnitID = 5,
-                    ProfilePic = "~/images/default_profile_pic.png"
+                    ProfilePic = "~/images/default_profile_pic.png",
+                    Permissions = 6
                 },
                 new ApplicationUser
                 {
