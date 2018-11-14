@@ -80,7 +80,8 @@ namespace eIDEAS.Data
                     LastName = "Heisler",
                     DivisionID = 2,
                     UnitID = 5,
-                    IdeaPoints = 450
+                    IdeaPoints = 450,
+                    Permissions = 7
                 },
                 new ApplicationUser
                 {
@@ -123,7 +124,8 @@ namespace eIDEAS.Data
                     FirstName = "Quinn",
                     LastName = "Bast",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    Permissions = 6
                 },
                 new ApplicationUser
                 {

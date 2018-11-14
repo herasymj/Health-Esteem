@@ -1,6 +1,7 @@
 ﻿using eIDEAS.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace eIDEAS.Models
@@ -29,12 +30,31 @@ namespace eIDEAS.Models
 
         public DateTime? DateDeleted { get; set; }
 
+
+        //Find out if user is in role
         public bool IsRole(RoleEnum roleName)
         {
             int permission = this.Permissions;
             int role = (int)roleName;
 
-            return ((0b1 << (role - 1)) & permission) == 1; //Using bit shifting, find out if user has role
+            return (0b1 & (permission >> (role - 1))) == 1; //Using bit shifting, find out if user has role
+        }
+
+        //Return list of roles for current user
+        public List<RoleEnum> Roles()
+        {
+            var roleList = new List<RoleEnum>();
+
+            int numOfRoles = Enum.GetNames(typeof(RoleEnum)).Length;
+            for(int i = 1; i <= numOfRoles; i++)
+            {
+                if (IsRole((RoleEnum)i))
+                {
+                    roleList.Add((RoleEnum)i);
+                }
+            }
+
+            return roleList;
         }
     }
 }
