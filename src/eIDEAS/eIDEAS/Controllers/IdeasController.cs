@@ -27,10 +27,10 @@ namespace eIDEAS.Controllers
 
         // GET: Ideas?filterType={filterType}
         [HttpGet]
-        public async Task<IActionResult> Index(string filterType)
+        public async Task<IActionResult> Index(string filterType, string filterStyle)
         {
             //Create a list to store ideas
-            List <Idea> ideas = new List<Idea>();
+            IQueryable<Idea> ideaQuery;
 
             //Create basic model for the ideas to show. Initially set to have no rows
             List<IdeaPresentationViewModel> ideaViewModel = new List<IdeaPresentationViewModel>();
@@ -45,40 +45,102 @@ namespace eIDEAS.Controllers
             //Create a dictionary to store user information
             Dictionary<Guid, ApplicationUser> userDictionary = new Dictionary<Guid, ApplicationUser>();
 
+            //Create a list to store the filtered idea
+            List<Idea> filteredIdeas = new List<Idea>();
+
             //Determine which ideas the user wants to see
             switch(filterType)
             {
                 case "MyDrafts":
                     //Get a model that filters on the user's drafts
-                    ideas = await _context.Idea.Where(idea => idea.IsDraft && idea.UnitID == loggedInUserUnit.ID).ToListAsync();
+                    ideaQuery = _context.Idea.Where(idea => idea.IsDraft && idea.UnitID == loggedInUserUnit.ID);
 
                     //Name the page appropriately
                     ViewBag.PageName = "My Drafts";
+                    ViewBag.filterType = "MyDrafts";
                     ViewBag.IsDraft = true;
                     break;
 
                 case "TeamIdeas":
                     //Get a model that filters on the user's unit's ideas
-                    ideas = await _context.Idea.Where(idea => !idea.IsDraft && idea.UnitID == loggedInUserUnit.ID).ToListAsync();
+                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft && idea.UnitID == loggedInUserUnit.ID);
 
                     //Name the page appropriately
                     ViewBag.PageName = "Team Ideas";
+                    ViewBag.filterType = "TeamIdeas";
                     ViewBag.IsDraft = false;
                     break;
 
                 case "MyIdeas":
                 default:
                     //Get a model that filters on the user's ideas
-                    ideas = await _context.Idea.Where(idea => !idea.IsDraft && idea.UserID.ToString() == loggedInUserID).ToListAsync();
+                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft && idea.UserID.ToString() == loggedInUserID);
 
                     //Name the page appropriately
                     ViewBag.PageName = "My Ideas";
+                    ViewBag.filterType = "MyIdeas";
                     ViewBag.IsDraft = false;
                     break;
             }
 
+            //Determine what type of filter the user wants to perform on the view
+            switch (filterStyle)
+            {
+                case "New":
+                    filteredIdeas = ideaQuery.Where(idea => DateTime.Today.Subtract(idea.DateCreated).Days <= 7).ToList();
+                    break;
+                case "Top":
+                    //Create a list of the average ratings
+                    List<Tuple<double, Idea>> ideaList = new List<Tuple<double, Idea>>();
+
+                    //Loop through all ideas in the current query.
+                    foreach (Idea idea in ideaQuery)
+                    {
+                        var ratingList = _context.IdeaInteraction.Where(i => i.IdeaID == idea.ID).ToList();
+                        double avgRating = ratingList.Where(i => i.Rating != 0).Count() == 0 ? -1 : Math.Round(ratingList.Where(i => i.Rating != 0).Select(i => i.Rating).Average(), 1);
+                        ideaList.Add(new Tuple<double, Idea>(avgRating, idea));
+                    }
+                    //Sort the list. Create the comparison between x and y to compare the first element in the tuple, descending order.
+                    ideaList.Sort((rating1, rating2) => rating2.Item1.CompareTo(rating1.Item1));
+                    filteredIdeas = ideaList.Select(idea => idea.Item2).ToList();
+                    break;
+                case "Tracked":
+                    List<int> trackedIdeaIDs = _context.IdeaInteraction.Where(interaction => interaction.UserId == new Guid(loggedInUserID) && interaction.IsTracked).Select(interaction => interaction.IdeaID).ToList();
+                    foreach (Idea idea in ideaQuery)
+                    {
+                        if(trackedIdeaIDs.Contains(idea.ID))
+                        {
+                            filteredIdeas.Add(idea);
+                        }
+                    }
+                    break;
+                case "Plan":
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Plan).ToList();
+                    break;
+                case "Do":
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Do).ToList();
+                    break;
+                case "Check":
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Check).ToList();
+                    break;
+                case "Adopt":
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Adopt).ToList();
+                    break;
+                case "Adapt":
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Adapt).ToList();
+                    break;
+                case "Abandon":
+                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Abandon).ToList();
+                    break;
+                case "All":
+                default:
+                    filteredIdeas = ideaQuery.OrderBy(idea => idea.DateCreated).ToList();
+                    break;
+
+            }         
+
             //Create the idea presentation viewmodel
-            foreach (Idea idea in ideas)
+            foreach (Idea idea in filteredIdeas)
             {
                 //If the user dictionary does not have the idea author, add it
                 if (!userDictionary.ContainsKey(idea.UserID))
@@ -116,10 +178,31 @@ namespace eIDEAS.Controllers
                     }
                 }
 
+                //Get the average rating and if it is tracked
+                var ideaInteractions = _context.IdeaInteraction.Where(i => i.IdeaID == idea.ID).ToList();
+                var currentUserInteraction = ideaInteractions.Where(interaction => interaction.UserId.ToString() == loggedInUserID).FirstOrDefault();
+                //if there is no interaction, create one
+                if(currentUserInteraction == null)
+                {
+                    currentUserInteraction = new IdeaInteraction
+                    {
+                        IdeaID = idea.ID,
+                        UserId = new Guid(loggedInUserID),
+                        IsTracked = false
+                    };
+
+                    _context.Add(currentUserInteraction);
+                    _context.SaveChanges();
+                }
+                double avgRating = ideaInteractions.Where(i => i.Rating != 0).Count() == 0 ? -1 : Math.Round(ideaInteractions.Where(i => i.Rating != 0).Select(i => i.Rating).Average(), 1);
+
                 //Create the idea presentation
                 var ideaPresentation = new IdeaPresentationViewModel
                 {
                     Overview = idea,
+                    AverageRating = avgRating,
+                    UserRating = currentUserInteraction.Rating,
+                    IsTracked = currentUserInteraction.IsTracked,
                     AuthorFirstName = userDictionary[idea.UserID].FirstName,
                     AuthorLastName = userDictionary[idea.UserID].LastName,
                     UnitName = loggedInUserUnit.Name,
@@ -131,24 +214,6 @@ namespace eIDEAS.Controllers
 
             //Send the model to the view and return the view
             return View(ideaViewModel);
-        }
-
-        // GET: Ideas/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var idea = await _context.Idea
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (idea == null)
-            {
-                return NotFound();
-            }
-
-            return View(idea);
         }
 
         // GET: Ideas/Create
@@ -208,22 +273,6 @@ namespace eIDEAS.Controllers
             return View(idea);
         }
 
-        // GET: Ideas/UpdateStatus/5
-        public async Task<IActionResult> UpdateStatus(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var idea = await _context.Idea.FindAsync(id);
-            if (idea == null)
-            {
-                return NotFound();
-            }
-            return View(idea);
-        }
-
         // POST: Ideas/UpdateStatus/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -256,6 +305,33 @@ namespace eIDEAS.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(idea);
+        }
+
+        // POST: Ideas/Status/5
+        [HttpPost]
+        public async Task<IActionResult> Status(int id, StatusEnum status, string message)
+        {
+            try
+            {
+                var idea = await _context.Idea.FindAsync(id);
+                idea.Status = status;
+                idea.ClosingRemarks = message;
+                idea.DateEdited = DateTime.UtcNow;
+                _context.Update(idea);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!IdeaExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Json(new { success = true, responseText = "This is fine!" });
         }
 
         // GET: Ideas/UpdateDraft/5
@@ -361,6 +437,94 @@ namespace eIDEAS.Controllers
         private bool IdeaExists(int id)
         {
             return _context.Idea.Any(e => e.ID == id);
+        }
+
+        //Tracked
+        // POST: Idea/Track
+        [HttpPost]
+        public async Task<bool> TrackStatus(int ideaID, bool tracked)
+        {
+            //Retrieve the logged in user's information and idea interaction
+            var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+            var currentUserInteraction = _context.IdeaInteraction.Where(
+                interaction => interaction.UserId.ToString() == loggedInUserID
+                && interaction.IdeaID == ideaID
+                ).FirstOrDefault();
+
+            //if there is no interaction, create one
+            if (currentUserInteraction == null)
+            {
+                currentUserInteraction = new IdeaInteraction
+                {
+                    IdeaID = ideaID,
+                    UserId = new Guid(loggedInUserID),
+                    IsTracked = tracked
+                };
+
+                _context.IdeaInteraction.Add(currentUserInteraction);
+            }
+            else //update interaction
+            {
+                currentUserInteraction.IsTracked = tracked;
+                _context.IdeaInteraction.Update(currentUserInteraction);
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        //Ratings
+        [HttpPost]
+        public async Task<IActionResult> Rate(int ideaID, int rating)
+        {
+            //Get the average rating and if it is tracked
+            var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+            var currentUserInteraction = _context.IdeaInteraction.Where(
+                interaction => interaction.UserId.ToString() == loggedInUserID
+                && interaction.IdeaID == ideaID
+                ).FirstOrDefault();
+
+            //If there is no interaction, create one and give points
+            if (currentUserInteraction == null)
+            {
+                currentUserInteraction = new IdeaInteraction
+                {
+                    IdeaID = ideaID,
+                    UserId = new Guid(loggedInUserID),
+                    IsTracked = false,
+                    Rating = rating
+                };
+
+                _context.Add(currentUserInteraction);
+                await _context.SaveChangesAsync();
+
+                //Give particiption points
+                var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+                loggedInUser.ParticipationPoints += 50;
+                _context.Update(loggedInUser);
+                _context.SaveChanges();
+            }
+            else
+            {
+                //If the original rating is null, give the rater participation points
+                if(!(currentUserInteraction.Rating <= 5 && currentUserInteraction.Rating >= 1))
+                {
+                    var loggedInUser = _context.Users.Where(user => user.Id == loggedInUserID).FirstOrDefault();
+                    loggedInUser.ParticipationPoints += 50;
+                    _context.Update(loggedInUser);
+                    await _context.SaveChangesAsync();
+                }
+                currentUserInteraction.Rating = rating;
+                _context.Update(currentUserInteraction);
+                await _context.SaveChangesAsync();
+            }
+
+            //Calculate the new average rating
+            var ideaInteractions = _context.IdeaInteraction.Where(i => i.IdeaID == ideaID).ToList();
+            double avgRating = Math.Round(ideaInteractions.Where(i => i.Rating != 0).Select(i => i.Rating).Average(), 1);
+
+            //Return the new average rating for idea
+            return Json(avgRating);
         }
     }
 }

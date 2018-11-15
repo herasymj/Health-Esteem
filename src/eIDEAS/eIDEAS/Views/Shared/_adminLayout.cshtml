@@ -41,12 +41,15 @@
     </nav>
     <partial name="_CookieConsentPartial" />
 
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - eIDEAS</p>
-        </footer>
+    <div>
+        @Html.Partial("_AdminPanel")
+        <div class="adminbody">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; 2018 - eIDEAS</p>
+            </footer>
+        </div>
     </div>
     <environment include="Development">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

@@ -1,15 +1,13 @@
 ﻿@model IEnumerable<ApplicationUserPresentationViewModel>
-
 @{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Users";
 }
-
-<h2>Users</h2>
-
-<p>
-    <a asp-area="Identity" asp-page="/Account/Register" asp-route-createdByAdmin="true">Create New User</a>
+<h1 class="text-center">Users</h1>
+<p style="margin-bottom:30px;">
+    <a class="btn btn-primary col-md-2 col-md-offset-10" asp-area="Identity" asp-page="/Account/Register" asp-route-createdByAdmin="true">Create New User</a>
 </p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -29,6 +27,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ParticipationPoints)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserRoles)
             </th>
             <th></th>
         </tr>
@@ -56,8 +57,14 @@
                     @Html.DisplayFor(modelItem => user.ParticipationPoints)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@user.ID">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@user.ID">Delete</a>
+                    @foreach(var role in user.UserRoles)
+                    {
+                        @role <br />
+                    }
+                </td>
+                <td align="right">
+                    <a class="btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.ID">Edit</a> |
+                    <a class="btn-sm btn-primary" asp-action="Delete" asp-route-id="@user.ID">Delete</a>
                 </td>
             </tr>
         }

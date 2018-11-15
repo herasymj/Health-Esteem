@@ -1,4 +1,6 @@
-﻿using System;
+﻿using eIDEAS.Models.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace eIDEAS.Models
@@ -25,5 +27,8 @@ namespace eIDEAS.Models
 
         [Display(Name = "Participation Points")]
         public int ParticipationPoints { get; set; }
+
+        [Display(Name =  "User's Roles")]
+        public List<RoleEnum> UserRoles { get; set; }
     }
 }

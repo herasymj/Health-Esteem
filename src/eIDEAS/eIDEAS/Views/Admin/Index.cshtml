@@ -1,33 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Panel";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
-<h2>Admin Panel</h2>
-
-<style>
-    .admin-link {
-        font-weight: bold;
-        padding: 20px;
-    }
-</style>
-
-<div class="row">
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a asp-area="" asp-controller="Admin" asp-action="Homepage" class="btn btn-large btn-block btn-default admin-link">Homepage</a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a asp-area="" asp-controller="ApplicationUsers" asp-action="Index" class="btn btn-large btn-block btn-default admin-link">Users</a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a asp-area="" asp-controller="Units" asp-action="Index" class="btn btn-large btn-block btn-default admin-link">Units</a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a asp-area="" asp-controller="Divisions" asp-action="Index" class="btn btn-large btn-block btn-default admin-link">Divisions</a>
-    </div>
-</div>
-
-<br />
-
-

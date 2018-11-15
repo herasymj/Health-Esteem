@@ -103,7 +103,8 @@ namespace eIDEAS.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, DivisionID = Input.DivisionID, UnitID = Input.UnitID};
+                var default_profilepic = "~/images/default_profile_pic.png";
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, DivisionID = Input.DivisionID, UnitID = Input.UnitID, ProfilePic = default_profilepic };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

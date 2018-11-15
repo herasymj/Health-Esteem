@@ -1,5 +1,7 @@
 ﻿using eIDEAS.Models;
 using eIDEAS.Models.Enums;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -56,7 +58,9 @@ namespace eIDEAS.Data
                     FirstName = "Oscar",
                     LastName = "Lou",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    ProfilePic = "~/images/default_profile_pic.png"
+
                 },
                 new ApplicationUser
                 {
@@ -78,7 +82,9 @@ namespace eIDEAS.Data
                     LastName = "Heisler",
                     DivisionID = 2,
                     UnitID = 5,
-                    IdeaPoints = 450
+                    IdeaPoints = 450,
+                    ProfilePic = "~/images/default_profile_pic.png",
+                    Permissions = 7
                 },
                 new ApplicationUser
                 {
@@ -99,7 +105,9 @@ namespace eIDEAS.Data
                     FirstName = "Jennifer",
                     LastName = "Herasymuik",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    Permissions = 1,
+                    ProfilePic = "~/images/default_profile_pic.png"
                 },
                 new ApplicationUser
                 {
@@ -120,7 +128,9 @@ namespace eIDEAS.Data
                     FirstName = "Quinn",
                     LastName = "Bast",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    ProfilePic = "~/images/default_profile_pic.png",
+                    Permissions = 6
                 },
                 new ApplicationUser
                 {
@@ -141,7 +151,8 @@ namespace eIDEAS.Data
                     FirstName = "Shawn",
                     LastName = "Clake",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    ProfilePic = "~/images/default_profile_pic.png"
                 },
                 new ApplicationUser
                 {
@@ -162,7 +173,8 @@ namespace eIDEAS.Data
                     FirstName = "Wilson",
                     LastName = "Nie",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    ProfilePic = "~/images/default_profile_pic.png"
                 });
             context.SaveChanges();
 
@@ -206,6 +218,97 @@ namespace eIDEAS.Data
                 }
             );
             context.SaveChanges();
+
+            //Get default user's
+            var jennID = context.Users.Where(user => user.FirstName == "Jennifer").FirstOrDefault();
+            var shawnID = context.Users.Where(user => user.FirstName == "Shawn").FirstOrDefault();
+            var wilsonID = context.Users.Where(user => user.FirstName == "Wilson").FirstOrDefault();
+            var quinnID = context.Users.Where(user => user.FirstName == "Quinn").FirstOrDefault();
+
+            var idea1 = context.Idea.Where(idea => idea.Title == "Sample Idea Being Checked").FirstOrDefault();
+            var idea2 = context.Idea.Where(idea => idea.Title == "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.").FirstOrDefault();
+            var idea3 = context.Idea.Where(idea => idea.Title == "Sample Idea One").FirstOrDefault();
+
+            context.IdeaInteraction.AddRange(
+                new IdeaInteraction
+                {
+                    UserId = new Guid(sampleUser.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 4
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(sampleUser.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 1
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(sampleUser.Id),
+                    IdeaID = idea3.ID
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(jennID.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 1
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(quinnID.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 2
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(shawnID.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 5
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(wilsonID.Id),
+                    IdeaID = idea1.ID,
+                    IsTracked = true,
+                    Rating = 4
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(jennID.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 5
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(quinnID.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 1
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(shawnID.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 5
+                },
+                new IdeaInteraction
+                {
+                    UserId = new Guid(wilsonID.Id),
+                    IdeaID = idea2.ID,
+                    IsTracked = false,
+                    Rating = 4
+                }
+            );
+            context.SaveChanges();
+
+            
         }
     }
 }

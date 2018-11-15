@@ -1,12 +1,43 @@
 ﻿@using Microsoft.AspNetCore.Identity
-
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
 @if (SignInManager.IsSignedIn(User))
 {
-    <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="MyDrafts">My Drafts</a></li>
-    <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="MyIdeas">My Ideas</a></li>
-    <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="TeamIdeas">Team Ideas</a></li>
-    <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
+    <script type="text/javascript">
+        $.ajax({
+            url: '@Url.Action("Admin","ApplicationUsers")',
+            type: "GET",
+            success: function (result) {
+                // refreshes partial view
+                var isAdmin = result;
+                if (isAdmin) {
+                    document.getElementById("AdminButton").style.visibility = "visible";
+                } else {
+                    document.getElementById("AdminButton").style.visibility = "hidden";
+                }
+            }
+        });
+    </script>
+
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown">Ideas</a>
+        <ul class="dropdown-menu">
+            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="MyDrafts">My Drafts</a></li>
+            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="MyIdeas">My Ideas</a></li>
+            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType="TeamIdeas">Team Ideas</a></li>
+        </ul>
+    </li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown">Statistics</a>
+        <ul class="dropdown-menu">
+            <li><a asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a></li>
+            <li><a asp-area="" asp-controller="Statistics" asp-action="Leaderboard" asp-route-filterType="Individual">Individual Leaderboard</a></li>
+            <li><a asp-area="" asp-controller="Statistics" asp-action="Leaderboard" asp-route-filterType="Team">Team Leaderboard</a></li>
+        </ul>
+    </li>
+    <li><a asp-area="" id="AdminButton" asp-controller="Admin" asp-action="Index" style="visibility:hidden">Admin</a></li>
+
 }

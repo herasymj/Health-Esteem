@@ -1,16 +1,13 @@
 ﻿@model IEnumerable<eIDEAS.Models.Division>
-
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
-<h2>Divisions</h2>
-
+<h1 class="text-center">Divisions</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary col-md-2 col-md-offset-10" asp-action="Create">Create New Division</a>
 </p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -20,17 +17,18 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td align="right">
+                    <a class="btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a class="btn-sm btn-primary" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a class="btn-sm btn-primary" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
