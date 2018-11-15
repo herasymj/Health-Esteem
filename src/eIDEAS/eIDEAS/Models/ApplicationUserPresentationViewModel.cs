@@ -30,5 +30,7 @@ namespace eIDEAS.Models
 
         [Display(Name =  "User's Roles")]
         public List<RoleEnum> UserRoles { get; set; }
+
+        public int Permissions { get; set; }
     }
 }

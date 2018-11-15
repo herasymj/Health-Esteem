@@ -87,7 +87,7 @@ namespace eIDEAS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,FirstName,LastName,Email,IdeaPoints,ParticipationPoints")] ApplicationUserPresentationViewModel user)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,FirstName,LastName,Email,IdeaPoints,ParticipationPoints,Permissions")] ApplicationUserPresentationViewModel user)
         {
             //Is the user actually an admin
             if (!IsAdmin())
@@ -189,6 +189,12 @@ namespace eIDEAS.Controllers
         //Create the presentation view for a single user
         private ApplicationUserPresentationViewModel generateUserViewModel(ApplicationUser user, string divisionName, string unitName, List<RoleEnum> roles)
         {
+            int permissions = 0;
+            foreach(var role in roles)
+            {
+                permissions |= 0b1 << ((int)role - 1);
+            }
+
             return new ApplicationUserPresentationViewModel()
             {
                 ID = new Guid(user.Id),
@@ -199,7 +205,8 @@ namespace eIDEAS.Controllers
                 Unit = unitName,
                 IdeaPoints = user.IdeaPoints,
                 ParticipationPoints = user.ParticipationPoints,
-                UserRoles = roles
+                UserRoles = roles,
+                Permissions = permissions
             };
         }
 
@@ -212,31 +219,12 @@ namespace eIDEAS.Controllers
 
         //
         [HttpPost]
-        public async Task<IActionResult> ChangeRole(bool isChecked, RoleEnum role, Guid id)
+        public async Task<IActionResult> ChangeRoles(int roles, Guid id)
         {
             //Get user
             var editedUser = await _context.Users.FindAsync(id.ToString());
 
-            //determine role number
-            int roleNum = (int)role;
-
-            if(editedUser == null)
-            {
-                return Json(false);
-            }
-
-            //Either give or remove role
-            if (isChecked)
-            {
-                //give role
-                editedUser.Permissions |= (0b1 << (roleNum - 1));//set only bit that represents that role
-            }
-            else
-            {
-                //take role
-                editedUser.Permissions &= ~(0b1 << (roleNum - 1));//set role bit to 0 and only that one
-            }
-
+            editedUser.Permissions = roles;
             _context.Update(editedUser);
             await _context.SaveChangesAsync();
 

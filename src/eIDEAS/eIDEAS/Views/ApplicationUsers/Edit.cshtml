@@ -15,6 +15,7 @@
             <input type="hidden" asp-for="ID" />
             <input type="hidden" asp-for="Division" />
             <input type="hidden" asp-for="Unit" />
+            <input type="hidden" asp-for="Permissions" id="Permissions" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -42,15 +43,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserRoles" class="control-label"></label><br />
-                @foreach (RoleEnum role in (RoleEnum[])Enum.GetValues(typeof(RoleEnum)))
+                @foreach (int role in (RoleEnum[])Enum.GetValues(typeof(RoleEnum)))
                 {
+                    var roleName = (RoleEnum)role;
                     <input type="checkbox" id="@role" onchange="editRole(this.id)"
-                           @{if (Model.UserRoles.Contains(role)) { <text> checked</text>
-                        }} />@role<br />
-                    }
+                           @{if (Model.UserRoles.Contains((RoleEnum)role)) { <text> checked</text>
+                        }} />
+                    @roleName;
+                    <br />
+                }
             </div>
             <div class="form-group">
-                <input type="submit" value="Update User" class="btn btn-default" />
+                <input type="submit" value="Update User" class="btn btn-default" onmousedown="setRoles()"/>
             </div>
         </form>
     </div>
@@ -63,37 +67,27 @@
 @section Scripts{
     <script type="text/javascript">
         function editRole(role) {
-            if (document.getElementById(role).checked == true) {
-                $.ajax({
-                    url: '@Url.Action("ChangeRole", "ApplicationUsers")',
-                    data: {
-                        'isChecked': true,
-                        'role': role,
-                        'id': "@Model.ID"
-                    },
-                    type: "POST",
-                    success: function (result) {
-                        if (result == false) {
-                            alert("There was an error completing this task.");
-                        }
-                    }
-                });
-            } else {
-                $.ajax({
-                    url: '@Url.Action("ChangeRole", "ApplicationUsers")',
-                    data: {
-                        'isChecked': false,
-                        'role': role,
-                        'id': "@Model.ID"
-                    },
-                    type: "POST",
-                    success: function (result) {
-                        if (result == false) {
-                            alert("There was an error completing this task.");
-                        }
-                    }
-                });
+            if (document.getElementById(role).checked == true) {//give role                
+                document.getElementById("Permissions").value |= (0b1 << (role - 1));
+            } else {//take role
+                document.getElementById("Permissions").value &= ~(0b1 << (role - 1));
             }
+        }
+
+        function setRoles() {
+            $.ajax({
+                url: '@Url.Action("ChangeRoles", "ApplicationUsers")',
+                data: {
+                    'roles': document.getElementById("Permissions").value,
+                    'id': "@Model.ID"
+                },
+                type: "POST",
+                success: function (result) {
+                    if (result == false) {
+                        alert("There was an error completing this task.");
+                    }
+                }
+            });
         }
     </script>
 }
