@@ -144,8 +144,8 @@ namespace eIDEAS.Areas.Identity.Pages.Account.Manage
             try
             {
                 //Update other user information
-                user.LastName = Input.LastName;
-                user.FirstName = Input.FirstName;
+                //user.LastName = Input.LastName;
+                //user.FirstName = Input.FirstName;
                 user.ProfilePic = Path.Combine("~/images/profile", profilePictureName);
 
                 //Update the user

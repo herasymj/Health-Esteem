@@ -58,7 +58,9 @@ namespace eIDEAS.Data
                     FirstName = "Oscar",
                     LastName = "Lou",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    ProfilePic = "~/images/default_profile_pic.png"
+
                 },
                 new ApplicationUser
                 {
@@ -81,6 +83,7 @@ namespace eIDEAS.Data
                     DivisionID = 2,
                     UnitID = 5,
                     IdeaPoints = 450,
+                    ProfilePic = "~/images/default_profile_pic.png",
                     Permissions = 7
                 },
                 new ApplicationUser
@@ -103,7 +106,8 @@ namespace eIDEAS.Data
                     LastName = "Herasymuik",
                     DivisionID = 2,
                     UnitID = 5,
-                    Permissions = 1
+                    Permissions = 1,
+                    ProfilePic = "~/images/default_profile_pic.png"
                 },
                 new ApplicationUser
                 {
@@ -125,6 +129,7 @@ namespace eIDEAS.Data
                     LastName = "Bast",
                     DivisionID = 2,
                     UnitID = 5,
+                    ProfilePic = "~/images/default_profile_pic.png",
                     Permissions = 6
                 },
                 new ApplicationUser
@@ -146,7 +151,8 @@ namespace eIDEAS.Data
                     FirstName = "Shawn",
                     LastName = "Clake",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    ProfilePic = "~/images/default_profile_pic.png"
                 },
                 new ApplicationUser
                 {
@@ -167,7 +173,8 @@ namespace eIDEAS.Data
                     FirstName = "Wilson",
                     LastName = "Nie",
                     DivisionID = 2,
-                    UnitID = 5
+                    UnitID = 5,
+                    ProfilePic = "~/images/default_profile_pic.png"
                 });
             context.SaveChanges();
 
