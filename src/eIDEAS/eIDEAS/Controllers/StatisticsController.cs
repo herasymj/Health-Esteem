@@ -29,7 +29,6 @@ namespace eIDEAS.Controllers
             int ideasThisYear;
             int totalIdeaPoints;
             int totalParticipationPoints;
-            double monthsSinceFirstIdea = DateTime.Today.Subtract(_context.Idea.OrderBy(idea => idea.DateCreated).First().DateCreated).TotalDays / (365 / 12); ;
             double averageIdeasPerMonth;
             double averageParticipationPointsPerMonth;
             double averageIdeaPointsPerMonth;
@@ -37,8 +36,14 @@ namespace eIDEAS.Controllers
             List<Idea> ideaList = new List<Idea>();
             List<double> averageRatings = new List<double>();
             int ratingsGiven;
-
             double averageIdeaRating;
+
+            Idea firstIdeaCreated = _context.Idea.OrderBy(idea => idea.DateCreated).First();
+            double monthsSinceFirstIdea = DateTime.Today.Subtract(_context.Idea.OrderBy(idea => idea.DateCreated).First().DateCreated).TotalDays / (365 / 12); ;
+            if(monthsSinceFirstIdea < 1)
+            {
+                monthsSinceFirstIdea = 1;
+            }
 
             ViewData["FilterType"] = filterType == null ? "Global" : filterType;
 
@@ -184,7 +189,14 @@ namespace eIDEAS.Controllers
                         averageRatings.Add(averageRating);
                     }
                     //Calculate final average rating
-                    averageIdeaRating = averageRatings.Average();
+                    if (averageRatings.Count() == 0)
+                    {
+                        averageIdeaRating = 0;
+                    }
+                    else
+                    {
+                        averageIdeaRating = averageRatings.Average();
+                    }
 
                     //Determine total number of ratings given
                     ratingsGiven = _context.IdeaInteraction.Where(interaction => interaction.Rating != 0).Count();
