@@ -19,7 +19,6 @@ namespace eIDEAS.Data
 
             //Initialize sample divisions
             context.Division.AddRange(
-                new Division { Name = "eHealth" },
                 new Division { Name = "ENSE 496ab" },
                 new Division { Name = "IT Consolidation - Labour Relations" },
                 new Division { Name = "Culture, Collaboration, Innovation" },
@@ -35,47 +34,47 @@ namespace eIDEAS.Data
 
             //Initialize sample units
             context.Unit.AddRange(
-                new Unit { DivisionID = 1, Name = "Knowledge Management" },
-                new Unit { DivisionID = 1, Name = "Finance" },
-                new Unit { DivisionID = 1, Name = "Continuous Improvement" },
-                new Unit { DivisionID = 1, Name = "Service Desk" },
-                new Unit { DivisionID = 2, Name = "Health Esteem" },
-                new Unit { DivisionID = 2, Name = "Tim's Bits" },
-                new Unit { DivisionID = 2, Name = "!Cool" },
-                new Unit { DivisionID = 2, Name = "MudsnakeFC" },
-                new Unit { DivisionID = 3, Name = "IT Consolidation - Labour Relations" },
-                new Unit { DivisionID = 4, Name = "Continuous Improvement" },
-                new Unit { DivisionID = 4, Name = "Buisiness Analysis" },
-                new Unit { DivisionID = 4, Name = "Portfolio Management" },
-                new Unit { DivisionID = 5, Name = "Data Quality" },
-                new Unit { DivisionID = 5, Name = "Information Management/Services" },
-                new Unit { DivisionID = 5, Name = "Data Warehouse" },
-                new Unit { DivisionID = 5, Name = "Records Management" },
-                new Unit { DivisionID = 5, Name = "Health Registries" },
-                new Unit { DivisionID = 5, Name = "Legal & Policy" },
-                new Unit { DivisionID = 5, Name = "IT Security/Risk Management" },
-                new Unit { DivisionID = 5, Name = "Privacy" },
-                new Unit { DivisionID = 5, Name = "Access Management Services" },
-                new Unit { DivisionID = 6, Name = "Communications" },
-                new Unit { DivisionID = 6, Name = "Transition Change Management" },
-                new Unit { DivisionID = 7, Name = "CEO" },
-                new Unit { DivisionID = 7, Name = "VP's and Director of Communications" },
-                new Unit { DivisionID = 8, Name = "Human Resources" },
-                new Unit { DivisionID = 9, Name = "Client Services" },
-                new Unit { DivisionID = 9, Name = "Network & Servers" },
-                new Unit { DivisionID = 9, Name = "Service Desk" },
-                new Unit { DivisionID = 9, Name = "Applications & Intergrations" },
-                new Unit { DivisionID = 9, Name = "Testing" },
-                new Unit { DivisionID = 9, Name = "IT Architecture" },
-                new Unit { DivisionID = 9, Name = "Database Services" },
-                new Unit { DivisionID = 9, Name = "IT Change & Release" },
-                new Unit { DivisionID = 10, Name = "Business Relations and Programs" },
-                new Unit { DivisionID = 11, Name = "Executive Administration" },
-                new Unit { DivisionID = 11, Name = "Finance" },
-                new Unit { DivisionID = 11, Name = "Payroll" },
-                new Unit { DivisionID = 11, Name = "Contracts & Facilities" }
+                new Unit { DivisionID = 1, Name = "Health Esteem" },
+                new Unit { DivisionID = 1, Name = "Tim's Bits" },
+                new Unit { DivisionID = 1, Name = "!Cool" },
+                new Unit { DivisionID = 1, Name = "MudsnakeFC" },
+                new Unit { DivisionID = 2, Name = "IT Consolidation - Labour Relations" },
+                new Unit { DivisionID = 3, Name = "Continuous Improvement" },
+                new Unit { DivisionID = 3, Name = "Business Analysis" },
+                new Unit { DivisionID = 3, Name = "Portfolio Management" },
+                new Unit { DivisionID = 4, Name = "Data Quality" },
+                new Unit { DivisionID = 4, Name = "Information Management/Services" },
+                new Unit { DivisionID = 4, Name = "Data Warehouse" },
+                new Unit { DivisionID = 4, Name = "Records Management" },
+                new Unit { DivisionID = 4, Name = "Health Registries" },
+                new Unit { DivisionID = 4, Name = "Legal & Policy" },
+                new Unit { DivisionID = 4, Name = "IT Security/Risk Management" },
+                new Unit { DivisionID = 4, Name = "Privacy" },
+                new Unit { DivisionID = 4, Name = "Access Management Services" },
+                new Unit { DivisionID = 5, Name = "Communications" },
+                new Unit { DivisionID = 5, Name = "Transition Change Management" },
+                new Unit { DivisionID = 6, Name = "CEO" },
+                new Unit { DivisionID = 6, Name = "VP's and Director of Communications" },
+                new Unit { DivisionID = 7, Name = "Human Resources" },
+                new Unit { DivisionID = 8, Name = "Client Services" },
+                new Unit { DivisionID = 8, Name = "Network & Servers" },
+                new Unit { DivisionID = 8, Name = "Service Desk" },
+                new Unit { DivisionID = 8, Name = "Applications & Intergrations" },
+                new Unit { DivisionID = 8, Name = "Testing" },
+                new Unit { DivisionID = 8, Name = "IT Architecture" },
+                new Unit { DivisionID = 8, Name = "Database Services" },
+                new Unit { DivisionID = 8, Name = "IT Change & Release" },
+                new Unit { DivisionID = 9, Name = "Business Relations and Programs" },
+                new Unit { DivisionID = 10, Name = "Executive Administration" },
+                new Unit { DivisionID = 10, Name = "Finance" },
+                new Unit { DivisionID = 10, Name = "Payroll" },
+                new Unit { DivisionID = 10, Name = "Contracts & Facilities" }
             );
             context.SaveChanges();
+
+            //Retrieve the sample user division and unit IDs
+            var ense496DivisionID = context.Division.Where(division => division.Name == "ENSE 496ab").First().ID;
+            var healthEsteemUnitID = context.Unit.Where(unit => unit.Name == "Health Esteem").First().ID;
 
             //Initialize sample users
             context.Users.AddRange(
@@ -97,8 +96,8 @@ namespace eIDEAS.Data
                     AccessFailedCount = 0,
                     FirstName = "Oscar",
                     LastName = "Lou",
-                    DivisionID = 2,
-                    UnitID = 5,
+                    DivisionID = ense496DivisionID,
+                    UnitID = healthEsteemUnitID,
                     ProfilePic = "~/images/default_profile_pic.png"
 
                 },
@@ -120,8 +119,8 @@ namespace eIDEAS.Data
                     AccessFailedCount = 0,
                     FirstName = "Tristan",
                     LastName = "Heisler",
-                    DivisionID = 2,
-                    UnitID = 5,
+                    DivisionID = ense496DivisionID,
+                    UnitID = healthEsteemUnitID,
                     IdeaPoints = 450,
                     ProfilePic = "~/images/default_profile_pic.png",
                     Permissions = 7
@@ -144,8 +143,8 @@ namespace eIDEAS.Data
                     AccessFailedCount = 0,
                     FirstName = "Jennifer",
                     LastName = "Herasymuik",
-                    DivisionID = 2,
-                    UnitID = 5,
+                    DivisionID = ense496DivisionID,
+                    UnitID = healthEsteemUnitID,
                     Permissions = 1,
                     ProfilePic = "~/images/default_profile_pic.png"
                 },
@@ -167,8 +166,8 @@ namespace eIDEAS.Data
                     AccessFailedCount = 0,
                     FirstName = "Quinn",
                     LastName = "Bast",
-                    DivisionID = 2,
-                    UnitID = 5,
+                    DivisionID = ense496DivisionID,
+                    UnitID = healthEsteemUnitID,
                     ProfilePic = "~/images/default_profile_pic.png",
                     Permissions = 6
                 },
@@ -190,8 +189,8 @@ namespace eIDEAS.Data
                     AccessFailedCount = 0,
                     FirstName = "Shawn",
                     LastName = "Clake",
-                    DivisionID = 2,
-                    UnitID = 5,
+                    DivisionID = ense496DivisionID,
+                    UnitID = healthEsteemUnitID,
                     ProfilePic = "~/images/default_profile_pic.png"
                 },
                 new ApplicationUser
@@ -212,8 +211,8 @@ namespace eIDEAS.Data
                     AccessFailedCount = 0,
                     FirstName = "Wilson",
                     LastName = "Nie",
-                    DivisionID = 2,
-                    UnitID = 5,
+                    DivisionID = ense496DivisionID,
+                    UnitID = healthEsteemUnitID,
                     ProfilePic = "~/images/default_profile_pic.png"
                 });
             context.SaveChanges();
