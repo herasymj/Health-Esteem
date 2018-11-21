@@ -20,7 +20,16 @@ namespace eIDEAS.Data
             //Initialize sample divisions
             context.Division.AddRange(
                 new Division { Name = "eHealth" },
-                new Division { Name = "ENSE 496ab" }
+                new Division { Name = "ENSE 496ab" },
+                new Division { Name = "IT Consolidation - Labour Relations" },
+                new Division { Name = "Culture, Collaboration, Innovation" },
+                new Division { Name = "Risk & Quality" },
+                new Division { Name = "Communications" },
+                new Division { Name = "Executive" },
+                new Division { Name = "Human Resources" },
+                new Division { Name = "Information Technology" },
+                new Division { Name = "Business Relations and Programs" },
+                new Division { Name = "Finance & Administrative" }
             );
             context.SaveChanges();
 
@@ -33,7 +42,38 @@ namespace eIDEAS.Data
                 new Unit { DivisionID = 2, Name = "Health Esteem" },
                 new Unit { DivisionID = 2, Name = "Tim's Bits" },
                 new Unit { DivisionID = 2, Name = "!Cool" },
-                new Unit { DivisionID = 2, Name = "MudsnakeFC" }
+                new Unit { DivisionID = 2, Name = "MudsnakeFC" },
+                new Unit { DivisionID = 3, Name = "IT Consolidation - Labour Relations" },
+                new Unit { DivisionID = 4, Name = "Continuous Improvement" },
+                new Unit { DivisionID = 4, Name = "Buisiness Analysis" },
+                new Unit { DivisionID = 4, Name = "Portfolio Management" },
+                new Unit { DivisionID = 5, Name = "Data Quality" },
+                new Unit { DivisionID = 5, Name = "Information Management/Services" },
+                new Unit { DivisionID = 5, Name = "Data Warehouse" },
+                new Unit { DivisionID = 5, Name = "Records Management" },
+                new Unit { DivisionID = 5, Name = "Health Registries" },
+                new Unit { DivisionID = 5, Name = "Legal & Policy" },
+                new Unit { DivisionID = 5, Name = "IT Security/Risk Management" },
+                new Unit { DivisionID = 5, Name = "Privacy" },
+                new Unit { DivisionID = 5, Name = "Access Management Services" },
+                new Unit { DivisionID = 6, Name = "Communications" },
+                new Unit { DivisionID = 6, Name = "Transition Change Management" },
+                new Unit { DivisionID = 7, Name = "CEO" },
+                new Unit { DivisionID = 7, Name = "VP's and Director of Communications" },
+                new Unit { DivisionID = 8, Name = "Human Resources" },
+                new Unit { DivisionID = 9, Name = "Client Services" },
+                new Unit { DivisionID = 9, Name = "Network & Servers" },
+                new Unit { DivisionID = 9, Name = "Service Desk" },
+                new Unit { DivisionID = 9, Name = "Applications & Intergrations" },
+                new Unit { DivisionID = 9, Name = "Testing" },
+                new Unit { DivisionID = 9, Name = "IT Architecture" },
+                new Unit { DivisionID = 9, Name = "Database Services" },
+                new Unit { DivisionID = 9, Name = "IT Change & Release" },
+                new Unit { DivisionID = 10, Name = "Business Relations and Programs" },
+                new Unit { DivisionID = 11, Name = "Executive Administration" },
+                new Unit { DivisionID = 11, Name = "Finance" },
+                new Unit { DivisionID = 11, Name = "Payroll" },
+                new Unit { DivisionID = 11, Name = "Contracts & Facilities" }
             );
             context.SaveChanges();
 
