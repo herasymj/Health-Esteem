@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Net.NetworkInformation;
 
 namespace eIDEAS.Areas.Identity.Pages.Account
 {
@@ -100,26 +101,26 @@ namespace eIDEAS.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(bool createdByAdmin, string returnUrl = null)
         {
+            //first check if we are able to connect to the network
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+
                 var default_profilepic = "~/images/default_profile_pic.png";
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, DivisionID = Input.DivisionID, UnitID = Input.UnitID, ProfilePic = default_profilepic };
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var callbackUrl = Url.Page(
+                    "/Account/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { userId = user.Id, code = code },
+                    protocol: Request.Scheme);
+                await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                // adding users into the database
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { userId = user.Id, code = code },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
                     //If the account was created by an admin, return to the user overview page
                     if (createdByAdmin)
                     {
