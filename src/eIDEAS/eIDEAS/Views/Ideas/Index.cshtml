@@ -96,25 +96,6 @@
     <div class="panel-heading col-md-12 lead">
         @Html.DisplayFor(modelItem => idea.Overview.Title)
     </div>
-<<<<<<< HEAD
-    @if (!ViewBag.IsDraft)
-    {
-        <div class="row">
-            <div class="col-md-11">
-                <div class="row">
-                    <div class="col-md-5">
-                        <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">@idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
-                        <p>to <strong>@idea.UnitName</strong></p>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div class="progress" style="height:20px;margin-top:10px;">
-                                    <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
-                                    <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%;">Do</div>
-                                    <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%;">Check</div>
-                                    <div id="@idea.Overview.ID-progress-act" class="progress-bar @actClass" role="progressbar" style="width:25%;">@actText</div>
-=======
     <div class="panel-body">
         @if (!ViewBag.IsDraft)
         {
@@ -130,11 +111,10 @@
                                 <div class="col-md-9">
                                     <div class="progress" style="height:20px;margin-top:10px;">
                                         <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
-                                        <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
-                                        <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
-                                        <div id="@idea.Overview.ID-progress-act" class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
+                                        <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%;">Do</div>
+                                        <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%;">Check</div>
+                                        <div id="@idea.Overview.ID-progress-act" class="progress-bar @actClass" role="progressbar" style="width:25%;">@actText</div>
                                     </div>
->>>>>>> Milestone5
                                 </div>
                                 @if (!isCompleted)
                                 {
