@@ -8,23 +8,20 @@
     foreach (var amendment in @Model)
     {
     <div class="row" style="margin-top: 17px">
-        <div class="col-md-11">
-            <div @{ if (count % 2 == 1)
-                { <text>class="text-right"</text>} } style="padding: 9px; background-color:#fff; border-radius:11px;">
+        <div class="col-md-12">
+            <div style="padding: 9px; background-color:#fff; border-radius:11px;">
                 @amendment.Comment
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12" >
-            <div @{if (count % 2 == 1)
-                { <text>class="text-right"</text>} }>
+            <div>
                 <span style="font-size:11px;">
                     <em>Posted by <strong>@amendment.AuthorFirstName @amendment.AuthorLastName</strong> <span class="panel-timestamp" data-utctime="@amendment.PostingDate.ToLocalTime()">@amendment.PostingDate.ToLocalTime()</span></em>
                 </span>
             </div>
         </div>
     </div>
-        count += 1;
     }
 }
