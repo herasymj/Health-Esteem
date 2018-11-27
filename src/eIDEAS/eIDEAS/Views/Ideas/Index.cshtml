@@ -92,12 +92,11 @@
     //An idea is completed if it is in the Adopt, Adapt or Abandon stage
     bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
 
-<div class="panel panel-default idea-overview" data-ideaid="@idea.Overview.ID" style="background-color:#F2F2F2;">
-    <div class="row">
-        <div class="col-md-12">
-            <span class="lead">@Html.DisplayFor(modelItem => idea.Overview.Title)</span>
-        </div>
+<div class="panel panel-primary idea-overview" data-ideaid="@idea.Overview.ID" style="padding:0px; background-color:#F2F2F2;">
+    <div class="panel-heading col-md-12 lead">
+        @Html.DisplayFor(modelItem => idea.Overview.Title)
     </div>
+<<<<<<< HEAD
     @if (!ViewBag.IsDraft)
     {
         <div class="row">
@@ -115,74 +114,64 @@
                                     <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%;">Do</div>
                                     <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%;">Check</div>
                                     <div id="@idea.Overview.ID-progress-act" class="progress-bar @actClass" role="progressbar" style="width:25%;">@actText</div>
-                                </div>
-                            </div>
-                            @if (!isCompleted)
-                            {
-                                <div class="col-md-3">
-                                    <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
-                                        <div class="btn-group" style="margin-top:10px;">
-                                            <button style="height:20px;padding-top:0px;padding-bottom:0px;" id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-sm btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
-                                            <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
-                                        </div>
-                                    </div>
-                                    <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
-                                        <div class="btn-group" style="margin-top:10px;">
-                                            <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
-                                            <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
-                                            <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
+=======
+    <div class="panel-body">
+        @if (!ViewBag.IsDraft)
+        {
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">@idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
+                            <p>to <strong>@idea.UnitName</strong></p>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-5" style="padding-top: 4px">
-                        <span>Track Idea: </span>
-                        <label class="switch">
-                            @{
-                                var checkedModifier = idea.IsTracked ? "checked" : "";
-                            }
-                            <input class="track-idea" data-idea-id="@idea.Overview.ID" type="checkbox" @checkedModifier>
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="row form-group">
-                            <div class="col-md-4" style="padding-top: 4px">
-                                <input type="hidden" id="@idea.Overview.ID-previous-rating" name="@idea.Overview.ID-previous-rating" value="@idea.UserRating" required="required">
-                                <span>Average Rating: </span>
-                                <span id="@idea.Overview.ID-average-rating">@(idea.AverageRating != -1 ? idea.AverageRating.ToString() : "-")</span><span> / 5</span>
-                            </div>
-                            <div class="col-md-8">
-                                <span>Your Rating: </span>
-                                @for (int possibleRating = 1; possibleRating <= 5; possibleRating++)
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="progress" style="height:20px;margin-top:10px;">
+                                        <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
+                                        <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">Do</div>
+                                        <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%; border-left: 1px solid #EEEEEE">Check</div>
+                                        <div id="@idea.Overview.ID-progress-act" class="progress-bar @actClass" role="progressbar" style="width:25%; border-left: 1px solid #EEEEEE">@actText</div>
+                                    </div>
+>>>>>>> Milestone5
+                                </div>
+                                @if (!isCompleted)
                                 {
-                                    <button type="button" class="btnrating btn btn-sm @(idea.UserRating >= possibleRating ? "btn-primary" : "btn-default")" data-rating="@possibleRating" data-idea-id="@idea.Overview.ID" id="@idea.Overview.ID-rating-star-@possibleRating">
-                                        <i class="fa fa-star"></i>
-                                    </button>
+                                    <div class="col-md-3">
+                                        <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
+                                            <div class="btn-group" style="margin-top:10px;">
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-sm btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                                            </div>
+                                        </div>
+                                        <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
+                                            <div class="btn-group" style="margin-top:10px;">
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
+                                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 }
-                            </div>   
+                            </div>
+                        </div>
+                    </div>
+                    <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;">
+                        <div class="col-md-6 col-md-push-6 col-sm-12 ">
+                            <textarea id="@idea.Overview.ID-textbox-message" class="form-control pull-right idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
+                            <br />
+                            <a id="@idea.Overview.ID-button-finalize" class="btn btn-primary pull-right idea-panel-finalize form-control" data-status="@status" data-ideaid="@idea.Overview.ID" role="button">Finalize</a>
                         </div>
                     </div>
                 </div>
-                <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;">
-                    <div class="col-md-6 col-md-push-6 col-sm-12 ">
-                        <textarea id="@idea.Overview.ID-textbox-message" class="form-control pull-right idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
-                        <br />
-                        <a id="@idea.Overview.ID-button-finalize" class="btn btn-primary pull-right idea-panel-finalize form-control" data-status="@status" data-ideaid="@idea.Overview.ID" role="button">Finalize</a>
-                    </div>
+                <div class="col-md-1">
+                    <img class="idea-panel-expand" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
                 </div>
             </div>
-            <div class="col-md-1">
-                <img class="idea-panel-expand" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
-            </div>
-        </div>
-    }
-        
-    <div id="idea-@idea.Overview.ID-details" class="row" style="@(ViewBag.isDraft ? "" : "display:none;")">
+        }
+    </div>
+    <div id="idea-@idea.Overview.ID-details" class="row" style="padding:10px; @(ViewBag.isDraft ? "" : "display:none;")">
         <div class="col-md-12">
             <hr />
             <div class="row">
@@ -254,6 +243,39 @@
             </div>
         </div>
     </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-5" style="padding-top: 4px">
+                <span>Track Idea: </span>
+                <label class="switch">
+                    @{
+                        var checkedModifier = idea.IsTracked ? "checked" : "";
+                    }
+                    <input class="track-idea" data-idea-id="@idea.Overview.ID" type="checkbox" @checkedModifier>
+                    <span class="slider round"></span>
+                </label>
+
+            </div>
+            <div class="col-md-7">
+                <div class="row form-group">
+                    <div class="col-md-4" style="padding-top: 4px">
+                        <input type="hidden" id="@idea.Overview.ID-previous-rating" name="@idea.Overview.ID-previous-rating" value="@idea.UserRating" required="required">
+                        <span>Average Rating: </span>
+                        <span id="@idea.Overview.ID-average-rating">@(idea.AverageRating != -1 ? idea.AverageRating.ToString() : "-")</span><span> / 5</span>
+                    </div>
+                    <div class="col-md-7">
+                        <span>Your Rating: </span>
+                        @for (int possibleRating = 1; possibleRating <= 5; possibleRating++)
+                        {
+                            <button type="button" class="btnrating btn btn-sm @(idea.UserRating >= possibleRating ? "btn-primary" : "btn-default")" data-rating="@possibleRating" data-idea-id="@idea.Overview.ID" id="@idea.Overview.ID-rating-star-@possibleRating">
+                                <i class="fa fa-star"></i>
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 }
 
@@ -262,7 +284,7 @@
 
         /*
          * MVP 4 TODO:
-         * TODO: Shrink finalize button cause wilson - group discussion about this 
+         * TODO: Shrink finalize button cause wilson - group discussion about this
          * TODO: Cancel/Close the finalize form if they decide they dont want to anymore
          * TODO: Make the finalize form and ammendment forms have consistent styling
          * TODO: Reorganize the data layout of tracking, rating, ammendments, and finalizing

@@ -42,8 +42,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\images\profile\" />
-  </ItemGroup>
-
 </Project>
