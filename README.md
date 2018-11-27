@@ -8,20 +8,30 @@
 # Health-Esteem
 Based on https://github.com/rstancu/braintrust
 
-Health-Esteem provides an electronic idea organization system for interorganizational improvement.
+Health-Esteem provides an idea mangagement system for interorganizational improvement.
 
 ### Contributors: 
-* Shawn Clake
-* Jennifer Herasymuik
-* Tristan Heisler
 * Quinn Bast
-* Wilson Nie
+* Shawn Clake
+* Tristan Heisler
+* Jennifer Herasymuik
 * Chengyu Lou
+* Wilson Nie
 
 ### Documentation
+* [User Manual] (https://todo.todo)
+* [Annonymized Usability Report] (https://todo.todo)
 * [Google Drive (Planning, Presentations in progress, Meeting notes)](https://drive.google.com/drive/folders/1xXZoQ2bTMq2rhHzLl4sXl5ZG7T7oY1FZ?usp=sharing)
 * [Requirements](https://github.com/herasymj/Health-Esteem/blob/master/documentation/requirements.md)
 * [Discussion](https://github.com/herasymj/Health-Esteem/blob/master/documentation/discussions.md)
+
+### Setup Guide
+1. Clone down this repository and modify any configurations necessary
+    * ie. The database the app will talk to
+    * ie. Production vs Development environment
+2. Run a `upgrade-database` command using .NET CLI
+3. Login with the default administrator account and change the password. By default it is: `Abc123!`
+    * Use this account to set other users roles in the future
 
 ## Archived Readme from Braintrust's repository
 
