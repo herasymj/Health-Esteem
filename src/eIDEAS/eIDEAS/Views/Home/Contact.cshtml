@@ -8,25 +8,25 @@
         <li>
             <a class="headericons" href="https://vimeo.com/ehealthsk" target="_blank">
                 vimeo
-                
+
             </a>
         </li>
         <li>
             <a class="headericons" href="https://www.facebook.com/EHealthSaskatchewan" target="_blank">
                 facebook
-                
+
             </a>
         </li>
         <li>
             <a class="headericons" href="https://twitter.com/ehealthsask" target="_blank">
                 twitter
-                
+
             </a>
         </li>
         <li>
             <a class="headericons" href="https://www.linkedin.com/company/ehealth-saskatchewan" target="_blank">
                 linkedin
-               
+
             </a>
         </li>
     </ul>
@@ -34,14 +34,40 @@
 
     ​You can connect with us during regular business hours. Our regular hours are Monday to Friday (excluding Statutory Holidays) between 8am until 5pm, Central Time.
 
-    <br /><br /></br><strong>Address</strong>
-    <address>
-        ​2130 11th Avenue<br />
-        Regina, Saskatchewan<br />
-        S4P 0J5<br />
-    </address>
+    <br /><br />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    
 
-    <address>
-        <strong>General questions email</strong> <a href="​vitalstatistics@eHealthSask.ca">​vitalstatistics@eHealthSask.ca</a><br />
+        <div ng-app="myApp" ng-controller="addressCtrl">
 
-    </address>
+            <button ng-click="toggle()">Show address</button>
+
+            <p ng-show="myVar">
+                
+                    {{rodeName}}<br />
+                    {{cityName}}<br />
+                    {{postcode}}<br />
+                
+                
+            </p>
+
+        </div>
+
+        <script>
+var app = angular.module('myApp', []);
+app.controller('addressCtrl', function($scope) {
+    $scope.rodeName = "2130 11th Avenue",
+        $scope.cityName = "Regina, Saskatchewan",
+        $scope.postcode = "S4P 0J5"
+    $scope.myVar = false;
+    $scope.toggle = function() {
+        $scope.myVar = !$scope.myVar;
+    };
+});
+        </script>
+        
+
+        <address>
+            <strong>General questions email</strong> <a href="​vitalstatistics@eHealthSask.ca">​vitalstatistics@eHealthSask.ca</a><br />
+
+        </address>
