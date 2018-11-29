@@ -295,7 +295,10 @@
 
             var current = new Date().getTime();
 
+            previous = previous.replace(/-/g, '/');
             previous = Date.parse(previous);
+
+            console.log(previous);
 
             var msPerMinute = 60 * 1000;
             var msPerHour = msPerMinute * 60;
