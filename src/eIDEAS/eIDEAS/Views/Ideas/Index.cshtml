@@ -351,6 +351,17 @@
             }
         }
 
+        // Changes absolute timestamps to relative timestamps to increase human readableness
+        function updateTimestamps() {
+            $('.panel-timestamp').each(function () {
+                if (!$(this).data('calculated')) {
+                    var utctime = $(this).data('utctime')
+                    $(this).html(timeDifference(utctime));
+                    $(this).data('calculated', true);
+                }
+            });
+        }
+
         // Updates the colorizing of the progress bar
         function updateTimeline(ideaid, status) {
             // Do
@@ -536,8 +547,6 @@
             if (event.stopPropagation) event.stopPropagation();
             target = $($(this).data('target'));
 
-            console.log($(this).data('target') + '-arrow');
-
             var img = $($(this).data('target') + '-arrow');
 
             if (img.attr('src').endsWith('arrow-right.png')) {
@@ -570,7 +579,6 @@
 
             target = $('#' + $(this).data('ideaid') + '-input-group-finalize');
 
-            console.log($(this).data('ideaid') + '-input-group-finalize');
             target.slideUp(speeds.transitions.fast);
         });
 
@@ -582,8 +590,10 @@
             id = $(this).data('target');
 
             comment = document.getElementById("Comment-" + id).value;
+
             if (!(/\S/.test(comment)))
                 return;
+
             $.ajax({
                 url: '@Url.Action("Update","Amendments")',
                 type: "POST",
@@ -592,6 +602,7 @@
                     // refreshes partial view
                     $('#amendment-partial-' + id).html(result);
                     document.getElementById('Comment-' + id).value = '';
+                    updateTimestamps();
                 }
             });
         });
@@ -600,10 +611,7 @@
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('.panel-timestamp').each(function () {
-                var utctime = $(this).data('utctime')
-                $(this).html(timeDifference(utctime));
-            });
+            updateTimestamps();
         });
 
         // Allow the user to track an idea
