@@ -103,15 +103,15 @@
     <div class="panel-body">
         @if (!ViewBag.IsDraft)
         {
-        <div class="row">
-            <div class="col-md-11">
-                <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">on @idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
-                <p>to <strong>@idea.UnitName</strong></p>
+            <div class="row">
+                <div class="col-md-11">
+                    <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">on @idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
+                    <p>to <strong>@idea.UnitName</strong></p>
+                </div>
+                <div class="col-md-1">
+                    <img class="idea-panel-expand" id="idea-@idea.Overview.ID-details-arrow" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
+                </div>
             </div>
-            <div class="col-md-1">
-                <img class="idea-panel-expand" id="idea-@idea.Overview.ID-details-arrow" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
-            </div>
-        </div>
             <div class="row">
                 <div class="col-md-10 col-sm-12">
 
@@ -145,7 +145,7 @@
             </div>
 
             <!-- FINALIZE IDEA FORM -->
-            <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;">
+            <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;margin-bottom:20px;">
                 <div class="col-md-6 col-sm-12 ">
                     <textarea id="@idea.Overview.ID-textbox-message" class="form-control idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
                     <br />
@@ -154,10 +154,8 @@
                 </div>
             </div>
         }
-    </div>
-    <div id="idea-@idea.Overview.ID-details" class="row" style="padding:10px; @(ViewBag.isDraft ? "" : "display:none;")">
-        <div class="col-md-12">
-            <hr />
+
+        <div id="idea-@idea.Overview.ID-details" style="padding:10px; border-top-style:solid;border-width:1px 0px 0px 0px;border-color:#ddd;  @(ViewBag.isDraft ? "" : "display:none;")">
 
             <!-- IDEA DESCRIPTION -->
 
@@ -226,7 +224,6 @@
             </div>
         </div>
     </div>
-
     <!-- IDEA FOOTER -->
 
     <div class="panel-footer">
@@ -352,6 +349,17 @@
                 else
                     return years + ' years ago';
             }
+        }
+
+        // Changes absolute timestamps to relative timestamps to increase human readableness
+        function updateTimestamps() {
+            $('.panel-timestamp').each(function () {
+                if (!$(this).data('calculated')) {
+                    var utctime = $(this).data('utctime')
+                    $(this).html(timeDifference(utctime));
+                    $(this).data('calculated', true);
+                }
+            });
         }
 
         // Updates the colorizing of the progress bar
@@ -510,6 +518,7 @@
             var ideaid = $(this).data('ideaid');
             var status = statuses['adapt'];
 
+            $('#' + ideaid + '-textbox-message').val("");
             $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for adaption");
             $('#' + ideaid + '-input-group-finalize').slideDown(speeds.transitions.fast);
             $('#' + ideaid + '-button-finalize').data('status', status);
@@ -523,6 +532,7 @@
             var ideaid = $(this).data('ideaid');
             var status = statuses['abandon'];
 
+            $('#' + ideaid + '-textbox-message').val("");
             $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for abandonment");
             $('#' + ideaid + '-input-group-finalize').slideDown(speeds.transitions.fast);
             $('#' + ideaid + '-button-finalize').data('status', status);
@@ -538,8 +548,6 @@
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
             target = $($(this).data('target'));
-
-            console.log($(this).data('target') + '-arrow');
 
             var img = $($(this).data('target') + '-arrow');
 
@@ -573,7 +581,6 @@
 
             target = $('#' + $(this).data('ideaid') + '-input-group-finalize');
 
-            console.log($(this).data('ideaid') + '-input-group-finalize');
             target.slideUp(speeds.transitions.fast);
         });
 
@@ -585,8 +592,10 @@
             id = $(this).data('target');
 
             comment = document.getElementById("Comment-" + id).value;
+
             if (!(/\S/.test(comment)))
                 return;
+
             $.ajax({
                 url: '@Url.Action("Update","Amendments")',
                 type: "POST",
@@ -595,6 +604,7 @@
                     // refreshes partial view
                     $('#amendment-partial-' + id).html(result);
                     document.getElementById('Comment-' + id).value = '';
+                    updateTimestamps();
                 }
             });
         });
@@ -603,10 +613,7 @@
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('.panel-timestamp').each(function () {
-                var utctime = $(this).data('utctime')
-                $(this).html(timeDifference(utctime));
-            });
+            updateTimestamps();
         });
 
         // Allow the user to track an idea
