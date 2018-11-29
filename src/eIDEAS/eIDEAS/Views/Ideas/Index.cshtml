@@ -145,7 +145,7 @@
             </div>
 
             <!-- FINALIZE IDEA FORM -->
-            <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;">
+            <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;margin-bottom:20px;">
                 <div class="col-md-6 col-sm-12 ">
                     <textarea id="@idea.Overview.ID-textbox-message" class="form-control idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
                     <br />
@@ -518,6 +518,7 @@
             var ideaid = $(this).data('ideaid');
             var status = statuses['adapt'];
 
+            $('#' + ideaid + '-textbox-message').val("");
             $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for adaption");
             $('#' + ideaid + '-input-group-finalize').slideDown(speeds.transitions.fast);
             $('#' + ideaid + '-button-finalize').data('status', status);
@@ -531,6 +532,7 @@
             var ideaid = $(this).data('ideaid');
             var status = statuses['abandon'];
 
+            $('#' + ideaid + '-textbox-message').val("");
             $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for abandonment");
             $('#' + ideaid + '-input-group-finalize').slideDown(speeds.transitions.fast);
             $('#' + ideaid + '-button-finalize').data('status', status);
