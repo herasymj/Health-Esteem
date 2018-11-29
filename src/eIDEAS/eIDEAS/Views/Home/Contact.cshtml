@@ -2,6 +2,36 @@
     ViewData["Title"] = "Contact";
 }
 <h2>@ViewData["Title"]</h2>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<div class="container">
+    
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">I like this site</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thank you</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Thank you.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 <h3>@ViewData["Message"]</h3>
 <div>
     <ul class="list-inline">
@@ -36,38 +66,38 @@
 
     <br /><br />
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    
 
-        <div ng-app="myApp" ng-controller="addressCtrl">
 
-            <button ng-click="toggle()">Show address</button>
+    <div ng-app="myApp" ng-controller="addressCtrl">
 
-            <p ng-show="myVar">
-                
-                    {{rodeName}}<br />
-                    {{cityName}}<br />
-                    {{postcode}}<br />
-                
-                
-            </p>
+        <button ng-click="toggle()">Show address</button>
 
-        </div>
+        <p ng-show="myVar">
 
-        <script>
-var app = angular.module('myApp', []);
-app.controller('addressCtrl', function($scope) {
-    $scope.rodeName = "2130 11th Avenue",
-        $scope.cityName = "Regina, Saskatchewan",
-        $scope.postcode = "S4P 0J5"
-    $scope.myVar = false;
-    $scope.toggle = function() {
-        $scope.myVar = !$scope.myVar;
-    };
-});
-        </script>
-        
+            {{rodeName}}<br />
+            {{cityName}}<br />
+            {{postcode}}<br />
 
-        <address>
-            <strong>General questions email</strong> <a href="​vitalstatistics@eHealthSask.ca">​vitalstatistics@eHealthSask.ca</a><br />
 
-        </address>
+        </p>
+
+    </div>
+
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('addressCtrl', function ($scope) {
+            $scope.rodeName = "2130 11th Avenue",
+                $scope.cityName = "Regina, Saskatchewan",
+                $scope.postcode = "S4P 0J5"
+            $scope.myVar = false;
+            $scope.toggle = function () {
+                $scope.myVar = !$scope.myVar;
+            };
+        });
+    </script>
+
+
+    <address>
+        <strong>General questions email</strong> <a href="​vitalstatistics@eHealthSask.ca">​vitalstatistics@eHealthSask.ca</a><br />
+
+    </address>
