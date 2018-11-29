@@ -93,9 +93,13 @@
     bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
 
 <div class="panel panel-primary idea-overview" data-ideaid="@idea.Overview.ID" style="padding:0px; background-color:#F2F2F2;">
+
+    <!-- IDEA TITLE BAR -->
     <div class="site-primary panel-heading col-md-12 lead idea-panel-expand" data-target="#idea-@idea.Overview.ID-details">
         @Html.DisplayFor(modelItem => idea.Overview.Title)
     </div>
+
+    <!-- IDEA BODY -->
     <div class="panel-body">
         @if (!ViewBag.IsDraft)
         {
@@ -110,6 +114,8 @@
         </div>
             <div class="row">
                 <div class="col-md-10 col-sm-12">
+
+                    <!-- IDEA PROGRESS BAR -->
                     <div class="progress" style="height:20px;margin-top:10px;">
                         <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
                         <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%;">Do</div>
@@ -119,6 +125,7 @@
                 </div>
                 @if (!isCompleted)
                 {
+                    <!-- IDEA ACTIONS -->
                     <div class="col-md-2 col-sm-12">
                         <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
                             <div class="btn-group" style="margin-top:10px;">
@@ -140,9 +147,10 @@
             <!-- FINALIZE IDEA FORM -->
             <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;">
                 <div class="col-md-6 col-sm-12 ">
-                    <textarea id="@idea.Overview.ID-textbox-message" class="form-control pull-right idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
+                    <textarea id="@idea.Overview.ID-textbox-message" class="form-control idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
                     <br />
-                    <a id="@idea.Overview.ID-button-finalize" class="btn btn-primary pull-right idea-panel-finalize form-control" data-status="@status" data-ideaid="@idea.Overview.ID" role="button">Finalize</a>
+                    <button class="btn btn-danger idea-panel-finalize-cancel" data-ideaid="@idea.Overview.ID">Cancel</button>
+                    <button id="@idea.Overview.ID-button-finalize" class="btn btn-primary idea-panel-finalize" data-status="@status" data-ideaid="@idea.Overview.ID">Finalize</button>
                 </div>
             </div>
         }
@@ -150,6 +158,9 @@
     <div id="idea-@idea.Overview.ID-details" class="row" style="padding:10px; @(ViewBag.isDraft ? "" : "display:none;")">
         <div class="col-md-12">
             <hr />
+
+            <!-- IDEA DESCRIPTION -->
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="row">
@@ -269,7 +280,15 @@
          */
 
         // Enum of status values to prevent magical numbers
-        var statuses = {'plan': 0, 'do': 1, 'check': 2, 'adopt': 3, 'adapt': 4, 'abandon': 5};
+        var statuses = { 'plan': 0, 'do': 1, 'check': 2, 'adopt': 3, 'adapt': 4, 'abandon': 5 };
+
+        // Speed constants for animated transitions
+        var speeds = {
+            transitions: {
+                slow: 500,
+                fast: 250
+            }
+        };
 
         // Returns human readable date difference
         function timeDifference(previous) {
@@ -440,7 +459,7 @@
         }
 
         // Advance an idea
-        $('.idea-panel-advance').click(function () {
+        $('.idea-panel-advance').click(function (event) {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
@@ -457,7 +476,7 @@
         });
 
         // Finalizing an idea after submitting abandon/adapting with a message
-        $('.idea-panel-finalize').click(function () {
+        $('.idea-panel-finalize').click(function (event) {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
@@ -471,7 +490,7 @@
         });
 
         // Adopt an idea
-        $('.idea-panel-adopt').click(function () {
+        $('.idea-panel-adopt').click(function (event) {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
@@ -484,7 +503,7 @@
         });
 
         // Adapt an idea
-        $('.idea-panel-adapt').click(function () {
+        $('.idea-panel-adapt').click(function (event) {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
@@ -492,12 +511,12 @@
             var status = statuses['adapt'];
 
             $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for adaption");
-            $('#' + ideaid + '-input-group-finalize').show();
+            $('#' + ideaid + '-input-group-finalize').slideDown(speeds.transitions.fast);
             $('#' + ideaid + '-button-finalize').data('status', status);
         });
 
         // Abandon an idea
-        $('.idea-panel-abandon').click(function () {
+        $('.idea-panel-abandon').click(function (event) {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
@@ -505,17 +524,17 @@
             var status = statuses['abandon'];
 
             $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for abandonment");
-            $('#' + ideaid + '-input-group-finalize').show();
+            $('#' + ideaid + '-input-group-finalize').slideDown(speeds.transitions.fast);
             $('#' + ideaid + '-button-finalize').data('status', status);
         });
 
-        $('.idea-panel-finalize-message').click(function () {
+        $('.idea-panel-finalize-message').click(function (event) {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
         });
 
         // Expand/Contract panel to see description, solution plan, etc.
-        $('.idea-panel-expand').click(function () {
+        $('.idea-panel-expand').click(function (event) {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
             target = $($(this).data('target'));
@@ -526,29 +545,40 @@
 
             if (img.attr('src').endsWith('arrow-right.png')) {
                 img.attr('src', "images/arrow-down.png");
-                target.slideDown(500);
+                target.slideDown(speeds.transitions.slow);
             }
             else {
                 img.attr('src', "images/arrow-right.png");
-                target.slideUp(500);
+                target.slideUp(speeds.transitions.slow);
             }
         });
 
         // Expand/Contract ammendments form
-        $('.idea-panel-expand-ammendments').click(function () {
+        $('.idea-panel-expand-ammendments').click(function (event) {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
             target = $($(this).data('target'));
 
             if ($(target).is(":hidden"))
-                target.slideDown(500);
+                target.slideDown(speeds.transitions.slow);
             else
-                target.slideUp(500);
+                target.slideUp(speeds.transitions.slow);
+        });
+
+        // Cancel and contract the finalize form
+        $('.idea-panel-finalize-cancel').click(function (event) {
+            event.cancelBubble = true;
+            if (event.stopPropagation) event.stopPropagation();
+
+            target = $('#' + $(this).data('ideaid') + '-input-group-finalize');
+
+            console.log($(this).data('ideaid') + '-input-group-finalize');
+            target.slideUp(speeds.transitions.fast);
         });
 
         // For amendment submission
-        $('.idea-panel-submit-ammendment').click(function () {
+        $('.idea-panel-submit-ammendment').click(function (event) {
             event.cancelBubble = true;
             if (event.stopPropagation) event.stopPropagation();
 
