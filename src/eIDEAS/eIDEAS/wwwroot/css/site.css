@@ -217,7 +217,9 @@ input:checked + .slider:before {
 
 
 
-
+.site-primary {
+    background-color: #063496 !important;
+}
 
 
 /* navbar */

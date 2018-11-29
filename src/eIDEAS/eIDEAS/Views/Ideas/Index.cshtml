@@ -93,7 +93,7 @@
     bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
 
 <div class="panel panel-primary idea-overview" data-ideaid="@idea.Overview.ID" style="padding:0px; background-color:#F2F2F2;">
-    <div class="panel-heading col-md-12 lead">
+    <div class="site-primary panel-heading col-md-12 lead idea-panel-expand" data-target="#idea-@idea.Overview.ID-details">
         @Html.DisplayFor(modelItem => idea.Overview.Title)
     </div>
     <div class="panel-body">
@@ -105,7 +105,7 @@
                 <p>to <strong>@idea.UnitName</strong></p>
             </div>
             <div class="col-md-1">
-                <img class="idea-panel-expand" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
+                <img class="idea-panel-expand" id="idea-@idea.Overview.ID-details-arrow" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
             </div>
         </div>
             <div class="row">
@@ -152,7 +152,7 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-12">
-                            <h5><strong>Description</strong></h5>
+                            <h5><strong>Problem Description</strong></h5>
                         </div>
                     </div>
                     <div class="row">
@@ -512,12 +512,16 @@
             if (event.stopPropagation) event.stopPropagation();
             target = $($(this).data('target'));
 
-            if ($(this).attr('src').endsWith('arrow-right.png')) {
-                $(this).attr('src', "images/arrow-down.png");
+            console.log($(this).data('target') + '-arrow');
+
+            var img = $($(this).data('target') + '-arrow');
+
+            if (img.attr('src').endsWith('arrow-right.png')) {
+                img.attr('src', "images/arrow-down.png");
                 target.slideDown(500);
             }
             else {
-                $(this).attr('src', "images/arrow-right.png");
+                img.attr('src', "images/arrow-right.png");
                 target.slideUp(500);
             }
         });
