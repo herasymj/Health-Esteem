@@ -103,15 +103,15 @@
     <div class="panel-body">
         @if (!ViewBag.IsDraft)
         {
-        <div class="row">
-            <div class="col-md-11">
-                <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">on @idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
-                <p>to <strong>@idea.UnitName</strong></p>
+            <div class="row">
+                <div class="col-md-11">
+                    <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">on @idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
+                    <p>to <strong>@idea.UnitName</strong></p>
+                </div>
+                <div class="col-md-1">
+                    <img class="idea-panel-expand" id="idea-@idea.Overview.ID-details-arrow" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
+                </div>
             </div>
-            <div class="col-md-1">
-                <img class="idea-panel-expand" id="idea-@idea.Overview.ID-details-arrow" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
-            </div>
-        </div>
             <div class="row">
                 <div class="col-md-10 col-sm-12">
 
@@ -154,10 +154,8 @@
                 </div>
             </div>
         }
-    </div>
-    <div id="idea-@idea.Overview.ID-details" class="row" style="padding:10px; @(ViewBag.isDraft ? "" : "display:none;")">
-        <div class="col-md-12">
-            <hr />
+
+        <div id="idea-@idea.Overview.ID-details" style="padding:10px; border-top-style:solid;border-width:1px 0px 0px 0px;border-color:#ddd;  @(ViewBag.isDraft ? "" : "display:none;")">
 
             <!-- IDEA DESCRIPTION -->
 
@@ -226,7 +224,6 @@
             </div>
         </div>
     </div>
-
     <!-- IDEA FOOTER -->
 
     <div class="panel-footer">
