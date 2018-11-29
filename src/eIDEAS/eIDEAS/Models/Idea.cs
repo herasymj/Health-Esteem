@@ -18,6 +18,7 @@ namespace eIDEAS.Models
         [Required]
         public string Title { get; set; }
 
+        [Display(Name = "Problem Description")]
         [Required]
         public string Description { get; set; }
 
