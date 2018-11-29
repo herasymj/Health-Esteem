@@ -51,34 +51,22 @@ namespace eIDEAS.Controllers
             //Determine which ideas the user wants to see
             switch(filterType)
             {
-                case "MyDrafts":
+                case "drafts":
                     //Get a model that filters on the user's drafts
-                    ideaQuery = _context.Idea.Where(idea => idea.IsDraft && idea.UnitID == loggedInUserUnit.ID);
+                    ideaQuery = _context.Idea.Where(idea => idea.IsDraft && idea.UserID.ToString() == loggedInUserID);
 
                     //Name the page appropriately
-                    ViewBag.PageName = "My Drafts";
-                    ViewBag.filterType = "MyDrafts";
+                    ViewBag.PageName = "Drafts";
+                    ViewBag.filterType = "Drafts";
                     ViewBag.IsDraft = true;
                     break;
-
-                case "TeamIdeas":
-                    //Get a model that filters on the user's unit's ideas
-                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft && idea.UnitID == loggedInUserUnit.ID);
-
-                    //Name the page appropriately
-                    ViewBag.PageName = "Team Ideas";
-                    ViewBag.filterType = "TeamIdeas";
-                    ViewBag.IsDraft = false;
-                    break;
-
-                case "MyIdeas":
                 default:
                     //Get a model that filters on the user's ideas
-                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft && idea.UserID.ToString() == loggedInUserID);
+                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft);
 
                     //Name the page appropriately
-                    ViewBag.PageName = "My Ideas";
-                    ViewBag.filterType = "MyIdeas";
+                    ViewBag.PageName = "Ideas";
+                    ViewBag.filterType = "Ideas";
                     ViewBag.IsDraft = false;
                     break;
             }
@@ -153,7 +141,7 @@ namespace eIDEAS.Controllers
                 List<AmendmentPresentationViewModel> amendmentViewModel = new List<AmendmentPresentationViewModel>();
 
                 //Drafts cannot possibly have amendments yet
-                if (filterType != "MyDrafts")
+                if (filterType != "drafts")
                 {
                     var amendments = _context.Amendment.Where(amendment => amendment.IdeaID == idea.ID);
 
