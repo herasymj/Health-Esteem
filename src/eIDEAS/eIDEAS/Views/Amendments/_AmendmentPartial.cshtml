@@ -3,25 +3,37 @@
 @model IEnumerable<AmendmentPresentationViewModel>
 
 @{
-    int count = 0;
+    <h4>Comments (<span style="color:darkred;">@Model.Count()</span>)</h4>
 
-    foreach (var amendment in @Model)
+    if (@Model.Count() > 0)
     {
-    <div class="row" style="margin-top: 17px">
-        <div class="col-md-12">
-            <div style="padding: 9px; background-color:#fff; border-radius:11px;">
-                @amendment.Comment
+        foreach (var amendment in @Model.OrderByDescending(amendment => amendment.PostingDate))
+        {
+            <div class="row" style="margin-top: 17px">
+                <div class="col-md-12">
+                    <div style="padding: 9px; background-color:#fff; border-radius:11px;">
+                        @amendment.Comment
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12" >
-            <div>
-                <span style="font-size:11px;">
-                    <em>Posted by <strong>@amendment.AuthorFirstName @amendment.AuthorLastName</strong> <span class="panel-timestamp" data-utctime="@amendment.PostingDate.ToLocalTime()">@amendment.PostingDate.ToLocalTime()</span></em>
-                </span>
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <span style="font-size:11px;">
+                            <em>Posted <span class="panel-timestamp" data-utctime="@amendment.PostingDate.ToLocalTime()">on @amendment.PostingDate.ToLocalTime()</span> by <strong>@amendment.AuthorFirstName @amendment.AuthorLastName</strong> </em>
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        }
     }
+    else
+    {
+        <div class="row" style="margin-top: 17px">
+            <div class="col-md-12">
+                There are no comments on this idea.
+            </div>
+        </div>
+    }
+
 }
