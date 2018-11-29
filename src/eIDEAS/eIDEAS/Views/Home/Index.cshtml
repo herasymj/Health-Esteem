@@ -2,28 +2,6 @@
     ViewData["Title"] = "Home";
 }
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-
-<div class=" text-center" ng-app="Time" ng-controller="myTime">
-
-
-    <h1>{{theTime}}</h1>
-
-</div>
-
-
-
-<script>
-    var app = angular.module('Time', []);
-    app.controller('myTime', function ($scope, $interval) {
-        $scope.theTime = new Date().toLocaleTimeString();
-        $interval(function () {
-            $scope.theTime = new Date().toLocaleTimeString();
-        }, 1000);
-    });
-</script>
-
-
 <div class="container-fluid">
     <div class="row" style="margin-top:25px;">
         <div class="col-md-12 col-sm-12">
