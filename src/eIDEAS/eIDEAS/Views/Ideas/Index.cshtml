@@ -105,7 +105,7 @@
         {
         <div class="row">
             <div class="col-md-11">
-                <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">@idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
+                <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">on @idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
                 <p>to <strong>@idea.UnitName</strong></p>
             </div>
             <div class="col-md-1">
@@ -195,7 +195,6 @@
                 <!-- IDEA COMMENTS SECTION -->
 
                 <div class="col-md-12">
-                    <h3>Comments</h3>
                     @if (!ViewBag.IsDraft)
                     {
                         @Html.Partial("../Amendments/Index", idea.Amendments, new ViewDataDictionary(ViewData){
@@ -297,8 +296,6 @@
 
             previous = previous.replace(/-/g, '/');
             previous = Date.parse(previous);
-
-            console.log(previous);
 
             var msPerMinute = 60 * 1000;
             var msPerHour = msPerMinute * 60;
