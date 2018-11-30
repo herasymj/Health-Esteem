@@ -15,5 +15,6 @@ namespace eIDEAS.Data
         public DbSet<Idea> Idea { get; set; }
         public DbSet<Amendment> Amendment { get; set; }
         public DbSet<IdeaInteraction> IdeaInteraction { get; set; }
+        public DbSet<Message> Message { get; set; }
     }
 }

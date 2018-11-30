@@ -15,7 +15,7 @@ namespace eIDEAS.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserID = table.Column<int>(nullable: false),
+                    AuthorID = table.Column<Guid>(nullable: false),
                     Title = table.Column<string>(nullable: true),
                     Text = table.Column<string>(nullable: false),
                     MessageType = table.Column<MessageEnum>(nullable: false),

@@ -7,6 +7,6 @@ namespace eIDEAS.Models.Enums
 {
     public enum MessageEnum
     {
-        WhatsNew = 1, SuccessStories = 2
+        WhatsNew = 1, SuccessStory = 2
     }
 }
