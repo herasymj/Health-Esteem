@@ -32,7 +32,7 @@ namespace eIDEAS.Areas.Identity.Pages.Account
 
         //public async Task<IActionResult> OnPostAsync()
         //{
-            
+
         //}
     }
 }

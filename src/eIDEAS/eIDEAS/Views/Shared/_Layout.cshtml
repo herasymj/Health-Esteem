@@ -1,10 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - eIDEAS</title>
-    
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -42,7 +44,33 @@
         </div>
     </nav>
     <partial name="_CookieConsentPartial" />
-
+    @if (TempData["SMTPfailed"] != null && SignInManager.IsSignedIn(User))
+    {
+        <div class="alert alert-danger text-center">
+            <strong>We were unable to send confirmation email. Please check your network connection</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    @if (TempData["ResetPasswordEmail"] != null)
+    {
+        <div class="alert alert-danger text-center">
+            <strong>An Email has been sent, check your email!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    @if (TempData["SMTPfailed"] != null)
+    {
+        <div class="alert alert-danger text-center">
+            <strong>We were unable to send email. Please check your network connection</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
     <div class="container body-content">
         @RenderBody()
         <hr />
