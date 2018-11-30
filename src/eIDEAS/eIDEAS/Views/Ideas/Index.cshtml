@@ -19,6 +19,14 @@
             <a class="btn btn-primary" asp-action="Create">Create Idea</a>
         </p>
     </div>
+    
+    <div ng-app="modalFormApp">
+        <div ng-controller="modalIdeaFormController">
+            <div class="page-body">
+                <button class="btn btn-primary" ng-click="showForm()">Create Idea pop</button>
+            </div>
+        </div>
+    </div>
     <div class="col-md-4" style="float: right">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Search" />
@@ -678,14 +686,19 @@
                     if ($(this).is(":hidden"))
                     {
                         $(this).show();
-                    }                     
+                    }
                     else
                     {
                         $(this).hide();
-                    }                        
-                }      
+                    }
+                }
             });
         });
 
     </script>
+    <script src="http://code.angularjs.org/1.2.6/angular.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.9.0.js"></script>
+
+    <script src="../../../js/script.js" language="javascript" type="text/javascript"></script>
+    <script src="../../../js/site.js" language="javascript" type="text/javascript"></script>
 }
