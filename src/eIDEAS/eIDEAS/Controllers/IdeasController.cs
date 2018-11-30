@@ -62,7 +62,7 @@ namespace eIDEAS.Controllers
                     break;
                 default:
                     //Get a model that filters on the user's ideas
-                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft);
+                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft && idea.UnitID == loggedInUserUnit.ID);
 
                     //Name the page appropriately
                     ViewBag.PageName = "Ideas";

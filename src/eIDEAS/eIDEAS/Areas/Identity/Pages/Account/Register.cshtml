@@ -78,9 +78,11 @@
                 //For each unit, show it only if it is part of the selected division
                 $('.unit-option').each(function (i) {
                     if ($(this).data('division') == selectedDivisionID) {
+                        $(this).prop("disabled", false);
                         $(this).show();
                     }
                     else {
+                        $(this).prop("disabled", true);
                         $(this).hide();
                     }
                 });
