@@ -220,7 +220,7 @@ namespace eIDEAS.Controllers
             ViewBag.UnitID = userUnit.ID;
             ViewBag.UnitName = userUnit.Name;
 
-            return View();
+            return PartialView();
         }
 
         // POST: Ideas/Create
