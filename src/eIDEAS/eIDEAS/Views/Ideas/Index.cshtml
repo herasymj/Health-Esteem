@@ -37,8 +37,7 @@
                     <div class="dropdown" style="display: inline">
                         <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-filter"></span></a>
                         <ul id="filter-menu" class="dropdown-menu" style="left: -119px; top: 15px">
-                            <li data-filterStyle="New">New<i id="filter-new" style="float: right;display:none;" class="fa fa-check"></i></li>
-                            <li data-filterStyle="Top">Top<i id="filter-top" style="float: right;display:none;" class="fa fa-check"></i></li>
+                            <li data-filterStyle="Top">Top Rated<i id="filter-top" style="float: right;display:none;" class="fa fa-check"></i></li>
                             <li data-filterStyle="Tracked">Tracked<i id="filter-tracked" style="float: right;display:none;" class="fa fa-check"></i></li>
                             <li data-filterStyle="Planning">Planning<i id="filter-planning" style="float: right;display:none;" class="fa fa-check"></i></li>
                             <li data-filterStyle="Doing">Doing<i id="filter-doing" style="float: right;display:none;" class="fa fa-check"></i></li>
@@ -106,7 +105,7 @@
     //An idea is completed if it is in the Adopt, Adapt or Abandon stage
     bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
 
-    <div class="panel panel-primary idea-overview" data-tracked="@idea.IsTracked" data-status="@idea.Overview.Status" data-authorid="@idea.Overview.UserID" data-ideaid="@idea.Overview.ID" style="padding:0px; background-color:#F2F2F2;">
+    <div class="panel panel-primary idea-overview" data-authorname="@idea.AuthorFirstName @idea.AuthorLastName" data-tracked="@idea.IsTracked" data-status="@idea.Overview.Status" data-authorid="@idea.Overview.UserID" data-ideaid="@idea.Overview.ID" style="padding:0px; background-color:#F2F2F2;">
         <!-- IDEA TITLE BAR -->
         <div class="site-primary panel-heading col-md-12 lead idea-panel-expand" id="@idea.Overview.ID-title" data-target="#idea-@idea.Overview.ID-details">
             @Html.DisplayFor(modelItem => idea.Overview.Title)
@@ -690,7 +689,6 @@
                 filter = {};
             }
             var topfilter = ('top' in filter) ? filter['top'] : false;
-            var newfilter = ('new' in filter) ? filter['new'] : false;
             var statusfilter = ('status' in filter) ? filter['status'] : [];
             var searchfilter = ('search' in filter) ? filter['search'] : "";
             var teamfilter = ('team' in filter) ? filter['team'] : true;
@@ -706,9 +704,9 @@
                 var thisdate = $("#" + thisideaid + "-timestamp").data('utctime');
                 thisdate = thisdate.replace(/-/g, '/');
                 thisdate = Date.parse(thisdate);
-                var thisrating = $("#" + thisideaid + "-average-rating").data('rating'); //string
                 var thisstatus = $(this).data('status');
-                var thisauthor = $(this).data("authorid")
+                var thisauthorid = $(this).data("authorid");
+                var thisauthorname = $(this).data("authorname");
                 var thistitle = $("#" + thisideaid + "-title").get(0).innerHTML;
                 var isthistracked = $(this).data('tracked'); //String
 
@@ -725,7 +723,7 @@
                 // Hide ideas if wanting individual ideas.
                 if (!teamfilter) {
                     //Check if the author is the user.
-                    if (thisauthor != "@loggedInUserID") {
+                    if (thisauthorid != "@loggedInUserID") {
                         hideMe = true;
                     }
                 }
@@ -740,7 +738,7 @@
                     }
 
                     // If the reg-ex matches the author, keep showing the idea.
-                    if (regex.test(thisauthor.toLowerCase())) {
+                    if (regex.test(thisauthorname.toLowerCase())) {
                         break breakpoint;
                     }
 
@@ -764,10 +762,6 @@
             //Sorting filters
             if (topfilter === true) {
                 sortByRating();
-            }
-
-            if (newfilter === true) {
-                //TODO
             }
         }
 
@@ -828,9 +822,6 @@
             switch (filterText) {
                 case "Top":
                     filter['top'] = ('top' in filter) ? !filter['top'] : true;
-                    break;
-                case "New":
-                    filter['new'] = ('new' in filter) ? !filter['new'] : true;
                     break;
                 case "Planning":
                     toggleStatusFilter("Plan");
