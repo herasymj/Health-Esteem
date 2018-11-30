@@ -27,7 +27,7 @@ namespace eIDEAS.Controllers
 
         // GET: Ideas?filterType={filterType}
         [HttpGet]
-        public async Task<IActionResult> Index(string filterType, string filterStyle)
+        public async Task<IActionResult> Index(string filterType)
         {
             //Create a list to store ideas
             IQueryable<Idea> ideaQuery;
@@ -62,7 +62,7 @@ namespace eIDEAS.Controllers
                     break;
                 default:
                     //Get a model that filters on the user's ideas
-                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft);
+                    ideaQuery = _context.Idea.Where(idea => !idea.IsDraft && idea.UnitID == loggedInUserUnit.ID);
 
                     //Name the page appropriately
                     ViewBag.PageName = "Ideas";
@@ -71,61 +71,7 @@ namespace eIDEAS.Controllers
                     break;
             }
 
-            //Determine what type of filter the user wants to perform on the view
-            switch (filterStyle)
-            {
-                case "New":
-                    filteredIdeas = ideaQuery.Where(idea => DateTime.Today.Subtract(idea.DateCreated).Days <= 7).ToList();
-                    break;
-                case "Top":
-                    //Create a list of the average ratings
-                    List<Tuple<double, Idea>> ideaList = new List<Tuple<double, Idea>>();
-
-                    //Loop through all ideas in the current query.
-                    foreach (Idea idea in ideaQuery)
-                    {
-                        var ratingList = _context.IdeaInteraction.Where(i => i.IdeaID == idea.ID).ToList();
-                        double avgRating = ratingList.Where(i => i.Rating != 0).Count() == 0 ? -1 : Math.Round(ratingList.Where(i => i.Rating != 0).Select(i => i.Rating).Average(), 1);
-                        ideaList.Add(new Tuple<double, Idea>(avgRating, idea));
-                    }
-                    //Sort the list. Create the comparison between x and y to compare the first element in the tuple, descending order.
-                    ideaList.Sort((rating1, rating2) => rating2.Item1.CompareTo(rating1.Item1));
-                    filteredIdeas = ideaList.Select(idea => idea.Item2).ToList();
-                    break;
-                case "Tracked":
-                    List<int> trackedIdeaIDs = _context.IdeaInteraction.Where(interaction => interaction.UserId == new Guid(loggedInUserID) && interaction.IsTracked).Select(interaction => interaction.IdeaID).ToList();
-                    foreach (Idea idea in ideaQuery)
-                    {
-                        if(trackedIdeaIDs.Contains(idea.ID))
-                        {
-                            filteredIdeas.Add(idea);
-                        }
-                    }
-                    break;
-                case "Plan":
-                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Plan).ToList();
-                    break;
-                case "Do":
-                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Do).ToList();
-                    break;
-                case "Check":
-                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Check).ToList();
-                    break;
-                case "Adopt":
-                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Adopt).ToList();
-                    break;
-                case "Adapt":
-                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Adapt).ToList();
-                    break;
-                case "Abandon":
-                    filteredIdeas = ideaQuery.Where(idea => idea.Status == StatusEnum.Abandon).ToList();
-                    break;
-                case "All":
-                default:
-                    filteredIdeas = ideaQuery.OrderBy(idea => idea.DateCreated).ToList();
-                    break;
-
-            }         
+            filteredIdeas = ideaQuery.ToList();
 
             //Create the idea presentation viewmodel
             foreach (Idea idea in filteredIdeas)
@@ -218,7 +164,7 @@ namespace eIDEAS.Controllers
             ViewBag.UnitID = userUnit.ID;
             ViewBag.UnitName = userUnit.Name;
 
-            return View();
+            return PartialView();
         }
 
         // POST: Ideas/Create
