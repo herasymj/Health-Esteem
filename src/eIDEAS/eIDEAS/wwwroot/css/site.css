@@ -327,3 +327,25 @@ input:checked + .slider:before {
 .btn-primary:hover {
     background-color: #1949B0;
 }
+
+#filter-menu > li:hover {
+    background-color: #B3CBFF;
+}
+
+#filter-menu > li {
+    font-size: 12px;
+    padding: 2px 10px;
+}
+
+.clearinput {
+    float: right;
+    margin-right: 6px;
+    margin-top: -23px;
+    position: relative;
+    z-index: 10;
+    color: red;
+}
+
+.clearinput:hover {
+    color: #820000;
+}

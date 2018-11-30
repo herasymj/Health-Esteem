@@ -27,7 +27,7 @@ namespace eIDEAS.Controllers
 
         // GET: Ideas?filterType={filterType}
         [HttpGet]
-        public async Task<IActionResult> Index(string filterType, string filterStyle)
+        public async Task<IActionResult> Index(string filterType, string filterStyle, string searchString)
         {
             //Create a list to store ideas
             IQueryable<Idea> ideaQuery;
@@ -125,7 +125,9 @@ namespace eIDEAS.Controllers
                     filteredIdeas = ideaQuery.OrderBy(idea => idea.DateCreated).ToList();
                     break;
 
-            }         
+            }  
+            
+            //Search the ideas based on the search string.
 
             //Create the idea presentation viewmodel
             foreach (Idea idea in filteredIdeas)

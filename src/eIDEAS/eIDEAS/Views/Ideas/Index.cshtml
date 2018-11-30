@@ -21,33 +21,30 @@
     </div>
     <div class="col-md-4" style="float: right">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" />
+            <input type="text" id="filter-search-box" class="form-control" placeholder="Search" />
+            <span class="fa fa-times clearinput"></span>
             <div class="input-group-btn">
-                <button class="btn btn-primary">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
                 @if (ViewBag.filterType != "MyDrafts")
                 {
                     <div class="dropdown" style="display: inline">
                         <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-filter"></span></a>
-                        <ul class="dropdown-menu" style="left: -119px; top: 15px">
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="All">All</a></li>
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="New">New</a></li>
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Top">Top</a></li>
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Tracked">Tracked</a></li>
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Plan">Planning</a></li>
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Do">Doing</a></li>
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Check">Checking</a></li>
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Adopt">Adopting</a></li>
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Adapt">Adapting</a></li>
-                            <li><a asp-area="" asp-controller="Ideas" asp-action="Index" asp-route-filterType=@ViewBag.filterType asp-route-filterStyle="Abandon">Abandoning</a></li>
+                        <ul id="filter-menu" class="dropdown-menu" style="left: -119px; top: 15px">
+                            <li data-filterStyle="New">New<i id="filter-new" style="float: right;display:none;" class="fa fa-check"></i></li>
+                            <li data-filterStyle="Top">Top<i id="filter-top" style="float: right;display:none;" class="fa fa-check"></i></li>
+                            <li data-filterStyle="Tracked">Tracked<i id="filter-tracked" style="float: right;display:none;" class="fa fa-check"></i></li>
+                            <li data-filterStyle="Planning">Planning<i id="filter-planning" style="float: right;display:none;" class="fa fa-check"></i></li>
+                            <li data-filterStyle="Doing">Doing<i id="filter-doing" style="float: right;display:none;" class="fa fa-check"></i></li>
+                            <li data-filterStyle="Checking">Checking<i id="filter-checking" style="float: right;display:none;" class="fa fa-check"></i></li>
+                            <li data-filterStyle="Adopting">Adopting<i id="filter-adopting" style="float: right;display:none;" class="fa fa-check"></i></li>
+                            <li data-filterStyle="Adapting">Adapting<i id="filter-adapting" style="float: right;display:none;" class="fa fa-check"></i></li>
+                            <li data-filterStyle="Abandoning">Abandoning<i id="filter-abandoning" style="float: right;display:none;" class="fa fa-check"></i></li>
                         </ul>
                     </div>
                 }
             </div>
         </div>
     </div>
-    <div class="col-md-2" style="float:right; padding-top: 6px">
+    <div style="float:right; padding-top: 6px">
         <span>Only show my ideas: </span>
         <label class="switch">
             <input id="show-my-ideas" type="checkbox">
@@ -101,10 +98,9 @@
     //An idea is completed if it is in the Adopt, Adapt or Abandon stage
     bool isCompleted = (idea.Overview.Status >= StatusEnum.Adopt);
 
-    <div class="panel panel-primary idea-overview" data-authorid="@idea.Overview.UserID" data-ideaid="@idea.Overview.ID" style="padding:0px; background-color:#F2F2F2;">
-
+    <div class="panel panel-primary idea-overview" data-tracked="@idea.IsTracked" data-status="@idea.Overview.Status" data-authorid="@idea.Overview.UserID" data-ideaid="@idea.Overview.ID" style="padding:0px; background-color:#F2F2F2;">
         <!-- IDEA TITLE BAR -->
-        <div class="site-primary panel-heading col-md-12 lead idea-panel-expand" data-target="#idea-@idea.Overview.ID-details">
+        <div class="site-primary panel-heading col-md-12 lead idea-panel-expand" id="@idea.Overview.ID-title" data-target="#idea-@idea.Overview.ID-details">
             @Html.DisplayFor(modelItem => idea.Overview.Title)
         </div>
 
@@ -114,7 +110,7 @@
             {
                 <div class="row">
                     <div class="col-md-11">
-                        <p class="no-margin" style="font-size:12px;"><em>Submitted <span class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">on @idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
+                        <p class="no-margin" style="font-size:12px;"><em>Submitted <span id="@idea.Overview.ID-timestamp"class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">on @idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
                         <p>to <strong>@idea.UnitName</strong></p>
                     </div>
                     <div class="col-md-1">
@@ -253,7 +249,7 @@
                         <div class="col-md-4" style="padding-top: 4px">
                             <input type="hidden" id="@idea.Overview.ID-previous-rating" name="@idea.Overview.ID-previous-rating" value="@idea.UserRating" required="required">
                             <span>Average Rating: </span>
-                            <span id="@idea.Overview.ID-average-rating">@(idea.AverageRating != -1 ? idea.AverageRating.ToString() : "-")</span><span> / 5</span>
+                            <span id="@idea.Overview.ID-average-rating" data-rating="@idea.AverageRating">@(idea.AverageRating != -1 ? idea.AverageRating.ToString() : "-")</span> / 5
                         </div>
                         <div class="col-md-7">
                             <span>Your Rating: </span>
@@ -286,6 +282,19 @@
 
         // Enum of status values to prevent magical numbers
         var statuses = { 'plan': 0, 'do': 1, 'check': 2, 'adopt': 3, 'adapt': 4, 'abandon': 5 };
+
+        // Global filter variable
+            /*
+             * filter = {
+             *  'top':true,
+             *  'new':true,
+             *  'team':true,
+             *  'status':['P/D/C/A/A/A'],
+             *  'search':'',
+             *  'tracked':false,
+             * } 
+             */
+        var filter = {};
 
         // Speed constants for animated transitions
         var speeds = {
@@ -667,24 +676,178 @@
                 }
             });
         });
+        
+        function filterIdeas() {
+            if (filter === null) {
+                filter = {};
+            }
+            var topfilter = ('top' in filter) ? filter['top'] : false;
+            var newfilter = ('new' in filter) ? filter['new'] : false;
+            var statusfilter = ('status' in filter) ? filter['status'] : [];
+            var searchfilter = ('search' in filter) ? filter['search'] : "";
+            var teamfilter = ('team' in filter) ? filter['team'] : true;
+            var trackedfilter = ('tracked' in filter) ? filter['tracked'] : false;
+
+            $(".idea-overview").each(function () {
+
+                // Show all by default.
+                $(this).show();
+                var hideMe = false;
+
+                // Initialize filter data for current idea
+                var thisideaid = $(this).data('ideaid');
+                var thisdate = $("#" + thisideaid + "-timestamp").data('utctime');
+                thisdate = thisdate.replace(/-/g, '/');
+                thisdate = Date.parse(thisdate);
+                var thisrating = $("#" + thisideaid + "-average-rating").data('rating'); //string
+                var thisstatus = $(this).data('status');
+                var thisauthor = $(this).data("authorid")
+                var thistitle = $("#" + thisideaid + "-title").get(0).innerHTML;
+                var isthistracked = $(this).data('tracked'); //String
+
+                // Determine what to hide:
+
+                // Only hide if a status filter is set.
+                if (statusfilter.length > 0) {
+                    //Hide if this status is not in the filter.
+                    if (statusfilter.indexOf(thisstatus) === -1) {
+                        hideMe = true;
+                    }
+                }
+
+                // Hide ideas if wanting individual ideas.
+                if (!teamfilter) {
+                    //Check if the author is the user.
+                    if (thisauthor != "@loggedInUserID") {
+                        hideMe = true;
+                    }
+                }
+
+                // Hide ideas if they don't match the search
+                breakpoint: if (searchfilter != "") {
+                    var expression = ".*" + searchfilter + ".*";
+                    var regex = new RegExp(expression);
+                    // If the reg-ex matches the title, keep showing the idea.
+                    if (regex.test(thistitle.toLowerCase())) {
+                        break breakpoint;
+                    }
+
+                    // If the reg-ex matches the author, keep showing the idea.
+                    if (regex.test(thisauthor.toLowerCase())) {
+                        break breakpoint;
+                    }
+
+                    // If none of the RegEx matched, hide content.
+                    hideMe = true;
+                }
+
+                // If the trackedFilter is set, hide items not tracked
+                if (trackedfilter) {
+                    if (isthistracked === "False") {
+                        hideMe = true;
+                    }
+                }
+
+                // Make hidden
+                if (hideMe) {
+                    $(this).hide();
+                }
+            });
+
+            //Sorting filters
+
+            if (top === true) {
+                //TODO
+            }
+
+            if (newfilter === true) {
+                //TODO
+            }
+        }
 
         //Allow the user to view only their own ideas
         $("#show-my-ideas").click(function () {
-            //Loop through each idea
-            $(".idea-overview").each(function () {
-                //Toggle the visibility of ideas not belonging to the user
-                if ($(this).data("authorid") != "@loggedInUserID")
-                {
-                    if ($(this).is(":hidden"))
-                    {
-                        $(this).show();
-                    }                     
-                    else
-                    {
-                        $(this).hide();
-                    }                        
-                }      
-            });
+            if ($(this).is(':checked')) {
+                filter['team'] = false;
+            } else {
+                filter['team'] = true;
+            }
+            filterIdeas();
+        });
+
+        //Allow the user to view only their own ideas
+        $("#filter-menu").click(function (e) {
+            //TODO: Reset checkmarks based on active filters.
+
+            var filterText = e.target.dataset["filterstyle"];
+            toggleFilterIcon(filterText);
+            switch (filterText) {
+                case "Top":
+                    filter['top'] = ('top' in filter) ? !filter['top'] : true;
+                    break;
+                case "New":
+                    filter['new'] = ('new' in filter) ? !filter['new'] : true;
+                    break;
+                case "Planning":
+                    toggleStatusFilter("Plan");
+                    break;
+                case "Doing":
+                    toggleStatusFilter("Do");
+                    break;
+                case "Checking":
+                    toggleStatusFilter("Check");
+                    break;
+                case "Adopting":
+                    toggleStatusFilter("Adopt");
+                    break;
+                case "Abandoning":
+                    toggleStatusFilter("Abandon");
+                    break;
+                case "Adapting":
+                    toggleStatusFilter("Adapt");
+                    break;
+                case "Tracked":
+                    filter['tracked'] = ('tracked' in filter) ? !filter['tracked'] : true;
+                    break;
+            }
+            filterIdeas();
+        });
+
+        function toggleStatusFilter(status){
+            if ('status' in filter) {
+                var index = filter['status'].indexOf(status);
+                if (index > -1) {
+                    // Remove the element from the array
+                    filter['status'].splice(index, 1);
+                } else {
+                    // Add the element to the array
+                    filter['status'].push(status);
+                }
+            } else {
+                // Create the array
+                filter['status'] = [status]
+            }
+        }
+
+        function toggleFilterIcon(filterName) {
+            if ($("#filter-" + filterName.toLowerCase()).is(":hidden")) {
+                $("#filter-" + filterName.toLowerCase()).show();
+            } else {
+                $("#filter-" + filterName.toLowerCase()).hide();
+            }
+        }
+
+        $("#filter-search-box").keyup(function () {
+            filter['search'] = $(this).get(0).value.toLowerCase();
+            //Convert wildcard searches to a wildcard in regex.
+            filter['search'].replace("*", ".*");
+            filterIdeas();
+        });
+
+        $(".clearinput").click(function () {
+            filter['search'] = "";
+            $("#filter-search-box").get(0).value = "";
+            filterIdeas();
         });
 
     </script>
