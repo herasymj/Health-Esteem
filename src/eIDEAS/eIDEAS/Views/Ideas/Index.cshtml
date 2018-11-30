@@ -16,17 +16,17 @@
 <div class="row">
     <div class="col-md-2" style="float: left">
         <p>
-            <a class="btn btn-primary" asp-action="Create">Create Idea</a>
+            <div ng-app="modalFormApp">
+                <div ng-controller="modalIdeaFormController">
+                    <div class="page-body">
+                        <button class="btn btn-primary" ng-click="showForm()">Create Idea</button>
+                    </div>
+                </div>
+            </div>
         </p>
     </div>
     
-    <div ng-app="modalFormApp">
-        <div ng-controller="modalIdeaFormController">
-            <div class="page-body">
-                <button class="btn btn-primary" ng-click="showForm()">Create Idea pop</button>
-            </div>
-        </div>
-    </div>
+    
     <div class="col-md-4" style="float: right">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Search" />
