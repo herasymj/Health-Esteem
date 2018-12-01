@@ -31,6 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Ideas\CreateModal.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Ideas\EditDraft.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

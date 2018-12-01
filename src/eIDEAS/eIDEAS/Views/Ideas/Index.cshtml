@@ -115,129 +115,122 @@
         <div class="panel-body">
             @if (!ViewBag.IsDraft)
             {
-                <div class="row">
-                    <div class="col-md-11">
-                        <p class="no-margin" style="font-size:12px;"><em>Submitted <span id="@idea.Overview.ID-timestamp"class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">on @idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
-                        <p>to <strong>@idea.UnitName</strong></p>
-                    </div>
-                    <div class="col-md-1">
-                        <img class="idea-panel-expand" id="idea-@idea.Overview.ID-details-arrow" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
+            <div class="row">
+                <div class="col-md-11">
+                    <p class="no-margin" style="font-size:12px;"><em>Submitted <span id="@idea.Overview.ID-timestamp"class="panel-timestamp" data-utctime="@idea.Overview.DateCreated.ToLocalTime()">on @idea.Overview.DateCreated.ToLocalTime()</span> by @idea.AuthorFirstName @idea.AuthorLastName</em></p>
+                    <p>to <strong>@idea.UnitName</strong></p>
+                </div>
+                <div class="col-md-1">
+                    <img class="idea-panel-expand" id="idea-@idea.Overview.ID-details-arrow" data-target="#idea-@idea.Overview.ID-details" src="~/images/arrow-right.png" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-sm-12">
+                    <!-- IDEA PROGRESS BAR -->
+                    <div class="progress" style="height:20px;margin-top:10px;">
+                        <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
+                        <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%;">Do</div>
+                        <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%;">Check</div>
+                        <div id="@idea.Overview.ID-progress-act" class="progress-bar @actClass" role="progressbar" style="width:25%;">@actText</div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-10 col-sm-12">
-
-                        <!-- IDEA PROGRESS BAR -->
-                        <div class="progress" style="height:20px;margin-top:10px;">
-                            <div id="@idea.Overview.ID-progress-plan" class="progress-bar progress-bar-info" role="progressbar" style="width:25%;">Plan</div>
-                            <div id="@idea.Overview.ID-progress-do" class="progress-bar @doClass" role="progressbar" style="width:25%;">Do</div>
-                            <div id="@idea.Overview.ID-progress-check" class="progress-bar @checkClass" style="width:25%;">Check</div>
-                            <div id="@idea.Overview.ID-progress-act" class="progress-bar @actClass" role="progressbar" style="width:25%;">@actText</div>
+                @if (!isCompleted)
+                {
+                    <!-- IDEA ACTIONS -->
+                    <div class="col-md-2 col-sm-12">
+                        <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
+                            <div class="btn-group" style="margin-top:10px;">
+                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-sm btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
+                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
+                            <div class="btn-group" style="margin-top:10px;">
+                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
+                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
+                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                            </div>
                         </div>
                     </div>
-                    @if (!isCompleted)
-                    {
-                        <!-- IDEA ACTIONS -->
-                        <div class="col-md-2 col-sm-12">
-                            <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
-                                <div class="btn-group" style="margin-top:10px;">
-                                    <button style="height:20px;padding-top:0px;padding-bottom:0px;" id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-sm btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
-                                    <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
-                                </div>
+                }
+            </div>
+
+            <!-- FINALIZE IDEA FORM -->
+            <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;margin-bottom:20px;">
+                <div class="col-md-6 col-sm-12 ">
+                    <textarea id="@idea.Overview.ID-textbox-message" class="form-control idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
+                    <br />
+                    <button class="btn btn-danger idea-panel-finalize-cancel" data-ideaid="@idea.Overview.ID">Cancel</button>
+                    <button id="@idea.Overview.ID-button-finalize" class="btn btn-primary idea-panel-finalize" data-status="@status" data-ideaid="@idea.Overview.ID">Finalize</button>
+                </div>
+            </div>
+        }
+        <div id="idea-@idea.Overview.ID-details" style="padding:10px; border-top-style:solid;border-width:1px 0px 0px 0px;border-color:#ddd;  @(ViewBag.isDraft ? "" : "display:none;")">
+            <!-- IDEA DESCRIPTION -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Problem Description</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="aproblem-description" style="padding: 5px">
+                                @Html.DisplayFor(modelItem => idea.Overview.Description)
                             </div>
-                            <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
-                                <div class="btn-group" style="margin-top:10px;">
-                                    <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
-                                    <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
-                                    <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
-                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Solution Plan</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="asolution-plan" style="padding: 5px">
+                                @Html.DisplayFor(modelItem => idea.Overview.SolutionPlan)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- IDEA COMMENTS SECTION -->
+                <div class="col-md-12">
+                    @if (!ViewBag.IsDraft)
+                    {
+                        @Html.Partial("../Amendments/Index", idea.Amendments, new ViewDataDictionary(ViewData){
+                            { "IdeaID", @idea.Overview.ID }
+                        })
+
+                        <div id="idea-@idea.Overview.ID-amendments" class="row">
+                            <div class="col-md-5 col-md-offset-7 col-sm-12 col-sm-offset-0" align="right">
+                                <form>
+                                    <input type="hidden" name="IdeaID" id="IdeaID-@idea.Overview.ID" value="@idea.Overview.ID">
+                                    <textarea name="Comment" id="Comment-@idea.Overview.ID" class="form-control idea-panel-finalize-message" placeholder="Enter your comment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
+                                    <input type="button" id="amendmentSubmit" class="btn btn-sm btn-primary idea-panel-submit-ammendment" data-target="@idea.Overview.ID" value="Submit Comment" />
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-10 col-md-offset-2" align="right">
+                                <span>
+                                    <a asp-action="EditDraft" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Edit Draft</a>
+                                </span>
                             </div>
                         </div>
                     }
                 </div>
-
-                <!-- FINALIZE IDEA FORM -->
-                <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;margin-bottom:20px;">
-                    <div class="col-md-6 col-sm-12 ">
-                        <textarea id="@idea.Overview.ID-textbox-message" class="form-control idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
-                        <br />
-                        <button class="btn btn-danger idea-panel-finalize-cancel" data-ideaid="@idea.Overview.ID">Cancel</button>
-                        <button id="@idea.Overview.ID-button-finalize" class="btn btn-primary idea-panel-finalize" data-status="@status" data-ideaid="@idea.Overview.ID">Finalize</button>
-                    </div>
-                </div>
-            }
-
-            <div id="idea-@idea.Overview.ID-details" style="padding:10px; border-top-style:solid;border-width:1px 0px 0px 0px;border-color:#ddd;  @(ViewBag.isDraft ? "" : "display:none;")">
-
-                <!-- IDEA DESCRIPTION -->
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>Problem Description</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="aproblem-description" style="padding: 5px">
-                                    @Html.DisplayFor(modelItem => idea.Overview.Description)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>Solution Plan</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="asolution-plan" style="padding: 5px">
-                                    @Html.DisplayFor(modelItem => idea.Overview.SolutionPlan)
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- IDEA COMMENTS SECTION -->
-
-                    <div class="col-md-12">
-                        @if (!ViewBag.IsDraft)
-                        {
-                            @Html.Partial("../Amendments/Index", idea.Amendments, new ViewDataDictionary(ViewData){
-                                { "IdeaID", @idea.Overview.ID }
-                            })
-
-                            <div id="idea-@idea.Overview.ID-amendments" class="row">
-                                <div class="col-md-5 col-md-offset-7 col-sm-12 col-sm-offset-0" align="right">
-                                    <form>
-                                        <input type="hidden" name="IdeaID" id="IdeaID-@idea.Overview.ID" value="@idea.Overview.ID">
-                                        <textarea name="Comment" id="Comment-@idea.Overview.ID" class="form-control idea-panel-finalize-message" placeholder="Enter your comment here" style="height: 70px; margin-top: 10px; margin-bottom: 10px"></textarea>
-                                        <input type="button" id="amendmentSubmit" class="btn btn-sm btn-primary idea-panel-submit-ammendment" data-target="@idea.Overview.ID" value="Submit Comment" />
-                                    </form>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="row" style="margin-top: 10px;">
-                                <div class="col-md-10 col-md-offset-2" align="right">
-                                    <span>
-                                        <a asp-action="EditDraft" asp-route-id="@idea.Overview.ID" class="btn btn-sm btn-default " role="button" style="padding: 1px 5px 0px 5px">Edit Draft</a>
-                                    </span>
-                                </div>
-                            </div>
-                        }
-
-                    </div>
-                </div>
             </div>
         </div>
-        <!-- IDEA FOOTER -->
-
+    </div>
+    <!-- IDEA FOOTER -->
+    @if (!ViewBag.IsDraft)
+    { 
         <div class="panel-footer">
             <div class="row">
                 <div class="col-md-5" style="padding-top: 4px">
@@ -249,7 +242,6 @@
                         <input class="track-idea" data-idea-id="@idea.Overview.ID" type="checkbox" @checkedModifier>
                         <span class="slider round"></span>
                     </label>
-
                 </div>
                 <div class="col-md-7">
                     <div class="row form-group">
@@ -271,7 +263,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    }
+</div>
 }
 
 @section Scripts {

@@ -8,8 +8,7 @@ app.controller("modalIdeaFormController", ['$scope', '$modal', '$log',
             console.log($scope.message);
 
             var modalInstance = $modal.open({
-                //templateUrl: '../../../js/model-form.html',
-                templateUrl: 'Ideas/Create',
+                templateUrl: 'Ideas/CreateModal',
                 controller: ModalInstanceCtrl,
                 scope: $scope,
                 resolve: {

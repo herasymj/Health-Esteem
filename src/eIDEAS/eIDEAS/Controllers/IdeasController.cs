@@ -167,6 +167,23 @@ namespace eIDEAS.Controllers
             return PartialView();
         }
 
+        // GET: Ideas/Create
+        public IActionResult CreateModal()
+        {
+            //Obtain the logged in user and their id
+            var _loggedInUserID = _userManager.GetUserId(HttpContext.User);
+            var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
+
+            //Obtain the logged in user's unit
+            var userUnit = _context.Unit.Where(unit => unit.ID == loggedInUser.UnitID).FirstOrDefault();
+
+            //Store the associated unit's id and name for use in the view
+            ViewBag.UnitID = userUnit.ID;
+            ViewBag.UnitName = userUnit.Name;
+
+            return PartialView();
+        }
+
         // POST: Ideas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
