@@ -320,7 +320,7 @@ input:checked + .slider:before {
     color: #B3CBFF;
 }
 
-.btn-primary {
+.btn-primary, .btn-primary:focus {
     background-color: #063496;
 }
 

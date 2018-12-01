@@ -152,23 +152,13 @@ namespace eIDEAS.Controllers
 
         // GET: Ideas/Create
         public IActionResult Create()
-        {
-            //Obtain the logged in user and their id
-            var _loggedInUserID = _userManager.GetUserId(HttpContext.User);
-            var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
+            => InitializeCreateIdeaInterface();
 
-            //Obtain the logged in user's unit
-            var userUnit = _context.Unit.Where(unit => unit.ID == loggedInUser.UnitID).FirstOrDefault();
-
-            //Store the associated unit's id and name for use in the view
-            ViewBag.UnitID = userUnit.ID;
-            ViewBag.UnitName = userUnit.Name;
-
-            return PartialView();
-        }
-
-        // GET: Ideas/Create
+        // GET: Ideas/CreateModal
         public IActionResult CreateModal()
+            => InitializeCreateIdeaInterface();
+
+        private IActionResult InitializeCreateIdeaInterface()
         {
             //Obtain the logged in user and their id
             var _loggedInUserID = _userManager.GetUserId(HttpContext.User);
@@ -191,37 +181,54 @@ namespace eIDEAS.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Get the logged in user's id
-                var _loggedInUserID = _userManager.GetUserId(HttpContext.User);
-
-                //Update the idea with information not directly entered by the user
-                idea.UserID = new Guid(_loggedInUserID);
-                idea.Status = StatusEnum.Plan;
-                idea.DateCreated = DateTime.UtcNow;
-                idea.DateEdited = DateTime.UtcNow;
-                idea.IsDraft = isDraft;
-
-                //Attempt to add the idea to the database
-                _context.Add(idea);
-                await _context.SaveChangesAsync();
-
-                //Give the idea author 150 idea points on idea submission
-                if (!isDraft)
-                {
-                    var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
-                    loggedInUser.IdeaPoints += 150;
-                    _context.Update(loggedInUser);
-                    await _context.SaveChangesAsync();
-                }
-
-                //Return to the appropriate page
-                if (isDraft)
-                {
-                    return RedirectToAction(nameof(Index), new { filterType = "MyDrafts" });
-                }
-                return RedirectToAction(nameof(Index));
+                return await submitIdeaOrDraft(idea, isDraft);
             }
             return View(idea);
+        }
+
+        // POST: Ideas/CreateModal
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModal([Bind("ID,UnitID,Title,Description,SolutionPlan")] Idea idea, bool isDraft)
+        {
+            if (ModelState.IsValid)
+            {
+                return await submitIdeaOrDraft(idea, isDraft);
+            }
+            return View(idea);
+        }
+
+        async Task<IActionResult> submitIdeaOrDraft(Idea idea, bool isDraft)
+        {
+            //Get the logged in user's id
+            var _loggedInUserID = _userManager.GetUserId(HttpContext.User);
+
+            //Update the idea with information not directly entered by the user
+            idea.UserID = new Guid(_loggedInUserID);
+            idea.Status = StatusEnum.Plan;
+            idea.DateCreated = DateTime.UtcNow;
+            idea.DateEdited = DateTime.UtcNow;
+            idea.IsDraft = isDraft;
+
+            //Attempt to add the idea to the database
+            _context.Add(idea);
+            await _context.SaveChangesAsync();
+
+            //Give the idea author 150 idea points on idea submission
+            if (!isDraft)
+            {
+                var loggedInUser = _context.Users.Where(user => user.Id == _loggedInUserID).FirstOrDefault();
+                loggedInUser.IdeaPoints += 150;
+                _context.Update(loggedInUser);
+                await _context.SaveChangesAsync();
+            }
+
+            //Return to the appropriate page
+            if (isDraft)
+            {
+                return RedirectToAction(nameof(Index), new { filterType = "drafts" });
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Ideas/UpdateStatus/5
@@ -349,7 +356,7 @@ namespace eIDEAS.Controllers
                 }
                 if(isDraft)
                 {
-                    return RedirectToAction(nameof(Index), new { filterType = "MyDrafts" });
+                    return RedirectToAction(nameof(Index), new { filterType = "drafts" });
                 }
                 return RedirectToAction(nameof(Index));
             }
