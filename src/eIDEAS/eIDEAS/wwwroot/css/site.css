@@ -349,3 +349,11 @@ input:checked + .slider:before {
 .clearinput:hover {
     color: #820000;
 }
+
+.modal-content {
+    padding: 10px;
+}
+
+.modal-dialog {
+    top: 20%;
+}
