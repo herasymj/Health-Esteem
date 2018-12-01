@@ -330,7 +330,10 @@ ASALocalRun/
 .mfractor/
 
 # Ignore User profile pictures
-src/eIDEAS/eIDEAs/wwwroot/images/profile/*
+
 
 # Make an exception for the profile folder file to generate the folder
 !src/eIDEAS/eIDEAs/wwwroot/images/profile/init.txt
+
+#Ignore local app settings
+src/eIDEAS/eIDEAs/appsettings.json
