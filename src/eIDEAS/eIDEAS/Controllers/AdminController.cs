@@ -55,8 +55,11 @@ namespace eIDEAS.Controllers
         [HttpPost]
         public async Task<IActionResult> HomepageUpdate(string title, string text, MessageEnum type)
         {
+            var loggedInUserID = _userManager.GetUserId(HttpContext.User);
+
             var message = new Message
             {
+                AuthorID = new Guid(loggedInUserID),
                 Title = title,
                 Text = text,
                 MessageType = type,
