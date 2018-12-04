@@ -134,7 +134,9 @@ namespace eIDEAS.Areas.Identity.Pages.Account.Manage
             }
             //Upload image region
             var uploads = Path.Combine(_appEnvironment.WebRootPath, "images/profile");
-            var profilePictureName = user.FirstName + user.LastName + ".png";
+            var file_name = Image.FileName;
+            var extension = file_name.Substring(file_name.IndexOf("."));
+            var profilePictureName = user.FirstName + user.LastName + extension;
             var filePath = Path.Combine(uploads, profilePictureName);
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
@@ -143,10 +145,7 @@ namespace eIDEAS.Areas.Identity.Pages.Account.Manage
             
             try
             {
-                //Update other user information
-                //user.LastName = Input.LastName;
-                //user.FirstName = Input.FirstName;
-                user.ProfilePic = Path.Combine("~/images/profile", profilePictureName);
+                user.ProfilePic = Path.Combine("~/images/profile/", profilePictureName);
 
                 //Update the user
                 _context.Users.Update(user);

@@ -1,18 +1,81 @@
 ﻿@{
     ViewData["Title"] = "FAQ";
 }
-<h2>@ViewData["Title"]</h2>
+<h2>Frequently Asked Questions</h2>
 
-<h4 class="question">What is eIDEAS?</h4>
-<p class="answer">
-    eIDEAS is a tool to help people collaborate and share ideas.<br/>
-    Under the mantra of Kaizen, eIDEAS provides functionality to work through the idea creation and implementation processes
-</p>
-
-<h4 class="question">How does the point system work?</h4>
-<p class="answer">
-    There are two type of points: idea points and participation points.<br/>
-    Creating an idea gives 150 idea points.<br/>
-    Amending an idea gives 100 participation points.<br/>
-    Rating an idea gives 50 participation points.
-</p>
+<div class="accordion" id="accordionExample">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="question btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#answer-eIDEAs">
+                    What is eIDEAS?
+                </button>
+            </h5>
+        </div>
+        <div id="answer-eIDEAs" class="answer collapse">
+            <div class="card-body">
+                eIDEAS is a tool to help people collaborate and share ideas.<br />
+                Under the mantra of Kaizen, eIDEAS provides functionality to work through the idea creation and implementation processes
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="question btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#answer-PDCA">
+                    What is PDCA?
+                </button>
+            </h5>
+        </div>
+        <div id="answer-PDCA" class="answer collapse">
+            <div class="card-body">
+                The Plan-Do-Check-Act (PDCA) cycle is an iterative management method aimed towards the continuous improvement of processes.
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="question btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#answer-create">
+                    How do I create an idea?
+                </button>
+            </h5>
+        </div>
+        <div id="answer-create" class="answer collapse">
+            <div class="card-body">
+                An idea can be created either by choosing the <b>Create Idea</b> option from the <b>Ideas</b> navigation bar drop down or by clicking the <b>Create Idea</b> button within the Idea or Draft pages.
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="question btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#answer-progression">
+                    How do I progress the status of an idea?
+                </button>
+            </h5>
+        </div>
+        <div id="answer-progression" class="answer collapse">
+            <div class="card-body">
+                The status of an idea can be updated using the buttons provided on the right-hand side of the associated idea's progress bar.
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <button class="question btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#answer-points">
+                    How does the point system work?
+                </button>
+            </h5>
+        </div>
+        <div id="answer-points" class="answer collapse">
+            <div class="card-body">
+                There are two type of points: <b>idea points</b> and <b>participation points</b>.<br />
+                Creating an idea gives 150 idea points.<br />
+                Amending an idea gives 100 participation points.<br />
+                Rating an idea gives 50 participation points.
+            </div>
+        </div>
+    </div>
+</div>

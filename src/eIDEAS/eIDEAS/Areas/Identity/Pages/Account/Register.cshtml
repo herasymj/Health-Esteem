@@ -15,11 +15,11 @@
     {
         @Html.Partial("_RegisterSideNotes")
     }
-    <div class = "@(createdByAdmin == true ? "col-md-6 col-md-offset-3":"col-md-6" )">
+    <div class = "@(createdByAdmin == true ? "col-md-6 col-md-offset-3" : "col-md-6" )">
         <div class="panel panel-primary">
             <div class="panel-heading text-center">Sign up for eIDEAS</div>
             <div class="panel-body" style="background-color: #F5F5F5;">
-                <form asp-route-returnUrl="@Model.ReturnUrl" asp-route-createdByAdmin="@createdByAdmin" method="post">
+                <form asp-route-returnUrl="@Model.ReturnUrl" asp-route-createdByAdmin="@createdByAdmin" method="post" >
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Input.FirstName"></label>
@@ -39,7 +39,7 @@
                         <select asp-for="Input.DivisionID" class="form-control" id="division">
                             @foreach (var division in Model.DivisionUnits.Keys)
                             {
-                                <option value="@division.ID.ToString()">@division.Name</option>
+                                <option value="@division.ID.ToString()" runat="server" id="divname">@division.Name</option>
                             }
                         </select>
                     </div>
@@ -48,6 +48,7 @@
                         <select asp-for="Input.UnitID" class="form-control" id="unit">
                             @foreach (var division in Model.DivisionUnits)
                             {
+
                                 @foreach (var unit in division.Value)
                                 {
                                     <option class="unit-option" data-division="@division.Key.ID" value="@unit.ID.ToString()">@unit.Name</option>
@@ -78,9 +79,11 @@
                 //For each unit, show it only if it is part of the selected division
                 $('.unit-option').each(function (i) {
                     if ($(this).data('division') == selectedDivisionID) {
+                        $(this).prop("disabled", false);
                         $(this).show();
                     }
                     else {
+                        $(this).prop("disabled", true);
                         $(this).hide();
                     }
                 });
