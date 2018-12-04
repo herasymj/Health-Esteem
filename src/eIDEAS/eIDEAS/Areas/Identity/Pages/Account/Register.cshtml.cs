@@ -150,7 +150,7 @@ namespace eIDEAS.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
 
 
-            //MAKE SURE TO RELOAD THE DIVIONS
+            //MAKE SURE TO RELOAD THE DIVISIONS
             var divisions = await _context.Division.Where(division => division.DateDeleted == null).ToListAsync();
 
             foreach (var division in divisions)

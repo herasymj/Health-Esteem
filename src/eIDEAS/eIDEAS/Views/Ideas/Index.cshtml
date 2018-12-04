@@ -24,8 +24,38 @@
                 </div>
             </div>
         </p>
-    </div>   
-    
+    </div>
+
+    <!-- Idea Progression Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title" id="exampleModalLabel">Idea Progression</h3>
+                </div>
+                <div class="modal-body" id="progress-idea-modal-body">
+                    ...
+                </div>
+                <!-- FINALIZE IDEA FORM -->
+                <div id="idea-finalize-input" class="row" style="display:none;margin-bottom:20px;">
+                    <div class="col-lg-12">
+                        <div id="idea-finalize-input-error" style="display:none;color:red;">This field is required. Provide information about why the idea is being updated, and what the outcomes may be.</div>
+                        <textarea id="idea-finalize-message" class="form-control idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
+                        <br />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirm-idea-progression"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-4" style="float: right">
         <div class="input-group">
             <input type="text" id="filter-search-box" class="form-control" placeholder="Search" />
@@ -139,29 +169,19 @@
                     <div class="col-md-2 col-sm-12">
                         <div id="@idea.Overview.ID-button-group-advance" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Plan || idea.Overview.Status == StatusEnum.Do)) { <text> style="display:none" </text>  } }>
                             <div class="btn-group" style="margin-top:10px;">
-                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" id="@idea.Overview.ID-button-advance" data-toggle="tooltip" title="Advance Idea" class="btn btn-sm btn-primary idea-panel-advance" data-status="@status" data-ideaid="@idea.Overview.ID"><i class="fas fa-play"></i></button>
-                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                                <span id="@idea.Overview.ID-advance-idea-button" style="height:20px; padding: 0px 0px;" data-toggle="modal" data-target="#confirmationModal" data-nextstatus="@(status+1)" data-ideaid="@idea.Overview.ID" class="btn btn-sm btn-primary"><span data-toggle="tooltip" title="Advance Idea"><i class="fas fa-play" style="padding: 0px 10px;"></i></span></span>
+                                <span style="height:20px; padding: 0px 0px;" data-toggle="modal" data-target="#confirmationModal" data-nextstatus="5" data-ideaid="@idea.Overview.ID" class="btn btn-sm btn-danger"><span data-toggle="tooltip" title="Abandon Idea"><i class="fas fa-times" style="padding: 0px 10px;"></i></span></span>
                             </div>
                         </div>
                         <div id="@idea.Overview.ID-button-group-finalize" class="row" @{ if (!(idea.Overview.Status == StatusEnum.Check)) { <text> style="display:none" </text>  } }>
                             <div class="btn-group" style="margin-top:10px;">
-                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-success idea-panel-adopt" data-toggle="tooltip" title="Adopt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-check"></i></button>
-                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-warning idea-panel-adapt" data-toggle="tooltip" title="Adapt Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-balance-scale"></i></button>
-                                <button style="height:20px;padding-top:0px;padding-bottom:0px;" type="button" class="btn btn-sm btn-danger idea-panel-abandon" data-toggle="tooltip" title="Abandon Idea" data-ideaid="@idea.Overview.ID"><i class="fas fa-times"></i></button>
+                                <span style="height:20px; padding: 0px 0px;" data-toggle="modal" data-target="#confirmationModal" data-nextstatus="3" data-ideaid="@idea.Overview.ID" class="btn btn-sm btn-success"><span data-toggle="tooltip" title="Adopt Idea"><i class="fas fa-check" style="padding: 0px 10px;"></i></span></span>
+                                <span style="height:20px; padding: 0px 0px;" data-toggle="modal" data-target="#confirmationModal" data-nextstatus="4" data-ideaid="@idea.Overview.ID" class="btn btn-sm btn-warning"><span data-toggle="tooltip" title="Adapt Idea"><i class="fas fa-balance-scale" style="padding: 0px 10px;"></i></span></span>
+                                <span style="height:20px; padding: 0px 0px;" data-toggle="modal" data-target="#confirmationModal" data-nextstatus="5" data-ideaid="@idea.Overview.ID" class="btn btn-sm btn-danger"><span data-toggle="tooltip" title="Abandon Idea"><i class="fas fa-times" style="padding: 0px 10px;"></i></span></span>
                             </div>
                         </div>
                     </div>
                 }
-            </div>
-
-            <!-- FINALIZE IDEA FORM -->
-            <div id="@idea.Overview.ID-input-group-finalize" class="row" style="display:none;margin-bottom:20px;">
-                <div class="col-md-6 col-sm-12 ">
-                    <textarea id="@idea.Overview.ID-textbox-message" class="form-control idea-panel-finalize-message" placeholder="Enter your message" style="height: 100px;"></textarea>
-                    <br />
-                    <button class="btn btn-danger idea-panel-finalize-cancel" data-ideaid="@idea.Overview.ID">Cancel</button>
-                    <button id="@idea.Overview.ID-button-finalize" class="btn btn-primary idea-panel-finalize" data-status="@status" data-ideaid="@idea.Overview.ID">Finalize</button>
-                </div>
             </div>
         }
         <div id="idea-@idea.Overview.ID-details" style="padding:10px; border-top-style:solid;border-width:1px 0px 0px 0px;border-color:#ddd;  @(ViewBag.isDraft ? "" : "display:none;")">
@@ -302,6 +322,8 @@
                 fast: 250
             }
         };
+
+        var progressingIdeaId, progressingIdeaStatus;
 
         // Returns human readable date difference
         function timeDifference(previous) {
@@ -444,16 +466,7 @@
 
         // Updating a status for adapt, abandon (Extra message field required)
         function finalizeStatus(ideaid, status, message) {
-            if (!confirm("Are you sure you want to finalize the status of this idea?\nThis action is irreversible."))
-                return;
-
-            message = message.trim();
-            if (!message) {
-                alert('You must enter a message.');
-                return;
-            }
-
-            $.ajax({
+           $.ajax({
                 url: '/Ideas/Status/' + ideaid,
                 type: "POST",
                 data: { 'status': status, 'message': message },
@@ -483,76 +496,58 @@
             });
         }
 
-        // Advance an idea
-        $('.idea-panel-advance').click(function (event) {
-            event.cancelBubble = true;
-            if (event.stopPropagation) event.stopPropagation();
+        //When a modal popup is generated, configure the modal to indicate what state the idea is being advanced to.
+        $('#confirmationModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Get the button that trigger the modal in order to obtain the idea's status.
 
-            if (!confirm("Are you sure you want to advance the status of this idea?\nThis action is irreversible."))
-                return;
+            // Get the status that they are trying to change to.
+            progressingIdeaId = parseInt(button.attr('data-ideaid'));
+            progressingIdeaStatus = parseInt(button.attr('data-nextstatus'));
+            var statusName = Object.keys(statuses).find(key => statuses[key] === progressingIdeaStatus);
+            statusName = statusName.charAt(0).toUpperCase() + statusName.slice(1);
 
-            var ideaid = $(this).data('ideaid');
-            var status = $(this).data('status') + 1;
-            if (status <= statuses['adopt']) {
-                updateStatus(ideaid, status);
+            if (statusName == "Adapt" || statusName == "Abandon") {
+                $('#idea-finalize-input').show();
+                $('#idea-finalize-input-error').hide();
+                $('#idea-finalize-message').val("");
+                if (statusName == "Adapt") {
+                    $('#idea-finalize-message').attr("placeholder", "Reason for adaptation");
+                } else {
+                    $('#idea-finalize-message').attr("placeholder", "Reason for abandonment");
+                }
             } else {
-                alert('Stop trying to hack the app');
+                $('#idea-finalize-input').hide();
             }
+
+            $('#progress-idea-modal-body').get(0).innerHTML = "Are you sure you want to update the status of this idea to '" + statusName + "'? <br/>This action cannot be undone.";
+            $('#confirm-idea-progression').get(0).innerHTML = "Progress to '" + statusName + "'";
         });
 
-        // Finalizing an idea after submitting abandon/adapting with a message
-        $('.idea-panel-finalize').click(function (event) {
-            event.cancelBubble = true;
-            if (event.stopPropagation) event.stopPropagation();
-
-            var ideaid = $(this).data('ideaid');
-            var desiredStatus = $(this).data('status');
-            var message = $('#' + ideaid + '-textbox-message').val();
-
-            finalizeStatus(ideaid, desiredStatus, message);
-
-            $('#' + ideaid + '-input-group-finalize').hide();
+        //Reset the modal on hide
+        $('#confirmationModal').on('hide.bs.modal', function (event) {
+            $('#idea-finalize-input-error').hide(); //Hide the error box
+            $('#idea-finalize-message').attr('style', 'border:1px solid #000000');   //Reset the text box border.
         });
 
-        // Adopt an idea
-        $('.idea-panel-adopt').click(function (event) {
-            event.cancelBubble = true;
-            if (event.stopPropagation) event.stopPropagation();
-
-            if (!confirm("Are you sure you want to advance this idea to the adopt status?\nThis action is irreversible."))
+        //Registers the user's click on confirmation button.
+        $('#confirm-idea-progression').click(function () {
+            if (progressingIdeaStatus == 4 || progressingIdeaStatus == 5) {
+                // Check if the input box has input.
+                var message = $('#idea-finalize-message').val();
+                message = message.trim();
+                if (!message) {
+                    // Outline the box in red, and show that an error has occured.
+                    $('#idea-finalize-message').attr('style', 'border:1px solid #FF0000')
+                    $('#idea-finalize-input-error').show();
+                    return;
+                }
+                finalizeStatus(progressingIdeaId, progressingIdeaStatus)
+                $('#confirmationModal').modal('hide')
                 return;
-
-            var ideaid = $(this).data('ideaid');
-            var status = statuses['adopt'];
-            updateStatus(ideaid, status);
-        });
-
-        // Adapt an idea
-        $('.idea-panel-adapt').click(function (event) {
-            event.cancelBubble = true;
-            if (event.stopPropagation) event.stopPropagation();
-
-            var ideaid = $(this).data('ideaid');
-            var status = statuses['adapt'];
-
-            $('#' + ideaid + '-textbox-message').val("");
-            $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for adaption");
-            $('#' + ideaid + '-input-group-finalize').slideDown(speeds.transitions.fast);
-            $('#' + ideaid + '-button-finalize').data('status', status);
-        });
-
-        // Abandon an idea
-        $('.idea-panel-abandon').click(function (event) {
-            event.cancelBubble = true;
-            if (event.stopPropagation) event.stopPropagation();
-
-            var ideaid = $(this).data('ideaid');
-            var status = statuses['abandon'];
-
-            $('#' + ideaid + '-textbox-message').val("");
-            $('#' + ideaid + '-textbox-message').attr("placeholder", "Reason for abandonment");
-            $('#' + ideaid + '-input-group-finalize').slideDown(speeds.transitions.fast);
-            $('#' + ideaid + '-button-finalize').data('status', status);
+            }
+            updateStatus(progressingIdeaId, progressingIdeaStatus);
+            $('#' + progressingIdeaId + '-advance-idea-button').attr('data-nextstatus', progressingIdeaStatus + 1);
+            $('#confirmationModal').modal('hide')
         });
 
         $('.idea-panel-finalize-message').click(function (event) {
@@ -589,16 +584,6 @@
                 target.slideDown(speeds.transitions.slow);
             else
                 target.slideUp(speeds.transitions.slow);
-        });
-
-        // Cancel and contract the finalize form
-        $('.idea-panel-finalize-cancel').click(function (event) {
-            event.cancelBubble = true;
-            if (event.stopPropagation) event.stopPropagation();
-
-            target = $('#' + $(this).data('ideaid') + '-input-group-finalize');
-
-            target.slideUp(speeds.transitions.fast);
         });
 
         // For amendment submission
