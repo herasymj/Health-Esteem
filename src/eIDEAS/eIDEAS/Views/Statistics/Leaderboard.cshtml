@@ -1,29 +1,23 @@
 ﻿@model IEnumerable<LeaderboardPresentationViewModel>
 
-
 <h2>@ViewData["LeaderboardType"] Leaderboard</h2>
-            <div class="row">
-                <div class="col-md-6" style="float: left">
-                    <table class="table table-striped">
-                        <tr>
-                            <th>Name</th>
-                            <th>Idea Points</th>
-                            <th>Participation Points</th>
-                        </tr>
-                        @foreach (var user in Model)
-                        {
-                            <tr>
-                                <td>@user.name</td>
-                                <td>@user.ideaPoints</td>
-                                <td>@user.participationPoints</td>
-                            </tr>
-                        }
-                    </table>
-                </div>
-                <div>
-                    <h3>This is where a graph of points/time will go</h3>
-                </div>
-                <div>
-                    <h3>This is where a pie chart of contributions will go</h3>
-                </div>
-            </div>
+
+<div class="row">
+    <div class="col-md-6" style="float: left">
+        <table class="table table-striped">
+            <tr>
+                <th>Name</th>
+                <th>Idea Points</th>
+                <th>Participation Points</th>
+            </tr>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.name</td>
+                    <td>@user.ideaPoints</td>
+                    <td>@user.participationPoints</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

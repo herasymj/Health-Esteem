@@ -5,17 +5,17 @@
 }
 <div style="margin:15px;">
     <div class="dropdown">
-        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><h3>@ViewData["FilterType"] Statistics <span class="glyphicon glyphicon-chevron-down"></span></h3></a>
-            <ul class="dropdown-menu" id="filterSelect">
-                <li><a asp-area="" asp-controller="Statistics" asp-action="Index" asp-route-filterType="Global">Global</a></li>
-                <li><a asp-area="" asp-controller="Statistics" asp-action="Index" asp-route-filterType="Team">Team</a></li>
-                <li><a asp-area="" asp-controller="Statistics" asp-action="Index" asp-route-filterType="Individual">Individual</a></li>
-            </ul>
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span>@ViewData["FilterType"] Statistics</span> 
+            <span class="glyphicon glyphicon-chevron-down" style="font-size: 10px; margin: 0 0 5px 5px; vertical-align: bottom;"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a asp-controller="Statistics" asp-action="Index" asp-route-filterType="Global">Global</a></li>
+            <li><a asp-controller="Statistics" asp-action="Index" asp-route-filterType="Team">Team</a></li>
+            <li><a asp-controller="Statistics" asp-action="Index" asp-route-filterType="Individual">Individual</a></li>
+        </ul>
     </div>
-</div>  
-
+</div>
 <div class="container border" id="stats-container">
-
     @Html.Partial("_StatisticPanelPartial", Model)
-
 </div>

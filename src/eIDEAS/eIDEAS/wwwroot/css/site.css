@@ -199,11 +199,11 @@ textarea {
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #063496;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #063496;
 }
 
 input:checked + .slider:before {
@@ -325,8 +325,8 @@ input:checked + .slider:before {
     color: #B3CBFF;
 }
 
-.btn-primary, .btn-primary:focus {
-    background-color: #063496;
+.btn-primary, .btn-primary:focus, .btn-primary:active {
+    background-color: #063496 !important;
 }
 
 .btn-primary:hover {
