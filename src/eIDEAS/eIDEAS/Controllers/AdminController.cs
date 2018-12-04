@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using eIDEAS.Data;
 using eIDEAS.Models;
+using eIDEAS.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +49,25 @@ namespace eIDEAS.Controllers
             }
 
             return View();
+        }
+
+        // POST: Homepage
+        [HttpPost]
+        public async Task<IActionResult> HomepageUpdate(string title, string text, MessageEnum type)
+        {
+            var message = new Message
+            {
+                Title = title,
+                Text = text,
+                MessageType = type,
+                DateCreated = DateTime.UtcNow
+            };
+            _context.Add(message);
+            await _context.SaveChangesAsync();
+
+            var homeViewModel = new HomePresentationViewModel();
+
+            return Json(homeViewModel);
         }
     }
 }
