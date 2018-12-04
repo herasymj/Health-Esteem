@@ -148,6 +148,20 @@ namespace eIDEAS.Areas.Identity.Pages.Account
                 }
             }
             // If we got this far, something failed, redisplay form
+
+
+            //MAKE SURE TO RELOAD THE DIVIONS
+            var divisions = await _context.Division.Where(division => division.DateDeleted == null).ToListAsync();
+
+            foreach (var division in divisions)
+            {
+                var units = _context.Unit
+                    .Where(unit => unit.DivisionID == division.ID && unit.DateDeleted == null)
+                    .ToList();
+
+                DivisionUnits.Add(division, units);
+            }
+
             return Page();
             //return RedirectToPage();
         }
