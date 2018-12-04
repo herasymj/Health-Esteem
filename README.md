@@ -19,8 +19,8 @@ Health-Esteem provides an idea mangagement system for interorganizational improv
 * Wilson Nie
 
 ### Documentation
-* [User Manual] (https://todo.todo)
-* [Annonymized Usability Report] (https://todo.todo)
+* [User Manual](https://github.com/herasymj/Health-Esteem/blob/master/documentation/User%20Manual.pdf)
+* [Anonymized Usability Report](https://github.com/herasymj/Health-Esteem/blob/master/documentation/Usability%20Analysis%20Report.pdf)
 * [Google Drive (Planning, Presentations in progress, Meeting notes)](https://drive.google.com/drive/folders/1xXZoQ2bTMq2rhHzLl4sXl5ZG7T7oY1FZ?usp=sharing)
 * [Requirements](https://github.com/herasymj/Health-Esteem/blob/master/documentation/requirements.md)
 * [Discussion](https://github.com/herasymj/Health-Esteem/blob/master/documentation/discussions.md)
