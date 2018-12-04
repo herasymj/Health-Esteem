@@ -1,6 +1,6 @@
 ﻿/* Answer */
 .answer {
-    padding-left: 30px;
+    padding-left: 20px;
 }
 
 /* Body */
@@ -79,7 +79,9 @@ hr {
 
 /* Question */
 .question {
-    padding-top: 15px;
+    font-size: 16px;
+    outline: none !important;
+    text-decoration: none !important;
 }
 
 /* Textarea */
@@ -100,7 +102,7 @@ textarea {
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #97DBF7;
+    background-color: #063496;
     border-color: #66C2E8;
     border-right: 1px solid #66C2E8;
     overflow-x: hidden;
@@ -109,18 +111,19 @@ textarea {
     margin-top: 50px;
 }
 
-    .sidenav > a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #07628A;
-        display: block;
-        transition: 0.03s;
-    }
+.sidenav > a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #fff;
+    display: block;
+    transition: 0.03s;
+}
 
-        .sidenav > a:hover {
-            color: #07628A;
-        }
+.sidenav > a:hover {
+    color: #B3CBFF;
+}
+
 .sidenav .heading-text {
     position: absolute;
     top: 0;
@@ -128,6 +131,7 @@ textarea {
     bottom: 0px;
     font-size: 20px;
 }
+
 .adminbody{
     padding-left: 250px;
     padding-right: 50px;
@@ -226,6 +230,7 @@ input:checked + .slider:before {
 .navbar-default .navbar-brand:focus {
     color: #B3CBFF;
 }
+
 /* Link */
 .navbar-default .navbar-nav > li > a {
     color: #fff;
