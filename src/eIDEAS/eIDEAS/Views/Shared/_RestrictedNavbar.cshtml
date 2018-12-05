@@ -31,13 +31,7 @@
             <li><a asp-area="" asp-controller="Ideas" asp-action="Create" asp-route-filterType="TeamIdeas">Create Idea</a></li>
         </ul>
     </li>
-    <li class="dropdown">
-        <a class="dropdown-toggle navbar-link-bold" data-toggle="dropdown"><span>Leaderboards</span><span class="glyphicon glyphicon-chevron-down" style="font-size: 10px; margin: 0 0 5px 5px; vertical-align: bottom;"></span></a>
-        <ul class="dropdown-menu">
-            <li><a asp-area="" asp-controller="Statistics" asp-action="Leaderboard" asp-route-filterType="Individual">Individual Leaderboard</a></li>
-            <li><a asp-area="" asp-controller="Statistics" asp-action="Leaderboard" asp-route-filterType="Team">Team Leaderboard</a></li>
-        </ul>
-    </li>
+    <li><a asp-area="" asp-controller="Statistics" asp-action="Leaderboard" asp-route-filterType="Individual">Leaderboards</a></li>
     <li><a asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a></li>
     <li><a asp-area="" id="AdminButton" asp-controller="Admin" asp-action="Index" style="visibility:hidden">Admin</a></li>
 }

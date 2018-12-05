@@ -32,16 +32,18 @@ namespace eIDEAS.Controllers
                 .OrderByDescending(message => message.DateCreated).FirstOrDefault();
 
             var homepageViewModel = new HomePresentationViewModel();
-            var success = new Message
+            var success = new Message {Title = "", Text = "No success stories have been set." };
+            var whats = new Message { Title = "", Text = "Nothing New." };
+            if (successStory != null)
             {
-                Title = successStory.Title,
-                Text = successStory.Text
-            };
-            var whats = new Message
+                success.Title = successStory.Title;
+                success.Text = successStory.Text;
+            }
+            if (whatsNew != null)
             {
-                Title = whatsNew.Title,
-                Text = whatsNew.Text
-            };
+                whats.Title = whatsNew.Title;
+                whats.Text = whatsNew.Text;
+            }
 
             homepageViewModel.SuccessStory = success;
             homepageViewModel.WhatsNew = whats;

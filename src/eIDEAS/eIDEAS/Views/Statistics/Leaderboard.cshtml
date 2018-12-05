@@ -2,6 +2,21 @@
 
 <h2>@ViewData["LeaderboardType"] Leaderboard</h2>
 
+<div style="padding: 6px 6px;">
+    <span>Show team leaderboard: </span>
+    <label class="switch">
+        <input id="show-team-leaderboard" type="checkbox">
+        <span class="slider round"></span>
+    </label>
+</div>
+
+<script>
+    // Immediately run this function when the page is loaded.  
+    if ("@ViewData["LeaderboardType"]" == "Team") {
+        $("#show-team-leaderboard").prop('checked', true);
+    }
+</script>
+
 <div class="row">
     <div class="col-md-6" style="float: left">
         <table class="table table-striped">
@@ -21,3 +36,17 @@
         </table>
     </div>
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+    //Allow the user to view only their own ideas
+        $("#show-team-leaderboard").click(function () {
+            var filter = "Individual";
+            if ($(this).is(':checked')) {
+                filter = "Team";
+            }
+
+            window.location = "/Statistics/Leaderboard?filterType=" + filter;
+        });
+    </script>
+}
