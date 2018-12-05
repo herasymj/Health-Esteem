@@ -221,6 +221,27 @@ namespace eIDEAS.Data
             var sampleUser = context.Users.Where(user => user.FirstName == "Tristan").FirstOrDefault();
             var initializationTime = DateTime.UtcNow;
 
+            //Add default stories
+            context.Message.AddRange(
+                new Message
+                {
+                    AuthorID = new Guid(sampleUser.Id),
+                    Title = "Sample What's New Title",
+                    Text = "This is where you would write your what's new story.",
+                    MessageType = MessageEnum.WhatsNew,
+                    DateCreated = DateTime.UtcNow
+                },
+                new Message
+                {
+                    AuthorID = new Guid(sampleUser.Id),
+                    Title = "Sample Success Stories Title",
+                    Text = "This is where you would write your success story.",
+                    MessageType = MessageEnum.SuccessStory,
+                    DateCreated = DateTime.UtcNow
+                }
+            );
+            context.SaveChanges();
+
             context.Idea.AddRange(
                 new Idea
                 {
