@@ -7,7 +7,6 @@ using eIDEAS.Data;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 using eIDEAS.Models;
-using eIDEAS.Areas.Identity.Pages.Account;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 
