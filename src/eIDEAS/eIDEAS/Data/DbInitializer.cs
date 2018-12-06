@@ -227,7 +227,7 @@ namespace eIDEAS.Data
                 {
                     AuthorID = new Guid(sampleUser.Id),
                     Title = "Sample What's New Title",
-                    Text = "This is where you would write your what's new story.",
+                    Text = "There is nothing new to announce at this time.",
                     MessageType = MessageEnum.WhatsNew,
                     DateCreated = DateTime.UtcNow
                 },
@@ -235,7 +235,7 @@ namespace eIDEAS.Data
                 {
                     AuthorID = new Guid(sampleUser.Id),
                     Title = "Sample Success Stories Title",
-                    Text = "This is where you would write your success story.",
+                    Text = "No success stories are available at this time.",
                     MessageType = MessageEnum.SuccessStory,
                     DateCreated = DateTime.UtcNow
                 }

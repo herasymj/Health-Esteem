@@ -45,17 +45,6 @@
     <div class="row" style="margin-top:25px;">
         <div class="col-md-6 col-sm-12">
             <div class="well well-lg text-center"><h3>Success Stories </h3></div>
-            @if(Model.WhatsNew.Title != null)
-            {
-                <h4>@Model.WhatsNew.Title</h4>
-            }
-            <p align="center">
-                @Model.WhatsNew.Text
-            </p>
-
-        </div>
-        <div class="col-md-6 col-sm-12">
-            <div class="well well-lg text-center"><h3>What's New?</h3></div>
             @if (Model.SuccessStory.Title != null)
             {
                 <h4>@Model.SuccessStory.Title</h4>
@@ -63,7 +52,16 @@
             <p align="center">
                 @Model.SuccessStory.Text
             </p>
-
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="well well-lg text-center"><h3>What's New?</h3></div>
+            @if (Model.WhatsNew.Title != null)
+            {
+                <h4>@Model.WhatsNew.Title</h4>
+            }
+            <p align="center">
+                @Model.WhatsNew.Text
+            </p>
         </div>
     </div>
 </div>
